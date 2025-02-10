@@ -108,6 +108,34 @@ namespace Scholario.Infrastructure.Persistence
                 .HasMany(g => g.Subjects)
                 .WithMany(s => s.Groups)
                 .UsingEntity(j => j.ToTable("GroupSubjects"));
+
+            // Relacja ScheduleEntry -> Subject
+            modelBuilder.Entity<ScheduleEntry>()
+                .HasOne(se => se.Subject)
+                .WithMany(s => s.ScheduleEntries)
+                .HasForeignKey(se => se.SubjectId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Relacja ScheduleEntry -> Group
+            modelBuilder.Entity<ScheduleEntry>()
+                .HasOne(se => se.Group)
+                .WithMany(g => g.ScheduleEntries)
+                .HasForeignKey(se => se.GroupId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Relacja ScheduleEntry -> Teacher
+            modelBuilder.Entity<ScheduleEntry>()
+                .HasOne(se => se.Teacher)
+                .WithMany(t => t.ScheduleEntries)
+                .HasForeignKey(se => se.TeacherId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Relacja ScheduleEntry -> LessonHour
+            modelBuilder.Entity<ScheduleEntry>()
+                .HasOne(se => se.LessonHour)
+                .WithOne(lh => lh.ScheduleEntry)
+                .HasForeignKey<ScheduleEntry>(se => se.LessonHourId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

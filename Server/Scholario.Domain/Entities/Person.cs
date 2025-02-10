@@ -14,6 +14,7 @@ namespace Scholario.Domain.Entities
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
         public Role Role { get; set; }
         public virtual ICollection<Message> SentMessages { get; set; } = default!;
         public virtual ICollection<Message> ReceivedMessages { get; set; } = default!;
