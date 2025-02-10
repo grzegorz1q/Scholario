@@ -39,6 +39,21 @@ namespace Scholario.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "LessonHours",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StartTime = table.Column<TimeSpan>(type: "time", nullable: false),
+                    EndTime = table.Column<TimeSpan>(type: "time", nullable: false),
+                    LessonNumber = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LessonHours", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Persons",
                 columns: table => new
                 {
@@ -47,6 +62,7 @@ namespace Scholario.Infrastructure.Migrations
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Role = table.Column<int>(type: "int", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -207,6 +223,47 @@ namespace Scholario.Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "ScheduleEntries",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    SubjectId = table.Column<int>(type: "int", nullable: false),
+                    GroupId = table.Column<int>(type: "int", nullable: false),
+                    TeacherId = table.Column<int>(type: "int", nullable: false),
+                    Day = table.Column<int>(type: "int", nullable: false),
+                    LessonHourId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ScheduleEntries", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ScheduleEntries_Groups_GroupId",
+                        column: x => x.GroupId,
+                        principalTable: "Groups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ScheduleEntries_LessonHours_LessonHourId",
+                        column: x => x.LessonHourId,
+                        principalTable: "LessonHours",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ScheduleEntries_Persons_TeacherId",
+                        column: x => x.TeacherId,
+                        principalTable: "Persons",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ScheduleEntries_Subjects_SubjectId",
+                        column: x => x.SubjectId,
+                        principalTable: "Subjects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Grades_DescriptiveAssessmentId",
                 table: "Grades",
@@ -260,6 +317,27 @@ namespace Scholario.Infrastructure.Migrations
                 filter: "[GroupId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ScheduleEntries_GroupId",
+                table: "ScheduleEntries",
+                column: "GroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ScheduleEntries_LessonHourId",
+                table: "ScheduleEntries",
+                column: "LessonHourId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ScheduleEntries_SubjectId",
+                table: "ScheduleEntries",
+                column: "SubjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ScheduleEntries_TeacherId",
+                table: "ScheduleEntries",
+                column: "TeacherId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Subjects_TeacherId",
                 table: "Subjects",
                 column: "TeacherId");
@@ -281,7 +359,13 @@ namespace Scholario.Infrastructure.Migrations
                 name: "Notifications");
 
             migrationBuilder.DropTable(
+                name: "ScheduleEntries");
+
+            migrationBuilder.DropTable(
                 name: "DescriptiveAssessments");
+
+            migrationBuilder.DropTable(
+                name: "LessonHours");
 
             migrationBuilder.DropTable(
                 name: "Subjects");

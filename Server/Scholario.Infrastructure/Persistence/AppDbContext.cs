@@ -17,6 +17,8 @@ namespace Scholario.Infrastructure.Persistence
         public virtual DbSet<DescriptiveAssessment> DescriptiveAssessments { get; set; }
         public virtual DbSet<Message> Messages { get; set; }
         public virtual DbSet<Notification> Notifications { get; set; }
+        public virtual DbSet<LessonHour> LessonHours { get; set; }
+        public virtual DbSet<ScheduleEntry> ScheduleEntries { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -136,6 +138,26 @@ namespace Scholario.Infrastructure.Persistence
                 .WithOne(lh => lh.ScheduleEntry)
                 .HasForeignKey<ScheduleEntry>(se => se.LessonHourId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<LessonHour>()
+                .HasOne(l => l.ScheduleEntry)
+                .WithOne(s => s.LessonHour)
+                .HasForeignKey<ScheduleEntry>(s => s.LessonHourId);
+
+            modelBuilder.Entity<ScheduleEntry>() //możliwe, że niepotrzebne
+                .HasOne(se => se.Teacher)
+                .WithMany(t => t.ScheduleEntries)
+                .HasForeignKey(se => se.TeacherId);
+
+            modelBuilder.Entity<ScheduleEntry>()
+                .HasOne(se => se.Subject)
+                .WithMany(s => s.ScheduleEntries)
+                .HasForeignKey(se => se.SubjectId);
+
+            modelBuilder.Entity<ScheduleEntry>()
+                .HasOne(se => se.Group)
+                .WithMany(g => g.ScheduleEntries)
+                .HasForeignKey(se => se.GroupId);
         }
     }
 }
