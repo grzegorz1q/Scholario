@@ -15,5 +15,6 @@ namespace Scholario.Domain.Entities
         public int TeacherId { get; set; }
         public virtual ICollection<Grade> Grades { get; set; } = default!;
         public virtual ICollection<Group> Groups { get; set; } = default!;
+        public virtual ICollection<ScheduleEntry> ScheduleEntries { get; set; } = default!;
     }
 }
