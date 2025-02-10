@@ -11,5 +11,6 @@ namespace Scholario.Domain.Entities
        public virtual ICollection<Subject> Subjects { get; set; } = default!;
        public virtual Group Group { get; set; } = default!;
        public int? GroupId { get; set; } //jeśli jest wychowawcą
+       public virtual ICollection<ScheduleEntry> ScheduleEntries { get; set; } = default!;
     }
 }
