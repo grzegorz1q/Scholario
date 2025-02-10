@@ -11,7 +11,7 @@ namespace Scholario.Application.Interfaces.Repositories
     {
         Task AddStudent(Student student);
         Task<IEnumerable<Student>> GetAllStudents();
-        Task GetStudent(int id);
+        Task<Student?> GetStudent(int id);
         Task UpdateStudent(Student student);
         Task DeleteStudent(int id);
     }

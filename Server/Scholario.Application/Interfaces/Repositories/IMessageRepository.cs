@@ -11,7 +11,7 @@ namespace Scholario.Application.Interfaces.Repositories
     {
         Task AddMessage(Message message);
         Task<IEnumerable<Message>> GetAllMessages();
-        Task GetMessage(int id);
+        Task<Message?> GetMessage(int id);
         Task UpdateMessage(Message message);
         Task DeleteMessage(int id);
     }

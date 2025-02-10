@@ -21,7 +21,9 @@ namespace Scholario.Infrastructure.Persistence
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=SCHOLARIO_DATABASE;Trusted_Connection=True;TrustServerCertificate=True;");
+            optionsBuilder
+                .UseLazyLoadingProxies()
+                .UseSqlServer("Server=localhost\\SQLEXPRESS;Database=SCHOLARIO_DATABASE;Trusted_Connection=True;TrustServerCertificate=True;");
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

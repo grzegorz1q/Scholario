@@ -11,7 +11,7 @@ namespace Scholario.Application.Interfaces.Repositories
     {
         Task AddGrade(Grade grade);
         Task<IEnumerable<Grade>> GetAllGrades();
-        Task GetGrade(int id);
+        Task<Grade?> GetGrade(int id);
         Task UpdateGrade(Grade grade);
         Task DeleteGrade(int id);
     }
