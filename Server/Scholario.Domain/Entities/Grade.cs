@@ -12,8 +12,8 @@ namespace Scholario.Domain.Entities
         public float? GradeValue { get; set; }
         public virtual Subject Subject { get; set; } = default!;
         public int SubjectId { get; set; }
-        public virtual Teacher Teacher { get; set; } = default!;
-        public int TeacherId { get; set; }
+        /*public virtual Teacher Teacher { get; set; } = default!;
+        public int TeacherId { get; set; }*/
         public virtual Student Student { get; set; } = default!;
         public int StudentId { get; set; }
         public DateTime DateOfIssue { get; set; }
