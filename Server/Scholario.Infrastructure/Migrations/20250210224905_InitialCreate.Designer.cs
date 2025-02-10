@@ -12,8 +12,8 @@ using Scholario.Infrastructure.Persistence;
 namespace Scholario.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250210161219_AddNewEntitie")]
-    partial class AddNewEntitie
+    [Migration("20250210224905_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,6 +21,9 @@ namespace Scholario.Infrastructure.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "9.0.1")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -131,7 +134,7 @@ namespace Scholario.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("LessonHour");
+                    b.ToTable("LessonHours");
                 });
 
             modelBuilder.Entity("Scholario.Domain.Entities.Message", b =>
@@ -268,7 +271,7 @@ namespace Scholario.Infrastructure.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("ScheduleEntry");
+                    b.ToTable("ScheduleEntries");
                 });
 
             modelBuilder.Entity("Scholario.Domain.Entities.Subject", b =>
