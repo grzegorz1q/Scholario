@@ -11,7 +11,7 @@ namespace Scholario.Application.Interfaces.Repositories
     {
         Task AddGroup(Group group);
         Task<IEnumerable<Group>> GetAllGroups();
-        Task GetGroup(int id);
+        Task<Group?> GetGroup(int id);
         Task UpdateGroup(Group group);
         Task DeleteGroup(int id);
     }

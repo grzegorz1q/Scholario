@@ -11,7 +11,7 @@ namespace Scholario.Application.Interfaces.Repositories
     {
         Task AddNotification(Notification notification);
         Task<IEnumerable<Notification>> GetAllNotifications();
-        Task GetNotification(int id);
+        Task<Notification?> GetNotification(int id);
         Task UpdateNotification(Notification notification);
         Task DeleteNotification(int id);
     }

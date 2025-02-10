@@ -11,7 +11,7 @@ namespace Scholario.Application.Interfaces.Repositories
     {
         Task AddSubject(Subject subject);
         Task<IEnumerable<Subject>> GetAllSubjects();
-        Task GetSubject(int id);
+        Task<Subject?> GetSubject(int id);
         Task UpdateSubject(Subject subject);
         Task DeleteSubject(int id);
     }

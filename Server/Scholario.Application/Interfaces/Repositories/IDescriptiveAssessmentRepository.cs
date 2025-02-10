@@ -11,7 +11,7 @@ namespace Scholario.Application.Interfaces.Repositories
     {
         Task AddDescriptiveAssessment(DescriptiveAssessment descriptiveAssessment);
         Task<IEnumerable<DescriptiveAssessment>> GetAllDescriptiveAssessments();
-        Task GetDescriptiveAssessment(int id);
+        Task<DescriptiveAssessment?> GetDescriptiveAssessment(int id);
         Task UpdateDescriptiveAssessment(DescriptiveAssessment descriptiveAssessment);
         Task DeleteDescriptiveAssessment(int id);
     }

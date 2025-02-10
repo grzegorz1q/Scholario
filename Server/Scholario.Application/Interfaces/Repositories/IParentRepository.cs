@@ -11,7 +11,7 @@ namespace Scholario.Application.Interfaces.Repositories
     {
         Task AddParent(Parent parent);
         Task<IEnumerable<Parent>> GetAllParents();
-        Task GetParent(int id);
+        Task<Parent?> GetParent(int id);
         Task UpdateParent(Parent parent);
         Task DeleteParent(int id);
     }
