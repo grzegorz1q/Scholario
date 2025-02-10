@@ -10,6 +10,6 @@ namespace Scholario.Domain.Entities
     {
        public virtual ICollection<Subject> Subjects { get; set; } = default!;
        public virtual Group Group { get; set; } = default!;
-       public int? GroupId { get; set; }
+       public int? GroupId { get; set; } //jeśli jest wychowawcą
     }
 }
