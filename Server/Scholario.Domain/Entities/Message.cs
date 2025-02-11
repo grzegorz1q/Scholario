@@ -16,5 +16,6 @@ namespace Scholario.Domain.Entities
         public string Content { get; set; } = string.Empty;
         public DateTime Sent { get; set; } 
         public bool IsRead { get; set; } = false; 
+        public MessageType MessageType { get; set; }
     }
 }

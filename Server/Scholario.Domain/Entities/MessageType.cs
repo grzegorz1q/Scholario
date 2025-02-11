@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace Scholario.Domain.Entities
 {
-    public enum NotificationType
+    public enum MessageType
     {
-        GradeAssigned,
-        MessageReceived,
-        GeneralInfo,
+        StudentNote,
+        CommonMessage
     }
 }

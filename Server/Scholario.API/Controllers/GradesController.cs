@@ -6,7 +6,7 @@ using Scholario.Application.Interfaces;
 namespace Scholario.API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("grades")]
     public class GradesController : ControllerBase
     {
         private readonly IGradeService _gradeService;
