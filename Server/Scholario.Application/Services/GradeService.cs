@@ -26,7 +26,7 @@ namespace Scholario.Application.Services
             _mapper = mapper;
         }
 
-        public async Task AddGradeToStudent(AddGradeToStudentDto addGradeToStudentDto)
+        public async Task AddGradeToStudent(AddOrUpdateGradeToStudentDto addGradeToStudentDto)
         {
             if(addGradeToStudentDto == null)
                 throw new ArgumentNullException(nameof(addGradeToStudentDto));
@@ -42,12 +42,31 @@ namespace Scholario.Application.Services
             var grade =  _mapper.Map<Grade>(addGradeToStudentDto);
             await _gradeRepository.AddGrade(grade);
         }
+        public async Task UpdateStudentGrade(AddOrUpdateGradeToStudentDto updateStudentGradeDto)
+        {
+            if (updateStudentGradeDto == null)
+                throw new ArgumentNullException(nameof(updateStudentGradeDto));
 
+            var student = await _studentRepository.GetStudent(updateStudentGradeDto.StudentId);
+            if (student == null)
+                throw new Exception("Student not found");
+            var subject = await _subjectRepository.GetSubject(updateStudentGradeDto.SubjectId);
+            if (subject == null)
+                throw new Exception("Subject not found");
+
+            var grade = await _gradeRepository.GetGrade(updateStudentGradeDto.Id);
+            if (grade == null)
+            {
+                throw new KeyNotFoundException(nameof(updateStudentGradeDto));
+            }
+            grade.GradeValue = updateStudentGradeDto.GradeValue;
+            await _gradeRepository.UpdateGrade(grade);
+        }
         public async Task DeleteGradeFromStudent(int id)
         {
             var grade = await _gradeRepository.GetGrade(id);
             if (grade == null)
-                throw new Exception("Grade not found");
+                throw new KeyNotFoundException("Grade not found");
 
             await _gradeRepository.DeleteGrade(id);
         }
