@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using Scholario.Application.Interfaces;
+using Scholario.Application.Services;
 using Scholario.Domain.Interfaces.Repositories;
 using Scholario.Infrastructure.Persistence;
 using Scholario.Infrastructure.Repositories;
@@ -8,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -36,6 +39,7 @@ builder.Services.AddScoped<ITeacherRepository, TeacherRepository>();
 builder.Services.AddScoped<ISubjectRepository, SubjectRepository>();
 
 //Adds services to the Dependency Injection Container
+builder.Services.AddScoped<IGradeService, GradeService>();
 
 var app = builder.Build();
 
