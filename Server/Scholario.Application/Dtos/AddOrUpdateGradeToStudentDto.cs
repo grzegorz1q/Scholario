@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Scholario.Application.Dtos
 {
-    public class AddGradeToStudentDto
+    public class AddOrUpdateGradeToStudentDto
     {
+        public int? Id { get; set; }
         public int GradeValue { get; set; }
         public int SubjectId { get; set; }
         public int StudentId { get; set; }

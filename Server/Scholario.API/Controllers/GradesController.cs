@@ -15,7 +15,7 @@ namespace Scholario.API.Controllers
             _gradeService = gradeService;
         }
         [HttpPost] 
-        public async Task<IActionResult> AddGradeToStudent(AddGradeToStudentDto addGradeToStudentDto)
+        public async Task<IActionResult> AddGradeToStudent(AddOrUpdateGradeToStudentDto addGradeToStudentDto)
         {
             try
             {
@@ -24,8 +24,33 @@ namespace Scholario.API.Controllers
             }
             catch (KeyNotFoundException ex)
             {
-                Console.WriteLine($">[GradeCtr] No projects were found: {ex.Message}");
-                return NotFound("There is no projects in the database.");
+                Console.WriteLine($">[GradeCtr] No grades were found: {ex.Message}");
+                return NotFound("There is no grades in the database.");
+            }
+            catch (ArgumentNullException ex)
+            {
+                Console.WriteLine($">[GradeCtr] Received null value: {ex.Message}");
+                return BadRequest($"Invalid data: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($">[GradeCtr] Unhandled exception: {ex.Message}");
+                return BadRequest($"Unexpected error: {ex.Message}");
+            }
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateStudentGrade(AddOrUpdateGradeToStudentDto updateStudentGrade)
+        {
+            try
+            {
+                await _gradeService.UpdateStudentGrade(updateStudentGrade);
+                return Ok("Grade updated successfully");
+            }
+            catch (KeyNotFoundException ex)
+            {
+                Console.WriteLine($">[GradeCtr] No grades were found: {ex.Message}");
+                return NotFound("There is no grades in the database.");
             }
             catch (ArgumentNullException ex)
             {

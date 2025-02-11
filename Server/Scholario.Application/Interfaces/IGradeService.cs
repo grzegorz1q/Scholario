@@ -9,7 +9,8 @@ namespace Scholario.Application.Interfaces
 {
     public interface IGradeService
     {
-        Task AddGradeToStudent(AddGradeToStudentDto addGradeToStudentDto);
+        Task AddGradeToStudent(AddOrUpdateGradeToStudentDto addGradeToStudentDto);
+        Task UpdateStudentGrade(AddOrUpdateGradeToStudentDto updateStudentGradeDto);
         Task DeleteGradeFromStudent(int id);
     }
 }

@@ -43,7 +43,7 @@ namespace Scholario.Infrastructure.Repositories
             return await _appDbContext.Grades.ToListAsync();
         }
 
-        public async Task<Grade?> GetGrade(int id)
+        public async Task<Grade?> GetGrade(int? id)
         {
             if (id < 0)
                 throw new ArgumentOutOfRangeException(nameof(id));

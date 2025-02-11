@@ -13,7 +13,7 @@ namespace Scholario.Application.Profiles
     {
         public BaseProfile() 
         {
-            CreateMap<AddGradeToStudentDto, Grade>();
+            CreateMap<AddOrUpdateGradeToStudentDto, Grade>();
         }
     }
 }
