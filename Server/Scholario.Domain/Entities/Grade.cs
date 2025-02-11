@@ -16,7 +16,7 @@ namespace Scholario.Domain.Entities
         public int TeacherId { get; set; }*/
         public virtual Student Student { get; set; } = default!;
         public int StudentId { get; set; }
-        public DateTime DateOfIssue { get; set; }
+        public DateTime DateOfIssue { get; set; } = DateTime.Now;
         public virtual DescriptiveAssessment DescriptiveAssessment { get; set; } = default!;
         public int? DescriptiveAssessmentId { get; set; }
     }

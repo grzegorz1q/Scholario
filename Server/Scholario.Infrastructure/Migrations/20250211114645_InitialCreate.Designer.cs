@@ -12,7 +12,7 @@ using Scholario.Infrastructure.Persistence;
 namespace Scholario.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250210224905_InitialCreate")]
+    [Migration("20250211114645_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

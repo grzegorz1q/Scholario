@@ -20,12 +20,15 @@ namespace Scholario.Infrastructure.Persistence
         public virtual DbSet<LessonHour> LessonHours { get; set; }
         public virtual DbSet<ScheduleEntry> ScheduleEntries { get; set; }
 
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        {
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
             optionsBuilder
-                .UseLazyLoadingProxies()
-                .UseSqlServer("Server=localhost\\SQLEXPRESS;Database=SCHOLARIO_DATABASE;Trusted_Connection=True;TrustServerCertificate=True;");
+                .UseLazyLoadingProxies();
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
