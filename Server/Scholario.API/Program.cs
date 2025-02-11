@@ -1,4 +1,6 @@
+using Microsoft.EntityFrameworkCore;
 using Scholario.Domain.Interfaces.Repositories;
+using Scholario.Infrastructure.Persistence;
 using Scholario.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +12,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//Database configuration
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 //Adds repositories to the Dependency Injection Container
 builder.Services.AddScoped<IDescriptiveAssessmentRepository, DescriptiveAssessmentRepository>();
 builder.Services.AddScoped<IGradeRepository, GradeRepository>();
