@@ -14,6 +14,7 @@ namespace Scholario.Application.Profiles
         public BaseProfile() 
         {
             CreateMap<AddOrUpdateGradeToStudentDto, Grade>();
+            CreateMap<AddMessageOrNoteToStudentDto, Message>();
         }
     }
 }

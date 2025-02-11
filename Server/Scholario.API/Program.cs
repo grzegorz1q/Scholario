@@ -40,7 +40,7 @@ builder.Services.AddScoped<ISubjectRepository, SubjectRepository>();
 
 //Adds services to the Dependency Injection Container
 builder.Services.AddScoped<IGradeService, GradeService>();
-
+builder.Services.AddScoped<ITeacherService, TeacherService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
