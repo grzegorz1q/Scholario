@@ -14,8 +14,9 @@ namespace Scholario.Domain.Entities
         public virtual Person Receiver { get; set; } = default!;
         public int ReceiverId { get; set; } 
         public string Content { get; set; } = string.Empty;
-        public DateTime Sent { get; set; } 
+        public DateTime Sent { get; set; } = DateTime.Now;
         public bool IsRead { get; set; } = false; 
         public MessageType MessageType { get; set; }
+
     }
 }
