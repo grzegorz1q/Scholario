@@ -1,4 +1,5 @@
 ﻿using Scholario.Application.Dtos;
+using Scholario.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

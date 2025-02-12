@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Scholario.Domain.Interfaces.Repositories
+namespace Scholario.Domain.Interfaces
 {
     public interface ITeacherRepository
     {
