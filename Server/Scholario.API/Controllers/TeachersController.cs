@@ -34,12 +34,12 @@ namespace Scholario.API.Controllers
             }
         }
 
-        [HttpPost("students")]
-        public async Task<IActionResult> GetStudentById(ReadStudentDto readStudentDto)
+        [HttpGet("students/{id}")]
+        public async Task<IActionResult> GetStudentById(int id)
         {
             try
             {
-                var student = await _teacherService.GetStudentById(readStudentDto);
+                var student = await _teacherService.GetStudentById(id);
 
                 if (student == null)
                 {
@@ -47,9 +47,9 @@ namespace Scholario.API.Controllers
                 }
                 return Ok(student);
             }
-            catch (ArgumentNullException ex)
+            catch (ArgumentOutOfRangeException ex)
             {
-                Console.WriteLine($">[GradeCtr] Received null value: {ex.Message}");
+                Console.WriteLine($"{ex.Message}");
                 return BadRequest($"Invalid data: {ex.Message}");
             }
             catch (Exception ex)
