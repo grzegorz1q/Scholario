@@ -10,7 +10,7 @@ namespace Scholario.Application.Dtos
     public class AddMessageOrNoteToStudentDto
     {
         public int SenderId { get; set; }
-        public int ReceverId { get; set; }
+        public int ReceiverId { get; set; }
         public string Content {  get; set; } = string.Empty;
         public MessageType MessageType { get; set; }
     }

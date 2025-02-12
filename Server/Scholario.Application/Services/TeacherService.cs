@@ -33,16 +33,31 @@ namespace Scholario.Application.Services
             if(sender == null)
                 throw new Exception("Teacher not found");
 
-            var receiver = await _studentRepository.GetStudent(addMessageOrNoteToStudentDto.ReceverId);
+            var receiver = await _studentRepository.GetStudent(addMessageOrNoteToStudentDto.ReceiverId);
             if (receiver == null)
                 throw new Exception("Student not found");
 
             var note = _mapper.Map<Message>(addMessageOrNoteToStudentDto);
             receiver.ReceivedMessages.Add(note);
-            await _studentRepository.UpdateStudent(receiver);
 
-            var parent = receiver.Parent;
-            parent.ReceivedMessages.Add(note); //to sie nie wysyla. Dostaje tylko uczeń. W tabeli messages powinny dodawac sie chyba dwa wpisy a dodaje sie tylko dla ucznia
+            if(addMessageOrNoteToStudentDto.MessageType == MessageType.StudentNote)
+            {
+                var parent = receiver.Parent;
+                if(parent != null)
+                {
+                    var parentNote = new AddMessageOrNoteToStudentDto
+                    {
+                        SenderId = sender.Id,
+                        ReceiverId = parent.Id,
+                        Content = addMessageOrNoteToStudentDto.Content,
+                        MessageType = MessageType.StudentNote
+                    };
+
+                    var parentNoteMap = _mapper.Map<Message>(parentNote);
+                    parent.ReceivedMessages.Add(parentNoteMap);
+                }
+            }
+            await _studentRepository.UpdateStudent(receiver);
         }
 
         public Task<IEnumerable<ReadStudentDto>> GetAllStudents(ReadStudentDto readStudentDto)

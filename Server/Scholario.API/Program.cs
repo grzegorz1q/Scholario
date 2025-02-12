@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Scholario.Application.Interfaces;
 using Scholario.Application.Services;
 using Scholario.Domain.Interfaces;
+using Scholario.Domain.Entities;
 using Scholario.Infrastructure.Persistence;
 using Scholario.Infrastructure.Repositories;
 
