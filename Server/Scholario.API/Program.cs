@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Scholario.Application.Interfaces;
 using Scholario.Application.Services;
-using Scholario.Domain.Interfaces.Repositories;
+using Scholario.Domain.Interfaces;
 using Scholario.Infrastructure.Persistence;
 using Scholario.Infrastructure.Repositories;
 
@@ -36,11 +36,14 @@ builder.Services.AddScoped<IParentRepository, ParentRepository>();
 builder.Services.AddScoped<IScheduleEntryRepository, ScheduleEntryRepository>();
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 builder.Services.AddScoped<ITeacherRepository, TeacherRepository>();
+builder.Services.AddScoped<IPersonRepository, PersonRepository>();
 builder.Services.AddScoped<ISubjectRepository, SubjectRepository>();
 
 //Adds services to the Dependency Injection Container
 builder.Services.AddScoped<IGradeService, GradeService>();
 builder.Services.AddScoped<ITeacherService, TeacherService>();
+builder.Services.AddScoped<IAccountService, AccountService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

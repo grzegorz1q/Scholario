@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Scholario.Domain.Interfaces.Repositories;
+using Scholario.Domain.Interfaces;
 using Scholario.Domain.Entities;
 using Scholario.Infrastructure.Persistence;
 using System;
