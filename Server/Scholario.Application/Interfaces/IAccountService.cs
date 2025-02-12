@@ -11,5 +11,6 @@ namespace Scholario.Application.Interfaces
     public interface IAccountService
     {
         Task RegisterUser(RegisterUserDto registerUserDto);
+        Task<string> GenerateJwt(LoginDto loginDto);
     }
 }

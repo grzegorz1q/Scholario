@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 using Scholario.Application.Dtos;
 using Scholario.Application.Interfaces;
-using Scholario.Application.Services;
 
 namespace Scholario.API.Controllers
 {
@@ -10,11 +10,12 @@ namespace Scholario.API.Controllers
     public class AccountsController : ControllerBase
     {
         private readonly IAccountService _accountService;
+
         public AccountsController(IAccountService accountService)
         {
             _accountService = accountService;
         }
-        [HttpPost]
+        [HttpPost("register")]
         public async Task<IActionResult> RegisterUser(RegisterUserDto registerUserDto)
         {
             try
@@ -31,6 +32,19 @@ namespace Scholario.API.Controllers
             {
                 Console.WriteLine($">[GradeCtr] Unhandled exception: {ex.Message}");
                 return BadRequest($"Unexpected error: {ex.Message}");
+            }
+        }
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(LoginDto loginDto)
+        {
+            try
+            {
+                string token = await _accountService.GenerateJwt(loginDto);
+                return Ok(token);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
     }

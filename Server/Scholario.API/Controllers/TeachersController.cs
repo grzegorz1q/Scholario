@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Scholario.Application.Dtos;
 using Scholario.Application.Interfaces;
 using Scholario.Application.Services;
@@ -15,6 +16,7 @@ namespace Scholario.API.Controllers
             _teacherService = teacherService;
         }
         [HttpPost("messages")]
+        [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> AddMessageOrNoteToStudent(AddMessageOrNoteToStudentDto addNoteToStudentDto)
         {
             try
