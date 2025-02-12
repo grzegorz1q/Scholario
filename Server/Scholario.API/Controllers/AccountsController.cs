@@ -33,11 +33,5 @@ namespace Scholario.API.Controllers
                 return BadRequest($"Unexpected error: {ex.Message}");
             }
         }
-        [HttpGet("teachers")]
-        public async Task<IActionResult> GetAllTeachers()
-        {
-            var teachers = await _accountService.GetAllTeachers();
-            return Ok(teachers);
-        }
     }
 }
