@@ -18,6 +18,14 @@ namespace Scholario.Infrastructure.Repositories
             _appDbContext = appDbContext;
         }
 
+        public async Task AddPerson(Person person)
+        {
+            if (person == null)
+                throw new ArgumentNullException(nameof(person));
+            await _appDbContext.Persons.AddAsync(person);
+            await _appDbContext.SaveChangesAsync();
+        }
+
         public async Task<IEnumerable<Person>> GetAllPersons()
         {
             return await _appDbContext.Persons.ToListAsync();

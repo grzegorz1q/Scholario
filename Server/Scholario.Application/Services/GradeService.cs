@@ -2,7 +2,7 @@
 using Scholario.Application.Dtos;
 using Scholario.Application.Interfaces;
 using Scholario.Domain.Entities;
-using Scholario.Domain.Interfaces.Repositories;
+using Scholario.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
