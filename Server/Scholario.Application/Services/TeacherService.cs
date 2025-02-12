@@ -60,12 +60,12 @@ namespace Scholario.Application.Services
             await _studentRepository.UpdateStudent(receiver);
         }
 
-        public async Task<ReadStudentDto?> GetStudentById(ReadStudentDto readStudentDto)
+        public async Task<ReadStudentDto?> GetStudentById(int id)
         {
-            if(readStudentDto == null)
-                throw new ArgumentNullException(nameof(readStudentDto));
+            if(id < 0 )
+                throw new ArgumentOutOfRangeException("Id must be greater than 0");
 
-            var student = await _studentRepository.GetStudent(readStudentDto.StudentId);
+            var student = await _studentRepository.GetStudent(id);
 
             if (student == null)
                 throw new Exception("Student not found");
