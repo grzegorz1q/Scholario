@@ -9,7 +9,6 @@ namespace Scholario.Application.Interfaces
 {
     public interface ITeacherService
     {
-        Task<IEnumerable<ReadStudentDto>> GetAllStudents(ReadStudentDto readStudentDto);
         Task<ReadStudentDto?> GetStudentById(ReadStudentDto readStudentDto);
         Task AddMessageOrNoteToStudent(AddMessageOrNoteToStudentDto addNoteToStudentDto);
     }

@@ -33,5 +33,30 @@ namespace Scholario.API.Controllers
                 return BadRequest($"Unexpected error: {ex.Message}");
             }
         }
+
+        [HttpPost("students")]
+        public async Task<IActionResult> GetStudentById(ReadStudentDto readStudentDto)
+        {
+            try
+            {
+                var student = await _teacherService.GetStudentById(readStudentDto);
+
+                if (student == null)
+                {
+                    return NotFound("Student not found");
+                }
+                return Ok(student);
+            }
+            catch (ArgumentNullException ex)
+            {
+                Console.WriteLine($">[GradeCtr] Received null value: {ex.Message}");
+                return BadRequest($"Invalid data: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($">[GradeCtr] Unhandled exception: {ex.Message}");
+                return BadRequest($"Unexpected error: {ex.Message}");
+            }
+        }
     }
 }

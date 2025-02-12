@@ -9,7 +9,7 @@ namespace Scholario.Application.Dtos
 {
     public class ReadStudentDto
     {
-        public int GroupId { get; set; }
-        public int ParentId { get; set; }
+        public int StudentId { get; set; }
+        public virtual ICollection<ReadGradeByStudentDto> ReadGradeByStudentDtos { get; set; } = default!;
     }
 }
