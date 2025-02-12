@@ -60,14 +60,29 @@ namespace Scholario.Application.Services
             await _studentRepository.UpdateStudent(receiver);
         }
 
-        public Task<IEnumerable<ReadStudentDto>> GetAllStudents(ReadStudentDto readStudentDto)
+        public async Task<ReadStudentDto?> GetStudentById(ReadStudentDto readStudentDto)
         {
-            throw new NotImplementedException();
-        }
+            if(readStudentDto == null)
+                throw new ArgumentNullException(nameof(readStudentDto));
 
-        public Task<ReadStudentDto?> GetStudentById(ReadStudentDto readStudentDto)
-        {
-            throw new NotImplementedException();
+            var student = await _studentRepository.GetStudent(readStudentDto.StudentId);
+
+            if (student == null)
+                throw new Exception("Student not found");
+
+            var studentDto =  _mapper.Map<ReadStudentDto>(student);
+
+            studentDto.ReadGradeByStudentDtos = student.Grades.Select(g => new ReadGradeByStudentDto
+            {
+                Id = g.Id,
+                GradeValue = g.GradeValue,
+                SubjectId = g.SubjectId,
+                StudentId = g.StudentId,
+                DateOfIssue = g.DateOfIssue,
+                DescriptiveAssessmentId = g.DescriptiveAssessmentId
+            }).ToList();
+
+            return studentDto;
         }
     }
 }

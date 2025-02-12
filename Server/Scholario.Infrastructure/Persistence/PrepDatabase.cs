@@ -70,6 +70,15 @@ namespace Scholario.Infrastructure.Persistence
                     _appDbContext.SaveChanges();
                 }
             }
+            if (_appDbContext.Database.CanConnect())
+            { 
+                if (_appDbContext.Subjects.Any())
+                {
+                    var grades = GetGrades();
+                    _appDbContext.Grades.AddRange(grades);
+                    _appDbContext.SaveChanges();
+                }
+            }
         }
 
         private IEnumerable<Teacher> GetTeachers()
@@ -124,5 +133,33 @@ namespace Scholario.Infrastructure.Persistence
             };
             return subjects;
         }
+        private IEnumerable<Grade> GetGrades()
+        {
+            var studentId = _appDbContext.Persons.OfType<Student>().First().Id;
+            var subjectId = _appDbContext.Subjects.First().Id;
+
+            var grades = new List<Grade>()
+            {
+
+                new Grade()
+                {
+                    GradeValue = 4.5f,
+                    StudentId = studentId,
+                    SubjectId = subjectId,
+                    DateOfIssue = DateTime.Now
+                },
+
+                new Grade()
+                {
+                    GradeValue = 5.0f,
+                    StudentId = studentId,
+                    SubjectId = subjectId,
+                    DateOfIssue = DateTime.Now
+                }
+            };
+
+            return grades;
+        }
+
     }
 }
