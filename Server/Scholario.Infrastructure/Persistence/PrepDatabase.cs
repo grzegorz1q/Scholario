@@ -27,6 +27,15 @@ namespace Scholario.Infrastructure.Persistence
             }
             if (_appDbContext.Database.CanConnect())
             {
+                if (!_appDbContext.Persons.Any())
+                {
+                    var admins = GetPersons();
+                    _appDbContext.Persons.AddRange(admins);
+                    _appDbContext.SaveChanges();
+                }
+            }
+            if (_appDbContext.Database.CanConnect())
+            {
                 if (!_appDbContext.Persons.OfType<Teacher>().Any())
                 {
                     var teachers = GetTeachers();
@@ -98,6 +107,14 @@ namespace Scholario.Infrastructure.Persistence
                 new Student(){FirstName="Adam", LastName="Nowak", Email="adam.nowak@test.pl", Password="adamnowak", GroupId=1, ParentId=parentId}
             };
             return students;
+        }
+        private IEnumerable<Person> GetPersons()
+        {
+            var admins = new List<Person>()
+            {
+                new Person(){FirstName="admin", LastName="admin", Email="admin@test.pl", Password="admin"}
+            };
+            return admins;
         }
         private IEnumerable<Group> GetGroups()
         {

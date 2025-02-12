@@ -40,7 +40,8 @@ namespace Scholario.Infrastructure.Persistence
                 .HasDiscriminator<Role>("Role")
                 .HasValue<Student>(Role.Student)
                 .HasValue<Teacher>(Role.Teacher)
-                .HasValue<Parent>(Role.Parent);
+                .HasValue<Parent>(Role.Parent)
+                .HasValue<Person>(Role.Admin);
 
             // Relacja Student -> Parent
             modelBuilder.Entity<Student>()

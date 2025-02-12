@@ -9,6 +9,7 @@ namespace Scholario.Domain.Interfaces
 {
     public interface IPersonRepository
     {
+        Task AddPerson(Person person);
         Task<IEnumerable<Person>> GetAllPersons();
     }
 }
