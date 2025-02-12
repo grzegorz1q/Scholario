@@ -42,7 +42,7 @@ namespace Scholario.Application.Services
             await _studentRepository.UpdateStudent(receiver);
 
             var parent = receiver.Parent;
-            parent.ReceivedMessages.Add(note);
+            parent.ReceivedMessages.Add(note); //to sie nie wysyla. Dostaje tylko uczeń. W tabeli messages powinny dodawac sie chyba dwa wpisy a dodaje sie tylko dla ucznia
         }
 
         public Task<IEnumerable<ReadStudentDto>> GetAllStudents(ReadStudentDto readStudentDto)
