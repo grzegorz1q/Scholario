@@ -11,5 +11,6 @@ namespace Scholario.Domain.Interfaces
     {
         Task AddPerson(Person person);
         Task<IEnumerable<Person>> GetAllPersons();
+        Task<Person?> GetPersonByEmail(string email);
     }
 }

@@ -1,4 +1,5 @@
-﻿using Scholario.Domain.Entities;
+﻿using Microsoft.AspNetCore.Identity;
+using Scholario.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +11,11 @@ namespace Scholario.Infrastructure.Persistence
     public class PrepDatabase
     {
         private readonly AppDbContext _appDbContext;
-        public PrepDatabase(AppDbContext appDbContext)
+        private readonly IPasswordHasher<Person> _passwordHasher;
+        public PrepDatabase(AppDbContext appDbContext, IPasswordHasher<Person> passwordHasher)
         {
             _appDbContext = appDbContext;
+            _passwordHasher = passwordHasher;
         }
         public void Seed()
         {
@@ -76,9 +79,13 @@ namespace Scholario.Infrastructure.Persistence
         {
             var teachers = new List<Teacher>()
             {
-                new Teacher(){FirstName="Jan", LastName="Kowlaski", Email="jan.kowalski@tests.pl", Password="jankowalski"},
-                new Teacher(){FirstName="Anna", LastName="Maliszewska", Email="anna.maliszewska@tests.pl", Password="annamaliszewska", GroupId=1},
+                new Teacher(){FirstName="Jan", LastName="Kowlaski", Email="jan.kowalski@test.pl", Password="jankowalski"},
+                new Teacher(){FirstName="Anna", LastName="Maliszewska", Email="anna.maliszewska@test.pl", Password="annamaliszewska", GroupId=1},
             };
+            foreach(var e in teachers)
+            {
+                e.Password = _passwordHasher.HashPassword(e, e.Password);
+            }
             return teachers;
         }
         private IEnumerable<Parent> GetParents()
@@ -88,6 +95,10 @@ namespace Scholario.Infrastructure.Persistence
                 new Parent(){FirstName="Edyta", LastName="Bąk", Email="edyta.bak@test.pl", Password="edytabak", PhoneNumber="987654321", Address="Topolowa 1"},
                 new Parent(){FirstName="Karol", LastName="Kot", Email="karol.kot@test.pl", Password="karolkot", PhoneNumber="123456789", Address="Akacjowa 1"}
             };
+            foreach (var e in parents)
+            {
+                e.Password = _passwordHasher.HashPassword(e, e.Password);
+            }
             return parents;
         }
         private IEnumerable<Student> GetStudents()
@@ -97,6 +108,10 @@ namespace Scholario.Infrastructure.Persistence
             {
                 new Student(){FirstName="Adam", LastName="Nowak", Email="adam.nowak@test.pl", Password="adamnowak", GroupId=1, ParentId=parentId}
             };
+            foreach (var e in students)
+            {
+                e.Password = _passwordHasher.HashPassword(e, e.Password);
+            }
             return students;
         }
         private IEnumerable<Person> GetPersons()
@@ -105,6 +120,10 @@ namespace Scholario.Infrastructure.Persistence
             {
                 new Person(){FirstName="admin", LastName="admin", Email="admin@test.pl", Password="admin"}
             };
+            foreach (var e in admins)
+            {
+                e.Password = _passwordHasher.HashPassword(e, e.Password);
+            }
             return admins;
         }
         private IEnumerable<Group> GetGroups()

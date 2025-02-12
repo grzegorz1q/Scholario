@@ -5,12 +5,45 @@ using Scholario.Domain.Interfaces;
 using Scholario.Domain.Entities;
 using Scholario.Infrastructure.Persistence;
 using Scholario.Infrastructure.Repositories;
+using Microsoft.AspNetCore.Identity;
+using FluentValidation;
+using Scholario.Application.Dtos;
+using Scholario.Application.Dtos.Validators;
+using FluentValidation.AspNetCore;
+using Scholario.Application.Authentication;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+//Authentication configuration
+var authenticationSettings = new AuthenticationSettings();
+builder.Configuration.GetSection("Authentication").Bind(authenticationSettings);
+
+builder.Services.AddSingleton(authenticationSettings);
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = "Bearer";
+    options.DefaultScheme = "Bearer";
+    options.DefaultChallengeScheme = "Bearer";
+}).AddJwtBearer(cfg =>
+{
+    cfg.RequireHttpsMetadata = false;
+    cfg.SaveToken = true;
+    cfg.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidIssuer = authenticationSettings.JwtIssuer,
+        ValidAudience = authenticationSettings.JwtIssuer,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey))
+    };
+});
+//
 
 builder.Services.AddControllers();
+builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
+
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -45,6 +78,10 @@ builder.Services.AddScoped<IGradeService, GradeService>();
 builder.Services.AddScoped<ITeacherService, TeacherService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 
+//Hashowanie has³a
+builder.Services.AddScoped<IPasswordHasher<Person>, PasswordHasher<Person>>();
+builder.Services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -58,11 +95,12 @@ if (app.Environment.IsDevelopment())
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    var prepDatabase = new PrepDatabase(dbContext);
+    var passwordHasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher<Person>>();
+    var prepDatabase = new PrepDatabase(dbContext, passwordHasher);
     prepDatabase.Seed();
 }
 //
-
+app.UseAuthentication();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

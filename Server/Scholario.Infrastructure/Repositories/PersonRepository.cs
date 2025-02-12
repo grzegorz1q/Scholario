@@ -30,5 +30,10 @@ namespace Scholario.Infrastructure.Repositories
         {
             return await _appDbContext.Persons.ToListAsync();
         }
+
+        public async Task<Person?> GetPersonByEmail(string email)
+        {
+            return await _appDbContext.Persons.FirstOrDefaultAsync(p => p.Email == email);
+        }
     }
 }
