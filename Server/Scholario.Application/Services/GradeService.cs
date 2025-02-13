@@ -16,17 +16,21 @@ namespace Scholario.Application.Services
         private readonly IGradeRepository _gradeRepository;
         private readonly IStudentRepository _studentRepository;
         private readonly ISubjectRepository _subjectRepository;
+        private readonly ITeacherRepository _teacherRepository;
+        private readonly IGroupRepository _groupRepository;
         private readonly IMapper _mapper;
 
-        public GradeService(IGradeRepository gradeRepository,IStudentRepository studentRepository,ISubjectRepository subjectRepository ,IMapper mapper)
+        public GradeService(IGroupRepository groupRepository ,ITeacherRepository teacherRepository, IGradeRepository gradeRepository,IStudentRepository studentRepository,ISubjectRepository subjectRepository ,IMapper mapper)
         {
             _gradeRepository = gradeRepository;
             _studentRepository = studentRepository;
             _subjectRepository = subjectRepository;
+            _teacherRepository = teacherRepository;
+            _groupRepository = groupRepository;
             _mapper = mapper;
         }
 
-        public async Task AddGradeToStudent(AddOrUpdateGradeToStudentDto addGradeToStudentDto)
+        public async Task AddGradeToStudent(AddOrUpdateGradeToStudentDto addGradeToStudentDto, int teacherId)
         {
             if(addGradeToStudentDto == null)
                 throw new ArgumentNullException(nameof(addGradeToStudentDto));
@@ -39,10 +43,19 @@ namespace Scholario.Application.Services
             if (subject == null)
                 throw new Exception("Subject not found");
 
-            var grade =  _mapper.Map<Grade>(addGradeToStudentDto);
+            var teacher = await _teacherRepository.GetTeacher(teacherId);
+            if (teacher == null)
+                throw new Exception("Teacher not found");
+            var studentGroup = await _groupRepository.GetGroup(student.GroupId);
+            if (studentGroup == null)
+                throw new Exception("Group not found");
+            var isTeachingInGroup = studentGroup.Subjects.Any(s => s.TeacherId == teacher.Id && s.Id == subject.Id);
+            if (!isTeachingInGroup)
+                throw new UnauthorizedAccessException("Teacher is not teaching this student");
+            var grade = _mapper.Map<Grade>(addGradeToStudentDto);
             await _gradeRepository.AddGrade(grade);
         }
-        public async Task UpdateStudentGrade(AddOrUpdateGradeToStudentDto updateStudentGradeDto)
+        public async Task UpdateStudentGrade(AddOrUpdateGradeToStudentDto updateStudentGradeDto, int teacherId)
         {
             if (updateStudentGradeDto == null)
                 throw new ArgumentNullException(nameof(updateStudentGradeDto));
@@ -59,6 +72,15 @@ namespace Scholario.Application.Services
             {
                 throw new KeyNotFoundException(nameof(updateStudentGradeDto));
             }
+            var teacher = await _teacherRepository.GetTeacher(teacherId);
+            if (teacher == null)
+                throw new Exception("Teacher not found");
+            var studentGroup = await _groupRepository.GetGroup(student.GroupId);
+            if (studentGroup == null)
+                throw new Exception("Group not found");
+            var isTeachingInGroup = studentGroup.Subjects.Any(s => s.TeacherId == teacher.Id && s.Id == subject.Id);
+            if (!isTeachingInGroup)
+                throw new UnauthorizedAccessException("Teacher is not teaching this student");
             grade.GradeValue = updateStudentGradeDto.GradeValue;
             await _gradeRepository.UpdateGrade(grade);
         }

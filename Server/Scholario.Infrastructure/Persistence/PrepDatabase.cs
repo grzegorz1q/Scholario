@@ -75,7 +75,7 @@ namespace Scholario.Infrastructure.Persistence
             }
             if (_appDbContext.Database.CanConnect())
             { 
-                if (_appDbContext.Subjects.Any())
+                if (_appDbContext.Grades.Any())
                 {
                     var grades = GetGrades();
                     _appDbContext.Grades.AddRange(grades);
@@ -86,10 +86,11 @@ namespace Scholario.Infrastructure.Persistence
 
         private IEnumerable<Teacher> GetTeachers()
         {
+            var group = _appDbContext.Groups.First();
             var teachers = new List<Teacher>()
             {
                 new Teacher(){FirstName="Jan", LastName="Kowlaski", Email="jan.kowalski@test.pl", Password="jankowalski"},
-                new Teacher(){FirstName="Anna", LastName="Maliszewska", Email="anna.maliszewska@test.pl", Password="annamaliszewska", GroupId=1},
+                new Teacher(){FirstName="Anna", LastName="Maliszewska", Email="anna.maliszewska@test.pl", Password="annamaliszewska", GroupId=group.Id},
             };
             foreach(var e in teachers)
             {
@@ -113,9 +114,10 @@ namespace Scholario.Infrastructure.Persistence
         private IEnumerable<Student> GetStudents()
         {
             var parentId = _appDbContext.Persons.OfType<Parent>().First().Id;
+            var group = _appDbContext.Groups.First();
             var students = new List<Student>()
             {
-                new Student(){FirstName="Adam", LastName="Nowak", Email="adam.nowak@test.pl", Password="adamnowak", GroupId=1, ParentId=parentId}
+                new Student(){FirstName="Adam", LastName="Nowak", Email="adam.nowak@test.pl", Password="adamnowak", GroupId=group.Id, ParentId=parentId}
             };
             foreach (var e in students)
             {
@@ -146,9 +148,10 @@ namespace Scholario.Infrastructure.Persistence
         private IEnumerable<Subject> GetSubjects()
         {
             var teacherId = _appDbContext.Persons.OfType<Teacher>().First().Id;
+            var group = _appDbContext.Groups.First();
             var subjects = new List<Subject>()
             {
-                new Subject(){ Name="Matematyka", TeacherId=teacherId, Description="Przedmiot pozwalający zrozumieć logiczne myślenie"}
+                new Subject(){ Name="Matematyka", TeacherId=teacherId, Description="Przedmiot pozwalający zrozumieć logiczne myślenie", Groups = new List<Group>() {group} }
             };
             return subjects;
         }
