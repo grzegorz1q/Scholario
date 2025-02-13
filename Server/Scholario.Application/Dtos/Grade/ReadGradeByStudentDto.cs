@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Scholario.Application.Dtos
+namespace Scholario.Application.Dtos.Grade
 {
     public class ReadGradeByStudentDto
     {

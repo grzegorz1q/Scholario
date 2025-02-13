@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Scholario.Application.Dtos;
+using Scholario.Application.Dtos.Grade;
 using Scholario.Application.Interfaces;
 using Scholario.Domain.Entities;
 using Scholario.Domain.Interfaces;
