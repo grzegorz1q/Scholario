@@ -142,11 +142,6 @@ namespace Scholario.Infrastructure.Persistence
                 .WithOne(lh => lh.ScheduleEntry)
                 .HasForeignKey<ScheduleEntry>(se => se.LessonHourId)
                 .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<LessonHour>()
-                .HasOne(l => l.ScheduleEntry)
-                .WithOne(s => s.LessonHour)
-                .HasForeignKey<ScheduleEntry>(s => s.LessonHourId); 
         }
     }
 }
