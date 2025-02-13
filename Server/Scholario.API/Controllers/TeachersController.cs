@@ -38,7 +38,7 @@ namespace Scholario.API.Controllers
             }
         }
 
-        [HttpPut("tgroup")]
+        [HttpPut("group")]
         //[Authorize(Roles = "Teacher")]
         public async Task<IActionResult> AddOrChangeTeacherToGroup(AddOrChangeTeacherToGroupDto addTeacherToGroupDto)
         {
@@ -48,31 +48,6 @@ namespace Scholario.API.Controllers
                 return Ok("Teacher added to group successfully");
             }
             catch (ArgumentNullException ex)
-            {
-                Console.WriteLine($"{ex.Message}");
-                return BadRequest($"Invalid data: {ex.Message}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($">[GradeCtr] Unhandled exception: {ex.Message}");
-                return BadRequest($"Unexpected error: {ex.Message}");
-            }
-        }
-
-        [HttpGet("students/{id}")]
-        public async Task<IActionResult> GetStudentById(int id)
-        {
-            try
-            {
-                var student = await _teacherService.GetStudentById(id);
-
-                if (student == null)
-                {
-                    return NotFound("Student not found");
-                }
-                return Ok(student);
-            }
-            catch (ArgumentOutOfRangeException ex)
             {
                 Console.WriteLine($"{ex.Message}");
                 return BadRequest($"Invalid data: {ex.Message}");

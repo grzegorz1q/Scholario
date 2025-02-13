@@ -9,6 +9,7 @@ namespace Scholario.Application.Interfaces
 {
     public interface IStudentService
     {
+        Task<ReadStudentDto?> GetStudentById(int id);
         Task AddOrChangeStudentGroup(AddOrChangeStudentToGroupDto addOrChangeStudentToGroupDto);
     }
 }
