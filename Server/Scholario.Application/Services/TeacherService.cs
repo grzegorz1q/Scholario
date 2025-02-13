@@ -84,31 +84,5 @@ namespace Scholario.Application.Services
             teacher.Group = group;
             await _teacherRepository.UpdateTeacher(teacher);
         }
-
-
-        public async Task<ReadStudentDto?> GetStudentById(int id)
-        {
-            if(id < 0 )
-                throw new ArgumentOutOfRangeException("Id must be greater than 0");
-
-            var student = await _studentRepository.GetStudent(id);
-
-            if (student == null)
-                throw new Exception("Student not found");
-
-            var studentDto =  _mapper.Map<ReadStudentDto>(student);
-
-            studentDto.ReadGradeByStudentDtos = student.Grades.Select(g => new ReadGradeByStudentDto
-            {
-                Id = g.Id,
-                GradeValue = g.GradeValue,
-                SubjectId = g.SubjectId,
-                StudentId = g.StudentId,
-                DateOfIssue = g.DateOfIssue,
-                DescriptiveAssessmentId = g.DescriptiveAssessmentId
-            }).ToList();
-
-            return studentDto;
-        }
     }
 }

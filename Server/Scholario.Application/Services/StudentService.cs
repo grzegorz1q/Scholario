@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Scholario.Application.Dtos.Grade;
 using Scholario.Application.Dtos.Student;
 using Scholario.Application.Interfaces;
 using Scholario.Domain.Interfaces;
@@ -39,6 +40,30 @@ namespace Scholario.Application.Services
             student.Group = group;
             await _studentRepository.UpdateStudent(student);
 
+        }
+        public async Task<ReadStudentDto?> GetStudentById(int id)
+        {
+            if (id < 0)
+                throw new ArgumentOutOfRangeException("Id must be greater than 0");
+
+            var student = await _studentRepository.GetStudent(id);
+
+            if (student == null)
+                throw new Exception("Student not found");
+
+            var studentDto = _mapper.Map<ReadStudentDto>(student);
+
+            studentDto.ReadGradeByStudentDtos = student.Grades.Select(g => new ReadGradeByStudentDto
+            {
+                Id = g.Id,
+                GradeValue = g.GradeValue,
+                SubjectId = g.SubjectId,
+                StudentId = g.StudentId,
+                DateOfIssue = g.DateOfIssue,
+                DescriptiveAssessmentId = g.DescriptiveAssessmentId
+            }).ToList();
+
+            return studentDto;
         }
     }
 }

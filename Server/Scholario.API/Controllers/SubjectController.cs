@@ -17,7 +17,7 @@ namespace Scholario.API.Controllers
             _subjectService = subjectService;
         }
 
-        [HttpPost("subjects")]
+        [HttpPost]
         //[Authorize(Roles = "Teacher")]
         public async Task<IActionResult> CreateSubject(CreateSubjectDto createSubjectDto)
         {
