@@ -116,6 +116,8 @@ builder.Services.AddScoped<ISubjectRepository, SubjectRepository>();
 builder.Services.AddScoped<IGradeService, GradeService>();
 builder.Services.AddScoped<ITeacherService, TeacherService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<ISubjectService, SubjectService>();
 
 //Hashowanie has³a
 builder.Services.AddScoped<IPasswordHasher<Person>, PasswordHasher<Person>>();

@@ -1,7 +1,7 @@
 ﻿
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Scholario.Application.Dtos;
+using Scholario.Application.Dtos.Grade;
 using Scholario.Application.Interfaces;
 using System.Security.Claims;
 

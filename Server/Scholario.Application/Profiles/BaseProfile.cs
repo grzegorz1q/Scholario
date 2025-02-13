@@ -1,5 +1,10 @@
 ﻿using AutoMapper;
 using Scholario.Application.Dtos;
+using Scholario.Application.Dtos.Grade;
+using Scholario.Application.Dtos.Message;
+using Scholario.Application.Dtos.Student;
+using Scholario.Application.Dtos.Subject;
+using Scholario.Application.Dtos.Teacher;
 using Scholario.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -18,6 +23,7 @@ namespace Scholario.Application.Profiles
             CreateMap<ReadStudentDto,Student>();
             CreateMap<Student, ReadStudentDto>();
             CreateMap<RegisterUserDto, Person>();
+            CreateMap<CreateSubjectDto, Subject>();
         }
     }
 }

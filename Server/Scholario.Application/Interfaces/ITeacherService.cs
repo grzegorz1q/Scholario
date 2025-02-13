@@ -1,4 +1,6 @@
-﻿using Scholario.Application.Dtos;
+﻿using Scholario.Application.Dtos.Message;
+using Scholario.Application.Dtos.Student;
+using Scholario.Application.Dtos.Teacher;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +13,6 @@ namespace Scholario.Application.Interfaces
     {
         Task<ReadStudentDto?> GetStudentById(int id);
         Task AddMessageOrNoteToStudent(AddMessageOrNoteToStudentDto addNoteToStudentDto);
+        Task AddOrChangeTeacherToGroup(AddOrChangeTeacherToGroupDto addOrChangeTeacherToGroupDto);
     }
 }
