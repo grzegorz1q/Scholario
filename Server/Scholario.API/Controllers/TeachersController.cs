@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Scholario.Application.Dtos.Message;
+using Scholario.Application.Dtos.Student;
 using Scholario.Application.Dtos.Teacher;
 using Scholario.Application.Interfaces;
 using Scholario.Application.Services;
@@ -37,8 +38,8 @@ namespace Scholario.API.Controllers
             }
         }
 
-        [HttpPut("group")]
-        [Authorize(Roles = "Teacher")]
+        [HttpPut("tgroup")]
+        //[Authorize(Roles = "Teacher")]
         public async Task<IActionResult> AddOrChangeTeacherToGroup(AddOrChangeTeacherToGroupDto addTeacherToGroupDto)
         {
             try
@@ -57,7 +58,6 @@ namespace Scholario.API.Controllers
                 return BadRequest($"Unexpected error: {ex.Message}");
             }
         }
-
 
         [HttpGet("students/{id}")]
         public async Task<IActionResult> GetStudentById(int id)
