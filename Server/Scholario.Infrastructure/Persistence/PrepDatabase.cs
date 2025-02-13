@@ -75,7 +75,7 @@ namespace Scholario.Infrastructure.Persistence
             }
             if (_appDbContext.Database.CanConnect())
             { 
-                if (_appDbContext.Grades.Any())
+                if (!_appDbContext.Grades.Any())
                 {
                     var grades = GetGrades();
                     _appDbContext.Grades.AddRange(grades);
