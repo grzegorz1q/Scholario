@@ -36,7 +36,7 @@ namespace Scholario.Application.Services
             if (group == null)
                 throw new Exception("Group not found");
 
-            student.GroupId = group.Id;
+            student.Group = group;
             await _studentRepository.UpdateStudent(student);
 
         }

@@ -32,8 +32,8 @@ namespace Scholario.API.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($">[StudentController] Unhandled exception: {ex.Message}");
-                return BadRequest($"Unexpected error: {ex.Message}");
+                Console.WriteLine($">[StudentController] Exception: {ex.Message} \n Inner: {ex.InnerException?.Message}");
+                return BadRequest($"Unexpected error: {ex.InnerException?.Message ?? ex.Message}");
             }
         }
     }

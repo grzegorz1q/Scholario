@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Scholario.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using Scholario.Infrastructure.Persistence;
 namespace Scholario.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250213180145_Student")]
+    partial class Student
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,7 +61,7 @@ namespace Scholario.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DescriptiveAssessments", (string)null);
+                    b.ToTable("DescriptiveAssessments");
                 });
 
             modelBuilder.Entity("Scholario.Domain.Entities.Grade", b =>
@@ -92,7 +95,7 @@ namespace Scholario.Infrastructure.Migrations
 
                     b.HasIndex("SubjectId");
 
-                    b.ToTable("Grades", (string)null);
+                    b.ToTable("Grades");
                 });
 
             modelBuilder.Entity("Scholario.Domain.Entities.Group", b =>
@@ -109,7 +112,7 @@ namespace Scholario.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Groups", (string)null);
+                    b.ToTable("Groups");
                 });
 
             modelBuilder.Entity("Scholario.Domain.Entities.LessonHour", b =>
@@ -131,7 +134,7 @@ namespace Scholario.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("LessonHours", (string)null);
+                    b.ToTable("LessonHours");
                 });
 
             modelBuilder.Entity("Scholario.Domain.Entities.Message", b =>
@@ -167,7 +170,7 @@ namespace Scholario.Infrastructure.Migrations
 
                     b.HasIndex("SenderId");
 
-                    b.ToTable("Messages", (string)null);
+                    b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("Scholario.Domain.Entities.Notification", b =>
@@ -198,7 +201,7 @@ namespace Scholario.Infrastructure.Migrations
 
                     b.HasIndex("ReceiverId");
 
-                    b.ToTable("Notifications", (string)null);
+                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("Scholario.Domain.Entities.Person", b =>
@@ -271,7 +274,7 @@ namespace Scholario.Infrastructure.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("ScheduleEntries", (string)null);
+                    b.ToTable("ScheduleEntries");
                 });
 
             modelBuilder.Entity("Scholario.Domain.Entities.Subject", b =>
@@ -296,7 +299,7 @@ namespace Scholario.Infrastructure.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("Subjects", (string)null);
+                    b.ToTable("Subjects");
                 });
 
             modelBuilder.Entity("Scholario.Domain.Entities.Parent", b =>
@@ -342,7 +345,7 @@ namespace Scholario.Infrastructure.Migrations
                         .IsUnique()
                         .HasFilter("[GroupId] IS NOT NULL");
 
-                    b.ToTable("Persons", null, t =>
+                    b.ToTable("Persons", t =>
                         {
                             t.Property("GroupId")
                                 .HasColumnName("Teacher_GroupId");
