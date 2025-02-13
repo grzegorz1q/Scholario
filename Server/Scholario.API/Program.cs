@@ -14,6 +14,7 @@ using Scholario.Application.Authentication;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +40,13 @@ builder.Services.AddAuthentication(options =>
         ValidAudience = authenticationSettings.JwtIssuer,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey))
     };
+});
+//
+
+//Authorization custom policies
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("GroupTeacher", builder => builder.RequireClaim("GroupId"));
 });
 //
 

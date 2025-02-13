@@ -57,6 +57,12 @@ namespace Scholario.Application.Services
                 new Claim(ClaimTypes.Role, $"{user.Role}"),
                 new Claim(ClaimTypes.Email, loginDto.Email)
             };
+
+            if (user is Teacher teacher && teacher.GroupId.HasValue)
+            {
+                claims.Add(new Claim("GroupId", teacher.GroupId.Value.ToString()));
+            }
+
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_authenticationSettings.JwtKey));
             var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var expires = DateTime.Now.AddMinutes(_authenticationSettings.JwtExpireMinutes);

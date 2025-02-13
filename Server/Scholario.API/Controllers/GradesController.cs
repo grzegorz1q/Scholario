@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Scholario.Application.Dtos;
 using Scholario.Application.Interfaces;
@@ -14,7 +15,7 @@ namespace Scholario.API.Controllers
         {
             _gradeService = gradeService;
         }
-        [HttpPost] 
+        [HttpPost]
         public async Task<IActionResult> AddGradeToStudent(AddOrUpdateGradeToStudentDto addGradeToStudentDto)
         {
             try
