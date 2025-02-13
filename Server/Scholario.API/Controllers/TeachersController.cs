@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Scholario.Application.Dtos;
+using Scholario.Application.Dtos.Message;
+using Scholario.Application.Dtos.Student;
+using Scholario.Application.Dtos.Teacher;
 using Scholario.Application.Interfaces;
 using Scholario.Application.Services;
 
@@ -27,6 +29,27 @@ namespace Scholario.API.Controllers
             catch (ArgumentNullException ex)
             {
                 Console.WriteLine($">[GradeCtr] Received null value: {ex.Message}");
+                return BadRequest($"Invalid data: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($">[GradeCtr] Unhandled exception: {ex.Message}");
+                return BadRequest($"Unexpected error: {ex.Message}");
+            }
+        }
+
+        [HttpPut("tgroup")]
+        //[Authorize(Roles = "Teacher")]
+        public async Task<IActionResult> AddOrChangeTeacherToGroup(AddOrChangeTeacherToGroupDto addTeacherToGroupDto)
+        {
+            try
+            {
+                await _teacherService.AddOrChangeTeacherToGroup(addTeacherToGroupDto);
+                return Ok("Teacher added to group successfully");
+            }
+            catch (ArgumentNullException ex)
+            {
+                Console.WriteLine($"{ex.Message}");
                 return BadRequest($"Invalid data: {ex.Message}");
             }
             catch (Exception ex)

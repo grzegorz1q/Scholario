@@ -1,4 +1,4 @@
-﻿using Scholario.Application.Dtos;
+﻿using Scholario.Application.Dtos.Grade;
 using System;
 using System.Collections.Generic;
 using System.Linq;

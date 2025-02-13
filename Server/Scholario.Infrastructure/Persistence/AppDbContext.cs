@@ -130,7 +130,7 @@ namespace Scholario.Infrastructure.Persistence
                 .OnDelete(DeleteBehavior.Restrict);
 
             // Relacja ScheduleEntry -> Teacher
-            modelBuilder.Entity<ScheduleEntry>()
+            modelBuilder.Entity<ScheduleEntry>() // mozliwe ze niepotrzebne
                 .HasOne(se => se.Teacher)
                 .WithMany(t => t.ScheduleEntries)
                 .HasForeignKey(se => se.TeacherId)
@@ -146,22 +146,7 @@ namespace Scholario.Infrastructure.Persistence
             modelBuilder.Entity<LessonHour>()
                 .HasOne(l => l.ScheduleEntry)
                 .WithOne(s => s.LessonHour)
-                .HasForeignKey<ScheduleEntry>(s => s.LessonHourId);
-
-            modelBuilder.Entity<ScheduleEntry>() //możliwe, że niepotrzebne
-                .HasOne(se => se.Teacher)
-                .WithMany(t => t.ScheduleEntries)
-                .HasForeignKey(se => se.TeacherId);
-
-            modelBuilder.Entity<ScheduleEntry>()
-                .HasOne(se => se.Subject)
-                .WithMany(s => s.ScheduleEntries)
-                .HasForeignKey(se => se.SubjectId);
-
-            modelBuilder.Entity<ScheduleEntry>()
-                .HasOne(se => se.Group)
-                .WithMany(g => g.ScheduleEntries)
-                .HasForeignKey(se => se.GroupId);
+                .HasForeignKey<ScheduleEntry>(s => s.LessonHourId); 
         }
     }
 }
