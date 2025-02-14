@@ -15,6 +15,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.OpenApi.Any;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,13 +42,18 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey))
     };
 });
-//
+
+
 
 //Authorization custom policies
 
-//
-
 builder.Services.AddControllers();
+
+builder.Services.AddControllers()   ///// DO SPRAWDZENIA
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new TimeSpanConverter());
+    });
 builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -82,6 +88,11 @@ builder.Services.AddSwaggerGen(opt =>
             new string[]{}
         }
     });
+    opt.MapType<TimeSpan>(() => new OpenApiSchema
+    {
+        Type = "string",
+        Example = new OpenApiString("00:00") // Ustawienie przyk³adu formatu
+    });
 });
 
 
@@ -115,6 +126,7 @@ builder.Services.AddScoped<ITeacherService, TeacherService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<ISubjectService, SubjectService>();
+builder.Services.AddScoped<IScheduleEntryService, ScheduleEntryService>();
 
 //Hashowanie has³a
 builder.Services.AddScoped<IPasswordHasher<Person>, PasswordHasher<Person>>();
