@@ -9,10 +9,10 @@ namespace Scholario.API.Controllers
 {
     [ApiController]
     [Route("grades")]
-    public class GradesController : ControllerBase
+    public class GradeController : ControllerBase
     {
         private readonly IGradeService _gradeService;
-        public GradesController(IGradeService gradeService)
+        public GradeController(IGradeService gradeService)
         {
             _gradeService = gradeService;
         }

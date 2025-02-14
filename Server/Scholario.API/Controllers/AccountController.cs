@@ -7,11 +7,11 @@ namespace Scholario.API.Controllers
 {
     [ApiController]
     [Route("accounts")]
-    public class AccountsController : ControllerBase
+    public class AccountController : ControllerBase
     {
         private readonly IAccountService _accountService;
 
-        public AccountsController(IAccountService accountService)
+        public AccountController(IAccountService accountService)
         {
             _accountService = accountService;
         }

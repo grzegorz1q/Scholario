@@ -24,6 +24,7 @@ namespace Scholario.Application.Profiles
             CreateMap<Student, ReadStudentDto>();
             CreateMap<RegisterUserDto, Person>();
             CreateMap<CreateSubjectDto, Subject>();
+            CreateMap<Grade, ReadGradeByStudentDto>();
         }
     }
 }
