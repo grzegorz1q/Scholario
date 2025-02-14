@@ -44,10 +44,7 @@ builder.Services.AddAuthentication(options =>
 //
 
 //Authorization custom policies
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("GroupTeacher", builder => builder.RequireClaim("GroupId"));
-});
+
 //
 
 builder.Services.AddControllers();
