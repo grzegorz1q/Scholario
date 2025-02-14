@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Scholario.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using Scholario.Infrastructure.Persistence;
 namespace Scholario.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250214092530_ChangeGroupTeacherRelation")]
+    partial class ChangeGroupTeacherRelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -263,6 +266,9 @@ namespace Scholario.Infrastructure.Migrations
                     b.Property<int>("SubjectId")
                         .HasColumnType("int");
 
+                    b.Property<int>("TeacherId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("GroupId");
@@ -271,6 +277,8 @@ namespace Scholario.Infrastructure.Migrations
                         .IsUnique();
 
                     b.HasIndex("SubjectId");
+
+                    b.HasIndex("TeacherId");
 
                     b.ToTable("ScheduleEntries");
                 });
@@ -440,11 +448,19 @@ namespace Scholario.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("Scholario.Domain.Entities.Teacher", "Teacher")
+                        .WithMany("ScheduleEntries")
+                        .HasForeignKey("TeacherId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Group");
 
                     b.Navigation("LessonHour");
 
                     b.Navigation("Subject");
+
+                    b.Navigation("Teacher");
                 });
 
             modelBuilder.Entity("Scholario.Domain.Entities.Subject", b =>
@@ -525,6 +541,8 @@ namespace Scholario.Infrastructure.Migrations
                 {
                     b.Navigation("Group")
                         .IsRequired();
+
+                    b.Navigation("ScheduleEntries");
 
                     b.Navigation("Subjects");
                 });

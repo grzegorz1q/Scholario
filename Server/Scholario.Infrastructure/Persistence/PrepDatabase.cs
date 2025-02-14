@@ -21,15 +21,6 @@ namespace Scholario.Infrastructure.Persistence
         {
             if (_appDbContext.Database.CanConnect())
             {
-                if (!_appDbContext.Groups.Any())
-                {
-                    var groups = GetGroups();
-                    _appDbContext.Groups.AddRange(groups);
-                    _appDbContext.SaveChanges();
-                }
-            }
-            if (_appDbContext.Database.CanConnect())
-            {
                 if (!_appDbContext.Persons.Any())
                 {
                     var admins = GetPersons();
@@ -52,6 +43,15 @@ namespace Scholario.Infrastructure.Persistence
                 {
                     var parents = GetParents();
                     _appDbContext.Persons.AddRange(parents);
+                    _appDbContext.SaveChanges();
+                }
+            }
+            if (_appDbContext.Database.CanConnect())
+            {
+                if (!_appDbContext.Groups.Any())
+                {
+                    var groups = GetGroups();
+                    _appDbContext.Groups.AddRange(groups);
                     _appDbContext.SaveChanges();
                 }
             }
@@ -86,11 +86,10 @@ namespace Scholario.Infrastructure.Persistence
 
         private IEnumerable<Teacher> GetTeachers()
         {
-            var group = _appDbContext.Groups.First();
             var teachers = new List<Teacher>()
             {
                 new Teacher(){FirstName="Jan", LastName="Kowlaski", Email="jan.kowalski@test.pl", Password="jankowalski"},
-                new Teacher(){FirstName="Anna", LastName="Maliszewska", Email="anna.maliszewska@test.pl", Password="annamaliszewska", GroupId=group.Id},
+                new Teacher(){FirstName="Anna", LastName="Maliszewska", Email="anna.maliszewska@test.pl", Password="annamaliszewska"},
             };
             foreach(var e in teachers)
             {
@@ -139,9 +138,10 @@ namespace Scholario.Infrastructure.Persistence
         }
         private IEnumerable<Group> GetGroups()
         {
+            var teacher = _appDbContext.Persons.OfType<Teacher>().First();
             var groups = new List<Group>()
             {
-                new Group() {Name = "1tb1"}
+                new Group() {Name = "1tb1", TeacherId = teacher.Id}
             };
             return groups;
         }

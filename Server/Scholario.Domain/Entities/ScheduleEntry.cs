@@ -13,8 +13,6 @@ namespace Scholario.Domain.Entities
         public int SubjectId { get; set; }
         public virtual Group Group { get; set; } = default!;
         public int GroupId { get; set; }
-        public virtual Teacher Teacher { get; set; } = default!;
-        public int TeacherId { get; set; }
         public DayOfWeek Day { get; set; }
         public virtual LessonHour LessonHour { get; set; } = default!;
         public int LessonHourId { get; set; }
