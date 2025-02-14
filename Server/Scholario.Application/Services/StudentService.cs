@@ -15,12 +15,14 @@ namespace Scholario.Application.Services
     {
         private readonly IStudentRepository _studentRepository;
         private readonly IGroupRepository _groupRepository;
+        private readonly ISubjectRepository _subjectRepository;
         private readonly IMapper _mapper;
 
-        public StudentService(IStudentRepository studentRepository, IGroupRepository groupRepository, IMapper mapper)
+        public StudentService(IStudentRepository studentRepository, IGroupRepository groupRepository, ISubjectRepository subjectRepository, IMapper mapper)
         {
             _studentRepository = studentRepository;
             _groupRepository = groupRepository;
+            _subjectRepository = subjectRepository;
             _mapper = mapper;
         }
 
@@ -53,7 +55,7 @@ namespace Scholario.Application.Services
 
             var studentDto = _mapper.Map<ReadStudentDto>(student);
 
-            studentDto.ReadGradeByStudentDtos = student.Grades.Select(g => new ReadGradeByStudentDto
+            studentDto.Grades = student.Grades.Select(g => new ReadGradeByStudentDto
             {
                 Id = g.Id,
                 GradeValue = g.GradeValue,
@@ -64,6 +66,24 @@ namespace Scholario.Application.Services
             }).ToList();
 
             return studentDto;
+        }
+
+        public async Task<IEnumerable<ReadStudentDto>> GetStudentsByGroupAndSubject(int groupId, int subjectId, int teacherId)
+        {
+            var subject = await _subjectRepository.GetSubject(subjectId);
+            if (subject == null)
+                throw new Exception("Subject not found");
+
+            var group = subject.Groups.FirstOrDefault(g => g.Id == groupId);
+            if(group == null)
+                throw new Exception("The subject is not taught in this group.");
+
+            if (subject.TeacherId != teacherId && group.TeacherId != teacherId)
+                throw new UnauthorizedAccessException("You are not authorized to view this subject");
+
+            var students = group.Students.ToList();
+            var studentDtos = _mapper.Map<IEnumerable<ReadStudentDto>>(students);
+            return studentDtos;
         }
     }
 }

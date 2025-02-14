@@ -11,5 +11,6 @@ namespace Scholario.Application.Interfaces
     {
         Task<ReadStudentDto?> GetStudentById(int id);
         Task AddOrChangeStudentGroup(AddOrChangeStudentToGroupDto addOrChangeStudentToGroupDto);
+        Task<IEnumerable<ReadStudentDto>> GetStudentsByGroupAndSubject(int groupId, int subjectId, int teacherId);
     }
 }
