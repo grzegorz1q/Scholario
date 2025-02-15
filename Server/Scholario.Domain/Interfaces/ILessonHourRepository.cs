@@ -12,6 +12,7 @@ namespace Scholario.Domain.Interfaces
         Task AddLessonHour(LessonHour lessonHour);
         Task<IEnumerable<LessonHour>> GetAllLessonHours();
         Task<LessonHour?> GetLessonHour(int id);
+        Task<LessonHour?> GetLessonByNumber(int lessonNumber);
         Task UpdateLessonHour(LessonHour lessonHour);
         Task DeleteLessonHour(int id);
     }

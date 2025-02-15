@@ -41,6 +41,9 @@ namespace Scholario.Application.Profiles
             CreateMap<ScheduleEntryDto, ScheduleEntry>();
             CreateMap<Group, ReadGroupDto>()
                 .ForMember(dest => dest.TeacherName, x => x.MapFrom(src => $"{src.Teacher.FirstName} {src.Teacher.LastName}"));
+
+            CreateMap<LessonHourDto, LessonHour>();
+
         }
     }
 }
