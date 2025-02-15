@@ -8,6 +8,7 @@ namespace Scholario.Application.Dtos.ScheduleEntries
 {
     public class ScheduleEntryDto
     {
+        public string TeacherName { get; set; } = string.Empty;
         public int SubjectId { get; set; }
         public int GroupId { get; set; }
         public DayOfWeek Day { get; set; }

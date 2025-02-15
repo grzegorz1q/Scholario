@@ -5,6 +5,8 @@ using Scholario.Application.Dtos;
 using Scholario.Application.Dtos.ScheduleEntries;
 using Scholario.Application.Interfaces;
 using Scholario.Application.Services;
+using Scholario.Domain.Entities;
+using System.Security.Claims;
 namespace Scholario.API.Controllers
 {
     [ApiController]
@@ -59,5 +61,34 @@ namespace Scholario.API.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
+        [HttpGet("schedule/entries")]
+        public async Task<IActionResult> GetStudentSchedule()
+        {
+            try
+            {
+                // Pobieranie studentId z tokenu JWT
+                var studentIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (studentIdClaim == null)
+                {
+                    return Unauthorized("Student ID not found in token.");
+                }
+                var studentId = int.Parse(studentIdClaim);
+                var studentSchedule = await _scheduleEntryService.GetStudentSchedule(studentId);
+
+                return Ok(studentSchedule);
+            }
+            catch (ArgumentNullException ex)
+            {
+                Console.WriteLine($">[ScheduleEntryCtr] Received null value: {ex.Message}");
+                return BadRequest($"Invalid data: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($">[ScheduleEntryCtr] Unhandled exception: {ex.Message}");
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
     }
 }
