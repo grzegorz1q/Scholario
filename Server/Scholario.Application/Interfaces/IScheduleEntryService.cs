@@ -12,6 +12,6 @@ namespace Scholario.Application.Interfaces
     {
         Task<LessonHour> CreateLessonHour(LessonHourDto lessonHourDto);
         Task<ScheduleEntry> CreateScheduleEntry(ScheduleEntryDto scheduleEntryDto);
-        Task<StudentScheduleDto> GetStudentSchedule(int studentId);
+        Task<StudentScheduleDto> GetStudentSchedule(int userId);
     }
 }

@@ -8,7 +8,6 @@ namespace Scholario.Application.Dtos.ScheduleEntries
 {
     public class StudentScheduleDto
     {
-        public int StudentId { get; set; }
         public virtual ICollection<ScheduleEntryDto> ScheduleEntries { get; set; } = default!;
     }
 }
