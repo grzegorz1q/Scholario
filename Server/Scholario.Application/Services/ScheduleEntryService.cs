@@ -39,17 +39,12 @@ namespace Scholario.Application.Services
         public async Task<LessonHour> CreateLessonHour(LessonHourDto lessonHourDto)
         {
             if (lessonHourDto == null)
-            { throw new ArgumentNullException(nameof(lessonHourDto)); }
+                throw new ArgumentNullException(nameof(lessonHourDto));
 
-            var newlessonHour = new LessonHour
-            {
-                StartTime = lessonHourDto.StartTime,
-                EndTime = lessonHourDto.EndTime,
-                LessonNumber = lessonHourDto.LessonNumber
-            };
+            var newLessonHour = _mapper.Map<LessonHour>(lessonHourDto);
+            await _lessonHourRepository.AddLessonHour(newLessonHour);
 
-            await _lessonHourRepository.AddLessonHour(newlessonHour);
-            return newlessonHour;
+            return newLessonHour;
         }
 
 
@@ -66,13 +61,12 @@ namespace Scholario.Application.Services
             if (group == null)
                 throw new Exception("Group not found");
 
-            var scheduleEntry = new ScheduleEntry
-            {
-                SubjectId = scheduleEntryDto.SubjectId,
-                GroupId = scheduleEntryDto.GroupId,
-                Day = scheduleEntryDto.Day,
-                LessonHourId = scheduleEntryDto.LessonHourId
-            };
+            var lessonHour = await _lessonHourRepository.GetLessonByNumber(scheduleEntryDto.LessonNumber);
+            if (lessonHour == null)
+                throw new Exception("LessonHour not found for the given LessonNumber");
+
+            var scheduleEntry = _mapper.Map<ScheduleEntry>(scheduleEntryDto);
+            scheduleEntry.LessonHourId = lessonHour.Id;  
 
             await _scheduleEntryRepository.AddScheduleEntry(scheduleEntry);
 

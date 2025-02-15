@@ -12,6 +12,6 @@ namespace Scholario.Application.Dtos.ScheduleEntries
         public int SubjectId { get; set; }
         public int GroupId { get; set; }
         public DayOfWeek Day { get; set; }
-        public int LessonHourId { get; set; }
+        public int LessonNumber { get; set; }
     }
 }

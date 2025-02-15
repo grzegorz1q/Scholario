@@ -51,6 +51,15 @@ namespace Scholario.Infrastructure.Repositories
             return await _appDbContext.LessonHours.FirstOrDefaultAsync(l => l.Id == id);
         }
 
+        public async Task<LessonHour?> GetLessonByNumber(int lessonNumber)
+        {
+            if (lessonNumber <= 0)
+                throw new ArgumentOutOfRangeException(nameof(lessonNumber), "Lesson number must be a positive integer.");
+
+            return await _appDbContext.LessonHours
+                .FirstOrDefaultAsync(l => l.LessonNumber == lessonNumber);
+        }
+
         public async Task UpdateLessonHour(LessonHour lessonHour)
         {
             if (lessonHour == null)
