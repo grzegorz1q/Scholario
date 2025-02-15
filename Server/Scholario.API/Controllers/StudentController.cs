@@ -42,11 +42,6 @@ namespace Scholario.API.Controllers
             try
             {
                 var student = await _studentService.GetStudentById(id);
-
-                if (student == null)
-                {
-                    return NotFound("Student not found");
-                }
                 return Ok(student);
             }
             catch (ArgumentOutOfRangeException ex)

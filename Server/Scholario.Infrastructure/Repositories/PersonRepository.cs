@@ -17,7 +17,10 @@ namespace Scholario.Infrastructure.Repositories
         {
             _appDbContext = appDbContext;
         }
-
+        public async Task<Person?> GetPerson(int id)
+        {
+            return await _appDbContext.Persons.FirstOrDefaultAsync(p => p.Id == id);
+        }
         public async Task AddPerson(Person person)
         {
             if (person == null)
