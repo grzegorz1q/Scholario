@@ -68,15 +68,15 @@ namespace Scholario.API.Controllers
             try
             {
                 // Pobieranie studentId z tokenu JWT
-                var studentIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                if (studentIdClaim == null)
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (userIdClaim == null)
                 {
-                    return Unauthorized("Student ID not found in token.");
+                    return Unauthorized("User ID not found in token.");
                 }
-                var studentId = int.Parse(studentIdClaim);
-                var studentSchedule = await _scheduleEntryService.GetStudentSchedule(studentId);
+                var userId = int.Parse(userIdClaim);
+                var userSchedule = await _scheduleEntryService.GetStudentSchedule(userId);
 
-                return Ok(studentSchedule);
+                return Ok(userSchedule);
             }
             catch (ArgumentNullException ex)
             {
