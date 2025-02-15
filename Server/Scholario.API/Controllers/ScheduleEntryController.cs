@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Scholario.Application.Dtos;
 using Scholario.Application.Dtos.ScheduleEntries;
@@ -18,6 +19,7 @@ namespace Scholario.API.Controllers
         }
 
         [HttpPost("hour/create")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateLessonHour([FromBody] LessonHourDto lessonHourDto)
         {
             try
@@ -38,6 +40,7 @@ namespace Scholario.API.Controllers
         }
 
         [HttpPost("schedule/create")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateScheduleEntry([FromBody] ScheduleEntryDto scheduleEntryDto)
         {
             try
