@@ -10,5 +10,6 @@ namespace Scholario.Application.Interfaces
     public interface ISubjectService
     {
         Task CreateSubject(CreateSubjectDto createSubjectDto);
+        Task<UserSubjectsDto> GetLoggedUserSubjects(int userId);
     }
 }
