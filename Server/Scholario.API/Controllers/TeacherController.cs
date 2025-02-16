@@ -68,7 +68,6 @@ namespace Scholario.API.Controllers
         {
             try
             {
-                // Pobierz id nauczyciela z tokena JWT
                 var teacherIdClaim = (User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
                 if (teacherIdClaim == null)
                 {

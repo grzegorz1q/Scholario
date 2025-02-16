@@ -39,6 +39,7 @@ namespace Scholario.API.Controllers
             }
         }
         [HttpGet]
+        [Authorize(Roles ="Teacher,Parent,Student")]
         public async Task<IActionResult> GetLoggedUserSubjects()
         {
             try
