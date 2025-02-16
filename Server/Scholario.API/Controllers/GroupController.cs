@@ -26,9 +26,9 @@ namespace Scholario.API.Controllers
                     return Unauthorized("User's ID is missing in the token.");
                 }
                 var userId = int.Parse(userIdClaim);
-                var subjects = await _groupService.GetLoggedUserGroup(userId);
+                var groups = await _groupService.GetLoggedUserGroup(userId);
 
-                return Ok(subjects);
+                return Ok(groups);
             }
             catch (ArgumentOutOfRangeException ex)
             {
