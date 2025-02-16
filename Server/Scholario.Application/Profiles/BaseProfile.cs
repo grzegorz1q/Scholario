@@ -36,7 +36,10 @@ namespace Scholario.Application.Profiles
                 .ForMember(dest => dest.ChildId, x => x.MapFrom(src => src.Id))
                 .ForMember(dest => dest.ChildName, x => x.MapFrom(src => $"{src.FirstName} {src.LastName}"))
                 .ForMember(dest => dest.Subjects, x => x.MapFrom(src => src.Group.Subjects));
-
+            CreateMap<Student, ParentGroupDto>()
+                .ForMember(dest => dest.ChildId, x => x.MapFrom(src => src.Id))
+                .ForMember(dest => dest.ChildName, x => x.MapFrom(src => $"{src.FirstName} {src.LastName}"))
+                .ForMember(dest => dest.Group, x => x.MapFrom(src => src.Group));
             CreateMap<ScheduleEntry, ScheduleEntryDto>()
                 .ForMember(dest => dest.LessonNumber, x => x.MapFrom(src => src.LessonHour.LessonNumber));
             CreateMap<ScheduleEntryDto, ScheduleEntry>();
