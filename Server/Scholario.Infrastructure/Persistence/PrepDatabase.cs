@@ -82,6 +82,24 @@ namespace Scholario.Infrastructure.Persistence
                     _appDbContext.SaveChanges();
                 }
             }
+            if (_appDbContext.Database.CanConnect())
+            {
+                if (!_appDbContext.LessonHours.Any())
+                {
+                    var lessonHours = GetLessonHours();
+                    _appDbContext.LessonHours.AddRange(lessonHours);
+                    _appDbContext.SaveChanges();
+                }
+            }
+            if (_appDbContext.Database.CanConnect())
+            {
+                if (!_appDbContext.ScheduleEntries.Any())
+                {
+                    var scheduleEntries = GetScheduleEntries();
+                    _appDbContext.ScheduleEntries.AddRange(scheduleEntries);
+                    _appDbContext.SaveChanges();
+                }
+            }
         }
 
         private IEnumerable<Teacher> GetTeachers()
@@ -113,10 +131,15 @@ namespace Scholario.Infrastructure.Persistence
         private IEnumerable<Student> GetStudents()
         {
             var parentId = _appDbContext.Persons.OfType<Parent>().First().Id;
-            var group = _appDbContext.Groups.First();
+            var parentId1 = _appDbContext.Persons.OfType<Parent>().Skip(1).First().Id;
+            var groupId = _appDbContext.Groups.First().Id;
+            var groupId1 = _appDbContext.Groups.Skip(1).First().Id;
             var students = new List<Student>()
             {
-                new Student(){FirstName="Adam", LastName="Nowak", Email="adam.nowak@test.pl", Password="adamnowak", GroupId=group.Id, ParentId=parentId}
+                new Student(){FirstName="Adam", LastName="Nowak", Email="adam.nowak@test.pl", Password="adamnowak", GroupId=groupId, ParentId=parentId},
+                new Student(){FirstName="Ala", LastName="Nowakowska", Email="ala.nowakowska@test.pl", Password="alanowakswska", GroupId=groupId, ParentId=parentId},
+                new Student(){FirstName="Ada", LastName="Kowalska", Email="ada.kowalska@test.pl", Password="adakowalska", GroupId=groupId1, ParentId=parentId1},
+                
             };
             foreach (var e in students)
             {
@@ -138,20 +161,25 @@ namespace Scholario.Infrastructure.Persistence
         }
         private IEnumerable<Group> GetGroups()
         {
-            var teacher = _appDbContext.Persons.OfType<Teacher>().First();
+            var teacherId = _appDbContext.Persons.OfType<Teacher>().First().Id;
+            var teacherId1 = _appDbContext.Persons.OfType<Teacher>().Skip(1).First().Id;
             var groups = new List<Group>()
             {
-                new Group() {Name = "1tb1", TeacherId = teacher.Id}
+                new Group() {Name = "1tb1", TeacherId = teacherId},
+                new Group() {Name = "2ti2", TeacherId = teacherId1},
+
             };
             return groups;
         }
         private IEnumerable<Subject> GetSubjects()
         {
             var teacherId = _appDbContext.Persons.OfType<Teacher>().First().Id;
-            var group = _appDbContext.Groups.First();
+            var teacherId1 = _appDbContext.Persons.OfType<Teacher>().Skip(1).First().Id;
+            var groups = _appDbContext.Groups.ToList();
             var subjects = new List<Subject>()
             {
-                new Subject(){ Name="Matematyka", TeacherId=teacherId, Description="Przedmiot pozwalający zrozumieć logiczne myślenie", Groups = new List<Group>() {group} }
+                new Subject(){ Name="Matematyka", TeacherId=teacherId1, Description="Przedmiot pozwalający zrozumieć logiczne myślenie", Groups = groups },
+                new Subject(){ Name="Język polski", TeacherId=teacherId, Description="Nauak o języku", Groups = groups }
             };
             return subjects;
         }
@@ -181,6 +209,42 @@ namespace Scholario.Infrastructure.Persistence
             };
 
             return grades;
+        }
+        private IEnumerable<LessonHour> GetLessonHours()
+        {
+            var lessonHours = new List<LessonHour>()
+            {
+                new LessonHour() {StartTime = new TimeSpan(8,0,0), EndTime= new TimeSpan(8,45,0), LessonNumber=1},
+                new LessonHour() {StartTime = new TimeSpan(8,55,0), EndTime= new TimeSpan(9,40,0), LessonNumber=2},
+                new LessonHour() {StartTime = new TimeSpan(9,50,0), EndTime= new TimeSpan(10,35,0), LessonNumber=3},
+                new LessonHour() {StartTime = new TimeSpan(10,45,0), EndTime= new TimeSpan(11,30,0), LessonNumber=4},
+                new LessonHour() {StartTime = new TimeSpan(11,40,0), EndTime= new TimeSpan(12,25,0), LessonNumber=5},
+                new LessonHour() {StartTime = new TimeSpan(12,35,0), EndTime= new TimeSpan(13,20,0), LessonNumber=6},
+                new LessonHour() {StartTime = new TimeSpan(13,30,0), EndTime= new TimeSpan(14,15,0), LessonNumber=7},
+                new LessonHour() {StartTime = new TimeSpan(14,25,0), EndTime= new TimeSpan(15,10,0), LessonNumber=8}
+            };
+            return lessonHours;
+        }
+        private IEnumerable<ScheduleEntry> GetScheduleEntries()
+        {
+            var group = _appDbContext.Groups.First();
+            var group1 = _appDbContext.Groups.Skip(1).First();
+            var subject1 = _appDbContext.Subjects.First();
+            var subject2 = _appDbContext.Subjects.Skip(1).First();
+            var lessonHour1 = _appDbContext.LessonHours.First().Id;
+            var lessonHour2 = _appDbContext.LessonHours.Skip(1).First().Id;
+            var lessonHour3 = _appDbContext.LessonHours.Skip(2).First().Id;
+            Console.WriteLine(lessonHour1);
+            var scheduleEntries = new List<ScheduleEntry>()
+            {
+                new ScheduleEntry() { SubjectId = subject1.Id, GroupId = group.Id, Day = DayOfWeek.Monday, LessonHourId = lessonHour1},
+                new ScheduleEntry() { SubjectId = subject1.Id, GroupId = group.Id, Day = DayOfWeek.Monday, LessonHourId = lessonHour2},
+                new ScheduleEntry() { SubjectId = subject2.Id, GroupId = group.Id, Day = DayOfWeek.Monday, LessonHourId = lessonHour3},
+                new ScheduleEntry() { SubjectId = subject2.Id, GroupId = group1.Id, Day = DayOfWeek.Monday, LessonHourId = lessonHour1},
+                new ScheduleEntry() { SubjectId = subject1.Id, GroupId = group1.Id, Day = DayOfWeek.Tuesday, LessonHourId = lessonHour1},
+                new ScheduleEntry() { SubjectId = subject2.Id, GroupId = group1.Id, Day = DayOfWeek.Tuesday, LessonHourId = lessonHour2},
+            };
+            return scheduleEntries;
         }
 
     }
