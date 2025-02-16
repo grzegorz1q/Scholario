@@ -28,8 +28,6 @@ namespace Scholario.Application.Profiles
             CreateMap<RegisterUserDto, Person>();
             CreateMap<CreateSubjectDto, Subject>();
             CreateMap<Grade, ReadGradeByStudentDto>();
-            CreateMap<Group, ReadGroupDto>()
-                .ForMember(dest => dest.TeacherName, x => x.MapFrom(src => $"{src.Teacher.FirstName} {src.Teacher.LastName}"));
             CreateMap<Subject, ReadSubjectDto>()
                 .ForMember(dest => dest.TeacherName, x => x.MapFrom(src => $"{src.Teacher.FirstName} {src.Teacher.LastName}"));
             CreateMap<Student, ParentSubjectDto>()
@@ -44,7 +42,8 @@ namespace Scholario.Application.Profiles
                 .ForMember(dest => dest.LessonNumber, x => x.MapFrom(src => src.LessonHour.LessonNumber));
             CreateMap<ScheduleEntryDto, ScheduleEntry>();
             CreateMap<Group, ReadGroupDto>()
-                .ForMember(dest => dest.TeacherName, x => x.MapFrom(src => $"{src.Teacher.FirstName} {src.Teacher.LastName}"));
+                .ForMember(dest => dest.TeacherName, x => x.MapFrom(src => $"{src.Teacher.FirstName} {src.Teacher.LastName}"))
+                .ForMember(dest => dest.Students, x => x.MapFrom(src => src.Students.Select(s => $"{s.FirstName} {s.LastName}")));
 
             CreateMap<LessonHourDto, LessonHour>();
 

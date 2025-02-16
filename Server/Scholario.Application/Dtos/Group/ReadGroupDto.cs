@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Scholario.Application.Dtos.Student;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,5 +12,6 @@ namespace Scholario.Application.Dtos.Group
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string TeacherName { get; set; } = default!;
+        public IEnumerable<string> Students { get; set; } = default!;
     }
 }
