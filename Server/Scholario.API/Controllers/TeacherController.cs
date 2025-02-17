@@ -15,10 +15,12 @@ namespace Scholario.API.Controllers
     {
         private readonly ITeacherService _teacherService;
         private readonly IStudentService _studentService;
-        public TeacherController(ITeacherService teacherService, IStudentService studentService)
+        private readonly IGroupService _groupService;
+        public TeacherController(ITeacherService teacherService, IStudentService studentService, IGroupService groupService)
         {
             _teacherService = teacherService;
             _studentService = studentService;
+            _groupService = groupService;
         }
         [HttpPost("messages")]
         [Authorize(Roles = "Teacher")]
@@ -59,6 +61,28 @@ namespace Scholario.API.Controllers
             {
                 Console.WriteLine($">[GradeCtr] Unhandled exception: {ex.Message}");
                 return BadRequest($"Unexpected error: {ex.Message}");
+            }
+        }
+
+        [HttpGet("groups")]
+        [Authorize(Roles = "Teacher")]
+        public async Task<IActionResult> GetLoggedTeacherGroups() //Zwracanie grup, które uczy zalogowany nauczyciel(grupa której jest wychowawcą zwracana jest w GroupController)
+        {
+            try
+            {
+                var teacherIdClaim = (User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                if (teacherIdClaim == null)
+                {
+                    return Unauthorized("Teacher's ID is missing in the token.");
+                }
+                var teacherId = int.Parse(teacherIdClaim);
+                var groups = await _groupService.GetLoggedTeacherGroups(teacherId);
+                return Ok(groups);
+            }
+            catch(UnauthorizedAccessException ex)
+            {
+                Console.WriteLine($"Unauthorized access: {ex.Message}");
+                return Unauthorized();
             }
         }
 
