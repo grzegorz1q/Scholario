@@ -17,13 +17,26 @@ namespace Scholario.Application.Services
     {
         private readonly IGroupRepository _groupRepository;
         private readonly IPersonRepository _personRepository;
+        private readonly ITeacherRepository _teacherRepository;
         private readonly IMapper _mapper;
-        public GroupService(IGroupRepository groupRepository, IPersonRepository personRepository, IMapper mapper) 
+        public GroupService(IGroupRepository groupRepository, IPersonRepository personRepository, ITeacherRepository teacherRepository, IMapper mapper) 
         {
             _groupRepository = groupRepository;
             _personRepository = personRepository;
+            _teacherRepository = teacherRepository;
             _mapper = mapper;
         }
+
+        public async Task<IEnumerable<ReadGroupDto>> GetLoggedTeacherGroups(int teacherId)
+        {
+            var teacher = await _teacherRepository.GetTeacher(teacherId);
+            if (teacher == null)
+                throw new UnauthorizedAccessException(nameof(teacher));
+            var teacherGroups = teacher.Subjects.SelectMany(s => s.Groups);
+            var groupDtos = _mapper.Map<IEnumerable<ReadGroupDto>>(teacherGroups);
+            return groupDtos;
+        }
+
         public async Task<UserGroupsDto> GetLoggedUserGroup(int userId)
         {
             var groups = await _groupRepository.GetAllGroups();
