@@ -24,7 +24,13 @@ namespace Scholario.Application.Profiles
             CreateMap<AddOrUpdateGradeToStudentDto, Grade>();
             CreateMap<AddMessageOrNoteToStudentDto, Message>();
             CreateMap<ReadStudentDto, Student>();
+
             CreateMap<Student, ReadStudentDto>();
+            CreateMap<Student, ReadStudentWithFilteredGradesDto>()
+                .ForMember(dest => dest.Grades, opt => opt.MapFrom((src, dest, _, context) =>
+                    src.Grades.Where(g => g.SubjectId == (int)context.Items["subjectId"])));
+
+
             CreateMap<RegisterUserDto, Person>();
             CreateMap<CreateSubjectDto, Subject>();
             CreateMap<Grade, ReadGradeByStudentDto>();

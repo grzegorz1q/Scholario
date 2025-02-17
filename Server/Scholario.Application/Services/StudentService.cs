@@ -55,20 +55,10 @@ namespace Scholario.Application.Services
 
             var studentDto = _mapper.Map<ReadStudentDto>(student);
 
-            studentDto.Grades = student.Grades.Select(g => new ReadGradeByStudentDto
-            {
-                Id = g.Id,
-                GradeValue = g.GradeValue,
-                SubjectId = g.SubjectId,
-                StudentId = g.StudentId,
-                DateOfIssue = g.DateOfIssue,
-                DescriptiveAssessmentId = g.DescriptiveAssessmentId
-            }).ToList();
-
             return studentDto;
         }
 
-        public async Task<IEnumerable<ReadStudentDto>> GetStudentsByGroupAndSubject(int groupId, int subjectId, int teacherId)
+        public async Task<IEnumerable<ReadStudentWithFilteredGradesDto>> GetStudentsByGroupAndSubject(int groupId, int subjectId, int teacherId)
         {
             var subject = await _subjectRepository.GetSubject(subjectId);
             if (subject == null)
@@ -82,7 +72,7 @@ namespace Scholario.Application.Services
                 throw new UnauthorizedAccessException("You are not authorized to view this subject");
 
             var students = group.Students.ToList();
-            var studentDtos = _mapper.Map<IEnumerable<ReadStudentDto>>(students);
+            var studentDtos = _mapper.Map<IEnumerable<ReadStudentWithFilteredGradesDto>>(students, opt => opt.Items["subjectId"] = subjectId);
             return studentDtos;
         }
     }
