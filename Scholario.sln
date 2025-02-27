@@ -7,11 +7,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{CFBB45
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scholario.API", "Server\Scholario.API\Scholario.API.csproj", "{8FF0DF60-7389-4440-B250-D81AAB8441BC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scholario.Application", "Server\Scholario.Application\Scholario.Application.csproj", "{B50779EC-0E47-4ED6-A8AD-270B541F2E33}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scholario.Application", "Server\Scholario.Application\Scholario.Application.csproj", "{B50779EC-0E47-4ED6-A8AD-270B541F2E33}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scholario.Domain", "Server\Scholario.Domain\Scholario.Domain.csproj", "{20AABAEB-0182-4110-AAC9-46C0DED774C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scholario.Domain", "Server\Scholario.Domain\Scholario.Domain.csproj", "{20AABAEB-0182-4110-AAC9-46C0DED774C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scholario.Infrastructure", "Server\Scholario.Infrastructure\Scholario.Infrastructure.csproj", "{471E0704-B4BC-41E7-9D36-009A04D3E6BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scholario.Infrastructure", "Server\Scholario.Infrastructure\Scholario.Infrastructure.csproj", "{471E0704-B4BC-41E7-9D36-009A04D3E6BA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
