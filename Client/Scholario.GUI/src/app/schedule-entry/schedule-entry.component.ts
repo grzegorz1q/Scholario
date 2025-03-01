@@ -37,7 +37,19 @@ export class ScheduleEntryComponent implements OnInit {
     );
   }
   
-  showSubjectDetails(subjectId: number | null): void {
+  getSubjectId(day: string, lesson: number): number | null {
+    const dayIndex = this.days.indexOf(day) + 1;
+    const entry = this.scheduleEntries.find(e => e.day === dayIndex && e.lessonNumber === lesson);
+    return entry ? entry.subjectId : null;
+  }
+  
+  getScheduleEntry(day: string, lesson: number): string {
+    const dayIndex = this.days.indexOf(day) + 1; 
+    const entry = this.scheduleEntries.find(e => e.day === dayIndex && e.lessonNumber === lesson);
+    return entry ? this.subjectsMap[entry.subjectId] || 'Brak danych' : '-';
+  }
+
+    showSubjectDetails(subjectId: number | null): void {
     if (!subjectId) return;
     
     this.apiService.getSubjects().subscribe(
@@ -52,17 +64,4 @@ export class ScheduleEntryComponent implements OnInit {
       error => console.error('Błąd podczas pobierania przedmiotów:', error)
     );
   }
-  
-  getSubjectId(day: string, lesson: number): number | null {
-    const dayIndex = this.days.indexOf(day) + 1;
-    const entry = this.scheduleEntries.find(e => e.day === dayIndex && e.lessonNumber === lesson);
-    return entry ? entry.subjectId : null;
-  }
-  
-  getScheduleEntry(day: string, lesson: number): string {
-    const dayIndex = this.days.indexOf(day) + 1; 
-    const entry = this.scheduleEntries.find(e => e.day === dayIndex && e.lessonNumber === lesson);
-    return entry ? this.subjectsMap[entry.subjectId] || 'Brak danych' : '-';
-  }
-
 }
