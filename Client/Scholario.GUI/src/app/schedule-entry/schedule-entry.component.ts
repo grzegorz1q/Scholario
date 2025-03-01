@@ -1,15 +1,26 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../../Service/api.service';
 
 @Component({
   selector: 'app-schedule-entry',
-  imports: [],
   templateUrl: './schedule-entry.component.html',
-  styleUrl: './schedule-entry.component.scss'
+  styleUrls: ['./schedule-entry.component.scss']
 })
-export class ScheduleEntryComponent {
-    private readonly schedyleEntryService = inject(ApiService)
-    ngOnInit(){
-      this.schedyleEntryService.getUsers()
-    }
+export class ScheduleEntryComponent implements OnInit {
+  scheduleEntries: any[] = [];  // Zmienna do przechowywania danych
+
+  constructor(private apiService: ApiService) {}
+
+  ngOnInit(): void {
+    // Wywołanie metody serwisu, aby pobrać dane
+    this.apiService.getScheduleEntries().subscribe(
+      (data) => {
+        this.scheduleEntries = data;  // Przypisanie danych do zmiennej
+        console.log(this.scheduleEntries);  // Opcjonalnie: wyświetlenie w konsoli
+      },
+      (error) => {
+        console.error('Błąd podczas pobierania danych:', error);  // Obsługa błędów
+      }
+    );
+  }
 }

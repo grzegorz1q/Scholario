@@ -6,11 +6,11 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ApiService {
-  private apiUrl = 'https://localhost:5256/';
+  private apiUrl = 'http://localhost:5256';
 
   constructor(private http: HttpClient) {}
 
-  getUsers(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/schedule/entries`);
+  getScheduleEntries(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/schedule-entries/schedule/entries`);
   }
 }
