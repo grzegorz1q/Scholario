@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './schedule-entry.component.html',
   styleUrls: ['./schedule-entry.component.scss']
 })
+
 export class ScheduleEntryComponent implements OnInit {
   selectedSubject: any = null;
   scheduleEntries: any[] = [];  
