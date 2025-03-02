@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+ï»¿using Microsoft.EntityFrameworkCore;
 using Scholario.Application.Interfaces;
 using Scholario.Application.Services;
 using Scholario.Domain.Interfaces;
@@ -44,6 +44,15 @@ builder.Services.AddAuthentication(options =>
 });
 
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowOrigin",
+        builder => builder.WithOrigins("http://localhost:4200")
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials()
+        );
+});
 
 //Authorization custom policies
 
@@ -91,7 +100,7 @@ builder.Services.AddSwaggerGen(opt =>
     opt.MapType<TimeSpan>(() => new OpenApiSchema
     {
         Type = "string",
-        Example = new OpenApiString("00:00") // Ustawienie przyk³adu formatu
+        Example = new OpenApiString("00:00") // Ustawienie przykÂ³adu formatu
     });
 });
 
@@ -129,7 +138,7 @@ builder.Services.AddScoped<ISubjectService, SubjectService>();
 builder.Services.AddScoped<IGroupService, GroupService>();
 builder.Services.AddScoped<IScheduleEntryService, ScheduleEntryService>();
 
-//Hashowanie has³a
+//Hashowanie hasÂ³a
 builder.Services.AddScoped<IPasswordHasher<Person>, PasswordHasher<Person>>();
 builder.Services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator>();
 
@@ -151,7 +160,12 @@ using (var scope = app.Services.CreateScope())
     prepDatabase.Seed();
 }
 //
+
+
+app.UseCors("AllowOrigin");
+
 app.UseAuthentication();
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

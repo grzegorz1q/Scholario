@@ -1,0 +1,40 @@
+<div class="form-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Godzina</th>
+                <th *ngFor="let day of days">{{ day }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let lesson of lessons">
+                <td>{{ lesson }}</td>
+                <td *ngFor="let day of days">
+                    <span 
+                        *ngIf="getScheduleEntry(day, lesson) !== '-'" 
+                        (click)="showSubjectDetails(getSubjectId(day, lesson))" 
+                        style="cursor: pointer;color: black;">
+                        {{ getScheduleEntry(day, lesson) }}
+                    </span>
+                    <span *ngIf="getScheduleEntry(day, lesson) === '-'"></span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+<div *ngIf="selectedSubject" class="modal">
+    <div class="modal-content">
+        <span class="close" (click)="selectedSubject = null">&times;</span>
+        <h2>{{ selectedSubject.name }}</h2>
+        <p><strong>Opis:</strong> {{ selectedSubject.description }}</p>
+        <p><strong>Nauczyciel:</strong> {{ selectedSubject.teacherName }}</p>
+        <p><strong>Grupy:</strong></p>
+        <ul>
+            <li *ngFor="let group of selectedSubject.groups">
+                {{ group.name }} - {{ group.teacherName }} ({{ group.students.length }} uczniów)
+            </li>
+        </ul>
+    </div>
+</div>

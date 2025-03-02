@@ -1,0 +1,18 @@
+<div class="form-container">
+    <div class="title">
+        <p>Logowanie</p>
+    </div>
+    <form (ngSubmit)="login()">
+        <label for="email">Podaj swój email</label>
+        <input type="text" id="email" name="email" [(ngModel)]="email" required>
+
+        <label for="password">Podaj swoje hasło</label>
+        <input type="password" id="password" name="password" [(ngModel)]="password" required>
+
+        <button type="submit">Zaloguj się</button>
+    </form>
+
+    <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+    </div>
+</div>
