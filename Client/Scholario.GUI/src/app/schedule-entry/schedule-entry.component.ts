@@ -50,7 +50,7 @@ export class ScheduleEntryComponent implements OnInit {
     return entry ? this.subjectsMap[entry.subjectId] || 'Brak danych' : '-';
   }
 
-    showSubjectDetails(subjectId: number | null): void {
+  showSubjectDetails(subjectId: number | null): void {
     if (!subjectId) return;
     
     this.apiService.getSubjects().subscribe(

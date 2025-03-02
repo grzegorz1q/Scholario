@@ -22,7 +22,7 @@ export class ApiService {
     
   }
 
-  getSubjects(): Observable<{ subjects: any[] }> {
+  getSubjects(): Observable<{ subjects: any[] }> {    // Do sprawdzenia "getSubjects(): Observable<Subject[]> {"
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`);
     return this.http.get<{ subjects: any[] }>(`${this.apiUrl}/subjects`, { headers });
   }
