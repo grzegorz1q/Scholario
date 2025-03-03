@@ -44,10 +44,6 @@ namespace Scholario.Application.Services
             if (!group.Students.Any(s => s.Id == student.Id))
                 throw new Exception("This student is not in this group");
 
-            var teacher = await _teacherRepository.GetTeacher(teacherId);
-            if (teacher == null)
-                throw new UnauthorizedAccessException(nameof(teacher));
-
             //Do zmiany
 
 /*            if (!teacher.Subjects.Any(subject => subject.Groups.Any(g => g.Id == group.Id)))
