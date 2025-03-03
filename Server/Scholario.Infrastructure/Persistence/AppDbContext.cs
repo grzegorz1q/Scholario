@@ -19,6 +19,7 @@ namespace Scholario.Infrastructure.Persistence
         public virtual DbSet<Notification> Notifications { get; set; }
         public virtual DbSet<LessonHour> LessonHours { get; set; }
         public virtual DbSet<ScheduleEntry> ScheduleEntries { get; set; }
+        public virtual DbSet<StudentAttendance> StudentAttendances { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
@@ -135,6 +136,18 @@ namespace Scholario.Infrastructure.Persistence
                 .WithMany(lh => lh.ScheduleEntries)
                 .HasForeignKey(se => se.LessonHourId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            //Relacja StudentAttendances -> Student
+            modelBuilder.Entity<StudentAttendance>()
+                .HasOne(sa => sa.Student)
+                .WithMany(s => s.StudentAttendances)
+                .HasForeignKey(sa => sa.StudentId);
+
+            //Relacja StudentAttendances -> ScheduleEntry
+            modelBuilder.Entity<StudentAttendance>()
+                .HasOne(sa => sa.ScheduleEntry)
+                .WithMany(se => se.StudentAttendances)
+                .HasForeignKey(sa => sa.ScheduleEntryId);
         }
     }
 }
