@@ -58,7 +58,7 @@ namespace Scholario.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DescriptiveAssessments");
+                    b.ToTable("DescriptiveAssessments", (string)null);
                 });
 
             modelBuilder.Entity("Scholario.Domain.Entities.Grade", b =>
@@ -92,7 +92,7 @@ namespace Scholario.Infrastructure.Migrations
 
                     b.HasIndex("SubjectId");
 
-                    b.ToTable("Grades");
+                    b.ToTable("Grades", (string)null);
                 });
 
             modelBuilder.Entity("Scholario.Domain.Entities.Group", b =>
@@ -115,7 +115,7 @@ namespace Scholario.Infrastructure.Migrations
                     b.HasIndex("TeacherId")
                         .IsUnique();
 
-                    b.ToTable("Groups");
+                    b.ToTable("Groups", (string)null);
                 });
 
             modelBuilder.Entity("Scholario.Domain.Entities.LessonHour", b =>
@@ -137,7 +137,7 @@ namespace Scholario.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("LessonHours");
+                    b.ToTable("LessonHours", (string)null);
                 });
 
             modelBuilder.Entity("Scholario.Domain.Entities.Message", b =>
@@ -173,7 +173,7 @@ namespace Scholario.Infrastructure.Migrations
 
                     b.HasIndex("SenderId");
 
-                    b.ToTable("Messages");
+                    b.ToTable("Messages", (string)null);
                 });
 
             modelBuilder.Entity("Scholario.Domain.Entities.Notification", b =>
@@ -204,7 +204,7 @@ namespace Scholario.Infrastructure.Migrations
 
                     b.HasIndex("ReceiverId");
 
-                    b.ToTable("Notifications");
+                    b.ToTable("Notifications", (string)null);
                 });
 
             modelBuilder.Entity("Scholario.Domain.Entities.Person", b =>
@@ -271,7 +271,7 @@ namespace Scholario.Infrastructure.Migrations
 
                     b.HasIndex("SubjectId");
 
-                    b.ToTable("ScheduleEntries");
+                    b.ToTable("ScheduleEntries", (string)null);
                 });
 
             modelBuilder.Entity("Scholario.Domain.Entities.StudentAttendance", b =>
@@ -298,7 +298,7 @@ namespace Scholario.Infrastructure.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("StudentAttendances");
+                    b.ToTable("StudentAttendances", (string)null);
                 });
 
             modelBuilder.Entity("Scholario.Domain.Entities.Subject", b =>
@@ -323,7 +323,7 @@ namespace Scholario.Infrastructure.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("Subjects");
+                    b.ToTable("Subjects", (string)null);
                 });
 
             modelBuilder.Entity("Scholario.Domain.Entities.Parent", b =>

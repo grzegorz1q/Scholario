@@ -4,6 +4,7 @@ using Scholario.Application.Dtos.ScheduleEntries;
 using Scholario.Application.Dtos.StudentAttendance;
 using Scholario.Application.Interfaces;
 using Scholario.Application.Services;
+using System.Security.Claims;
 
 namespace Scholario.API.Controllers
 {
@@ -17,12 +18,18 @@ namespace Scholario.API.Controllers
             _studentAttendanceService = studentAttendanceService;
         }
         [HttpPost]
-        //[Authorize(Roles = "Teacher")]
+        [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> CreateStudentAttendance(CreateStudentAttendanceDto studentAttendanceDto)
         {
             try
             {
-                await _studentAttendanceService.CreateStudentAttendance(studentAttendanceDto);
+                var teacherIdClaim = (User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                if (teacherIdClaim == null)
+                {
+                    return Unauthorized("Teacher's ID is missing in the token.");
+                }
+                var teacherId = int.Parse(teacherIdClaim);
+                await _studentAttendanceService.CreateStudentAttendance(studentAttendanceDto, teacherId) ;
                 return Ok("StudentAttendance added successfully");
             }
             catch (ArgumentNullException ex)

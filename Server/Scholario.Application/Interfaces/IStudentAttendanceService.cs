@@ -10,6 +10,6 @@ namespace Scholario.Application.Interfaces
 {
     public interface IStudentAttendanceService
     {
-        Task CreateStudentAttendance(CreateStudentAttendanceDto studentAttendanceDto);
+        Task CreateStudentAttendance(CreateStudentAttendanceDto studentAttendanceDto, int teacherId);
     }
 }

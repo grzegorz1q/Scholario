@@ -12,14 +12,50 @@ namespace Scholario.Application.Services
     public class StudentAttendanceService : IStudentAttendanceService
     {
         private readonly IStudentAttendanceRepository _studentAttendanceRepository;
+        private readonly IStudentRepository _studentRepository;
+        private readonly IGroupRepository _groupRepository;
+        private readonly IScheduleEntryRepository _scheduleEntryRepository;
+        private readonly ITeacherRepository _teacherRepository;
         private readonly IMapper _mapper;
-        public StudentAttendanceService(IMapper mapper, IStudentAttendanceRepository studentAttendanceRepository)
+        public StudentAttendanceService(IMapper mapper,ITeacherRepository teacherRepository ,IStudentAttendanceRepository studentAttendanceRepository, IScheduleEntryRepository scheduleEntryRepository, IGroupRepository groupRepository, IStudentRepository studentRepository)
         {
             _studentAttendanceRepository = studentAttendanceRepository;
+            _groupRepository = groupRepository;
+            _scheduleEntryRepository = scheduleEntryRepository;
+            _studentRepository = studentRepository;
+            _teacherRepository = teacherRepository;
             _mapper = mapper;
         }
-        public async Task CreateStudentAttendance(CreateStudentAttendanceDto studentAttendanceDto)
+        public async Task CreateStudentAttendance(CreateStudentAttendanceDto studentAttendanceDto, int teacherId)
         {
+            if (studentAttendanceDto == null)
+                throw new ArgumentNullException(nameof(studentAttendanceDto));
+
+            var student = await _studentRepository.GetStudent(studentAttendanceDto.StudentId);
+            if (student == null)
+                throw new Exception("Student not found");
+
+            var scheduleEntry = await _scheduleEntryRepository.GetScheduleEntry(studentAttendanceDto.ScheduleEntryId);
+            if (scheduleEntry == null)
+                throw new Exception("ScheduleEntry not found");
+
+            var group = scheduleEntry.Group;
+
+            if (!group.Students.Any(s => s.Id == student.Id))
+                throw new Exception("This student is not in this group");
+
+            var teacher = await _teacherRepository.GetTeacher(teacherId);
+            if (teacher == null)
+                throw new UnauthorizedAccessException(nameof(teacher));
+
+            //Do zmiany
+
+/*            if (!teacher.Subjects.Any(subject => subject.Groups.Any(g => g.Id == group.Id)))
+                throw new Exception("This teacher is not teaching this group");*/
+/*
+            if (!scheduleEntry.Group.Subjects.Any(subject => subject.TeacherId == teacher.Id))
+                throw new Exception("This teacher is not teaching this subject");*/
+
             var existingStudentAttendance = await _studentAttendanceRepository.GetStudentAttendanceByStudentAndSubject(studentAttendanceDto.StudentId, studentAttendanceDto.ScheduleEntryId);
             if (existingStudentAttendance == null)
             {
