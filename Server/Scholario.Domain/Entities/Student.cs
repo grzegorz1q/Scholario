@@ -13,5 +13,6 @@ namespace Scholario.Domain.Entities
         public virtual Parent Parent { get; set; } = default!;
         public int ParentId { get; set; }
         public virtual ICollection<Grade> Grades { get; set; } = default!;
+        public virtual ICollection<Attendance> Attendances { get; set; } = default!;
     }
 }
