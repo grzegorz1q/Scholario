@@ -1,4 +1,5 @@
-﻿using Scholario.Application.Dtos.Student;
+﻿using Scholario.Application.Dtos.Grade;
+using Scholario.Application.Dtos.Student;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,5 +13,6 @@ namespace Scholario.Application.Interfaces
         Task<ReadStudentDto?> GetStudentById(int id);
         Task AddOrChangeStudentGroup(AddOrChangeStudentToGroupDto addOrChangeStudentToGroupDto);
         Task<IEnumerable<ReadStudentWithFilteredGradesDto>> GetStudentsByGroupAndSubject(int groupId, int subjectId, int teacherId);
+        Task<IEnumerable<ReadGradeByStudentDto>> GetStudentGrade(int studentId);
     }
 }
