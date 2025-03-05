@@ -1,15 +1,59 @@
 import { Component } from '@angular/core';
+import { AuthService } from '../../Service/authService';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-navbar',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.scss'
+  styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent {
-  isExpanded = false;  
+  isExpanded = false;
+  userRole: string = '';  // Zmienna do przechowywania roli użytkownika
+  menuItems: any[] = [];  // Tablica do przechowywania pozycji menu
 
-  toggleSidebar(state: boolean): void {
-    this.isExpanded = state; 
+  constructor(private authService: AuthService) {}
+
+  ngOnInit() {
+    this.userRole = this.authService.getUserRole() || '';
+    this.setMenuItems();
+  }
+
+  toggleSidebar(state: boolean) {
+    this.isExpanded = state;
+  }
+
+  setMenuItems() {
+    switch (this.userRole) {
+      case 'Admin':
+        this.menuItems = [
+          { name: 'Panel Admina', link: '#' },
+          { name: 'Zarządzanie użytkownikami', link: '#' },
+          { name: 'Raporty', link: '#' }
+        ];
+        break;
+      case 'Teacher':
+        this.menuItems = [
+          { name: 'Strona główna', link: '#' },
+          { name: 'Przedmioty', link: '#' },
+        ];
+        break;
+      case 'Student':
+        this.menuItems = [
+          { name: 'Moje przedmioty', link: '#' },
+          { name: 'Oceny', link: '#' },
+        ];
+        break;
+      case 'Parent':
+        this.menuItems = [
+          { name: 'Plan zajęć dziecka', link: '#' },
+          { name: 'Komunikacja z nauczycielami', link: '#' }
+        ];
+        break;
+      default:
+        this.menuItems = [];
+        break;
+    }
   }
 }

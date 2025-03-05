@@ -27,7 +27,7 @@ export class LoginComponent {
 
     this.apiService.login(loginDto.email, loginDto.password).subscribe(
       (response: string) => {
-        console.log('Token:', response); // For test
+        console.log('Token:', response);
         localStorage.setItem('auth_token', response);
         this.router.navigate(['/schedule'])
       },
