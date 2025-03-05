@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../../Service/authService';
+import { AuthService } from '../../../Service/authService';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -42,7 +42,7 @@ export class NavbarComponent {
       case 'Student':
         this.menuItems = [
           { name: 'Moje przedmioty', link: '#' },
-          { name: 'Oceny', link: '#' },
+          { name: 'Oceny', link: '/grade' },
         ];
         break;
       case 'Parent':

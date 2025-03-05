@@ -61,17 +61,26 @@ namespace Scholario.Application.Services
             return studentDto;
         }
 
-        public async Task<IEnumerable<ReadGradeByStudentDto>> GetStudentGrade(int studentId)
+        public async Task<IEnumerable<SubjectGradesDto>> GetStudentGrade(int studentId)
         {
             if (studentId < 0) 
                 throw new ArgumentOutOfRangeException("Id must be greater than 0");
 
-            var grade = await _gradeRepository.GetStudentGrades(studentId);
-            if (grade == null)
+            var grades = await _gradeRepository.GetStudentGrades(studentId);
+
+            if (grades == null)
                 throw new Exception("Student dosnt have any grades");
 
-            var gradeDtos = _mapper.Map<IEnumerable<ReadGradeByStudentDto>>(grade);
-            return gradeDtos;
+            var subjectGrades = grades
+                .GroupBy(g => g.SubjectId) // Grupujemy po SubjectId
+                .Select(group => new SubjectGradesDto
+                {
+                    SubjectName = group.First().Subject.Name, // Używamy nazwy przedmiotu z pierwszej oceny w grupie
+                    Grades = group.Select(g => g.GradeValue).ToList() // Lista ocen przypisanych do tego przedmiotu
+                })
+                .ToList();
+
+            return subjectGrades;
         }
 
         public async Task<IEnumerable<ReadStudentWithFilteredGradesDto>> GetStudentsByGroupAndSubject(int groupId, int subjectId, int teacherId)

@@ -1,0 +1,20 @@
+<div class="form-container">
+    <table class="styled-table">
+        <thead>
+            <tr>
+                <th>Przedmiot</th>
+                <th>Oceny</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let grade of studentGrades">
+                <td>{{ grade.subjectName }}</td>
+                <td>
+                    <ul>
+                        <li *ngFor="let gradeValue of grade.grades">{{ gradeValue }}</li>
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -2,6 +2,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AuthService } from '../Service/authService';
+import { Grade } from '../app/Type/Grade';
+import { StudentGrade } from '../app/Type/StudentGrade';
 
 @Injectable({
   providedIn: 'root'
@@ -27,4 +29,9 @@ export class ApiService {
     return this.http.get<{ subjects: any[] }>(`${this.apiUrl}/subjects`, { headers });
   }
 
+  getGradeByStudent(): Observable<StudentGrade[]> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`);
+    return this.http.get<StudentGrade[]>(`${this.apiUrl}/students/grade`, { headers });
+  }
+  
 }

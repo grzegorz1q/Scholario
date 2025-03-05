@@ -11,7 +11,7 @@ namespace Scholario.Application.Dtos.Grade
     {
         public int Id { get; set; }
         public float? GradeValue { get; set; }
-        public int SubjectId { get; set; }
+        public string SubjectName { get; set; } = string.Empty;
         public int StudentId { get; set; }
         public DateTime DateOfIssue { get; set; } = DateTime.Now;
         public int? DescriptiveAssessmentId { get; set; }
