@@ -1,12 +1,13 @@
 <div class="navbar-container">
-    <nav class="sidebar" 
+    <nav class="sidebar"
          [class.expanded]="isExpanded"
-         (mouseenter)="toggleSidebar(true)" 
+         (mouseenter)="toggleSidebar(true)"
          (mouseleave)="toggleSidebar(false)">
-        <ul>
-            <li><a href="#"> Strona główna</a></li>
-            <li><a href="#"> Przedmioty</a></li>
-            <li><a href="#"> Kontakt</a></li>
-        </ul>
+  
+      <ul *ngFor="let item of menuItems">
+        <li><a href="{{ item.link }}">{{ item.name }}</a></li>
+      </ul>
+  
     </nav>
-</div>
+  </div>
+  
