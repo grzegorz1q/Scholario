@@ -12,8 +12,7 @@
                 <td *ngFor="let day of days">
                     <span 
                         *ngIf="getScheduleEntry(day, lesson) !== '-'" 
-                        (click)="showSubjectDetails(getSubjectId(day, lesson))" 
-                        style="cursor: pointer;color: black;">
+                        (click)="showSubjectDetails(getSubjectId(day, lesson))" >
                         {{ getScheduleEntry(day, lesson) }}
                     </span>
                     <span *ngIf="getScheduleEntry(day, lesson) === '-'"></span>

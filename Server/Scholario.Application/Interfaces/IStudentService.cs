@@ -13,6 +13,6 @@ namespace Scholario.Application.Interfaces
         Task<ReadStudentDto?> GetStudentById(int id);
         Task AddOrChangeStudentGroup(AddOrChangeStudentToGroupDto addOrChangeStudentToGroupDto);
         Task<IEnumerable<ReadStudentWithFilteredGradesDto>> GetStudentsByGroupAndSubject(int groupId, int subjectId, int teacherId);
-        Task<IEnumerable<ReadGradeByStudentDto>> GetStudentGrade(int studentId);
+        Task<IEnumerable<SubjectGradesDto>> GetStudentGrade(int studentId);
     }
 }
