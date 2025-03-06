@@ -1,16 +1,32 @@
-<div *ngIf="students.length > 0; else noStudents">
-    <ul>
-      <li *ngFor="let student of students">
-        {{ student.firstName }} {{ student.lastName }}
-        <ul>
-          <li *ngFor="let grade of student.grades">
-            {{ grade.dateOfIssue }}: {{ grade.gradeValue }}
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </div>
-  <ng-template #noStudents>
-    <p>Brak studentów w tej grupie.</p>
-  </ng-template>
-  
+<div class="form-container">
+  <table class="styled-table">
+      <thead>
+          <tr>
+              <th>Uczeń</th>
+              <th>Oceny</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr *ngFor="let student of students">
+              <td>{{ student.firstName }} {{student.lastName}}</td>
+              <td>
+                <a
+                  *ngFor="let g of student.grades"
+                  (click)="getAditionalInformation(); grade = g">
+                  {{ g.gradeValue }}
+                </a>
+              </td>
+          </tr>
+      </tbody>
+  </table>
+</div>
+
+
+<div *ngIf="aditionalInformation" class="modal">
+    <div class="modal-content">
+      <span class="close" (click)="aditionalInformation = false">&times;</span>
+      <p><strong>Data:</strong> {{ grade?.dateOfIssue | date:'yyyy-MM-dd'}}</p>
+      <p><strong>Kategoria:</strong> {{grade?.gradeWeight}}</p>
+      <p><strong>Waga:</strong> {{grade?.gradeWeightValue}}</p>
+    </div>
+</div>

@@ -14,6 +14,5 @@ export class SubjectComponent {
   isSelected: boolean = false;
   getSubjectInfo(){
     this.isSelected = true
-    console.log("sss")
   }
 }
