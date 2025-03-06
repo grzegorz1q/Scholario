@@ -23,7 +23,9 @@ export class NavbarComponent {
   toggleSidebar(state: boolean) {
     this.isExpanded = state;
   }
-
+  logout(){
+    localStorage.removeItem("auth_token");
+  }
   setMenuItems() {
     switch (this.userRole) {
       case 'Admin':

@@ -33,7 +33,7 @@ export class LoginComponent {
       },
       
       (error: HttpErrorResponse) => {
-        this.errorMessage = 'Błąd logowania: ' + error.message;
+        this.errorMessage = 'Niepoprawny email lub hasło';
         console.error(error);
       }
     );
