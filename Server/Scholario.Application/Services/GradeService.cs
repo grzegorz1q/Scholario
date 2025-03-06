@@ -46,12 +46,15 @@ namespace Scholario.Application.Services
             var teacher = await _teacherRepository.GetTeacher(teacherId);
             if (teacher == null)
                 throw new Exception("Teacher not found");
+
             var studentGroup = await _groupRepository.GetGroup(student.GroupId);
             if (studentGroup == null)
                 throw new Exception("Group not found");
+
             var isTeachingInGroup = studentGroup.Subjects.Any(s => s.TeacherId == teacher.Id && s.Id == subject.Id);
             if (!isTeachingInGroup)
                 throw new UnauthorizedAccessException("Teacher is not teaching this student");
+
             var grade = _mapper.Map<Grade>(addGradeToStudentDto);
             await _gradeRepository.AddGrade(grade);
         }
