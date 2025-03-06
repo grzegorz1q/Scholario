@@ -194,6 +194,7 @@ namespace Scholario.Infrastructure.Persistence
                 new Grade()
                 {
                     GradeValue = 4.5f,
+                    GradeWeight = (GradeWeight)1,
                     StudentId = studentId,
                     SubjectId = subjectId,
                     DateOfIssue = DateTime.Now
@@ -202,6 +203,7 @@ namespace Scholario.Infrastructure.Persistence
                 new Grade()
                 {
                     GradeValue = 5.0f,
+                    GradeWeight= (GradeWeight)5,
                     StudentId = studentId,
                     SubjectId = subjectId,
                     DateOfIssue = DateTime.Now
@@ -234,7 +236,8 @@ namespace Scholario.Infrastructure.Persistence
             var lessonHour1 = _appDbContext.LessonHours.First().Id;
             var lessonHour2 = _appDbContext.LessonHours.Skip(1).First().Id;
             var lessonHour3 = _appDbContext.LessonHours.Skip(2).First().Id;
-            Console.WriteLine(lessonHour1);
+
+
             var scheduleEntries = new List<ScheduleEntry>()
             {
                 new ScheduleEntry() { SubjectId = subject1.Id, GroupId = group.Id, Day = DayOfWeek.Monday, LessonHourId = lessonHour1},
