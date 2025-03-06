@@ -11,6 +11,8 @@ namespace Scholario.Domain.Entities
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string? Description { get; set; }
+        public float? FinalAssessment { get; set; }
+        public float? SemiFinalAssessment { get; set; }
         public virtual Teacher Teacher { get; set; } = default!;
         public int TeacherId { get; set; }
         public virtual ICollection<Grade> Grades { get; set; } = default!;
