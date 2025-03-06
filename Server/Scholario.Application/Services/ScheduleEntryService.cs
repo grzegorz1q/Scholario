@@ -48,30 +48,33 @@ namespace Scholario.Application.Services
         }
 
 
-        public async Task<ScheduleEntry> CreateScheduleEntry(ScheduleEntryDto scheduleEntryDto)
-        {
-            if (scheduleEntryDto == null)
-                throw new ArgumentNullException(nameof(scheduleEntryDto));
+            public async Task<ScheduleEntry> CreateScheduleEntry(ScheduleEntryDto scheduleEntryDto)
+            {
+                if (scheduleEntryDto == null)
+                    throw new ArgumentNullException(nameof(scheduleEntryDto));
 
-            var subject = await _subjectRepository.GetSubject(scheduleEntryDto.SubjectId);
-            if (subject == null)
-                throw new Exception("Subject not found");
+                var subject = await _subjectRepository.GetSubject(scheduleEntryDto.SubjectId);
+                if (subject == null)
+                    throw new Exception("Subject not found");
 
-            var group = await _groupRepository.GetGroup(scheduleEntryDto.GroupId);
-            if (group == null)
-                throw new Exception("Group not found");
+                var group = await _groupRepository.GetGroup(scheduleEntryDto.GroupId);
+                if (group == null)
+                    throw new Exception("Group not found");
 
-            var lessonHour = await _lessonHourRepository.GetLessonByNumber(scheduleEntryDto.LessonNumber);
-            if (lessonHour == null)
-                throw new Exception("LessonHour not found for the given LessonNumber");
+                if (group.Subjects == null || !group.Subjects.Any(s => s.Id == subject.Id))
+                    throw new Exception("Group is not asigned to subject");
 
-            var scheduleEntry = _mapper.Map<ScheduleEntry>(scheduleEntryDto);
-            scheduleEntry.LessonHourId = lessonHour.Id;  
+                var lessonHour = await _lessonHourRepository.GetLessonByNumber(scheduleEntryDto.LessonNumber);
+                if (lessonHour == null)
+                    throw new Exception("LessonHour not found for the given LessonNumber");
 
-            await _scheduleEntryRepository.AddScheduleEntry(scheduleEntry);
+                var scheduleEntry = _mapper.Map<ScheduleEntry>(scheduleEntryDto);
+                scheduleEntry.LessonHourId = lessonHour.Id;  
 
-            return scheduleEntry;
-        }
+                await _scheduleEntryRepository.AddScheduleEntry(scheduleEntry);
+
+                return scheduleEntry;
+            }
 
         public async Task<StudentScheduleDto> GetStudentSchedule(int userId)
         {
