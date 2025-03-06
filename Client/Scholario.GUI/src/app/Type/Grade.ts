@@ -1,7 +1,8 @@
 
 export type Grade = {
   gradeValue: number;
-  gradeWeight: number;
+  gradeWeightValue: number;
+  gradeWeight: string;
   subjectName: string;
   studentId: number;
   dateOfIssue: Date;
