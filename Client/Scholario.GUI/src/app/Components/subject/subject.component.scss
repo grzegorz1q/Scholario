@@ -11,6 +11,15 @@
 ul{
     list-style-type: none;
 }
+.teacher{
+    background: gainsboro;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+.teacher:hover{
+    background: lightgray;
+}
 .modal {
     display: flex;
     position: fixed;

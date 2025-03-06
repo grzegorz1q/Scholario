@@ -107,6 +107,11 @@ namespace Scholario.API.Controllers
                 Console.WriteLine($"Unauthorized access: {ex.Message}");
                 return Forbid();
             }
+            catch (KeyNotFoundException ex)
+            {
+                Console.WriteLine($">[TeacherCtr] NotFound exception: {ex.Message}");
+                return NotFound($"NotFound error: {ex.Message}");
+            }
             catch (Exception ex)
             {
                 Console.WriteLine($">[TeacherCtr] Unhandled exception: {ex.Message}");

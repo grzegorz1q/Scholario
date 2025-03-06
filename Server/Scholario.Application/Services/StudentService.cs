@@ -87,11 +87,11 @@ namespace Scholario.Application.Services
         {
             var subject = await _subjectRepository.GetSubject(subjectId);
             if (subject == null)
-                throw new Exception("Subject not found");
+                throw new KeyNotFoundException("Subject not found");
 
             var group = subject.Groups.FirstOrDefault(g => g.Id == groupId);
             if(group == null)
-                throw new Exception("The subject is not taught in this group.");
+                throw new KeyNotFoundException("The subject is not taught in this group.");
 
             if (subject.TeacherId != teacherId && group.TeacherId != teacherId)
                 throw new UnauthorizedAccessException("You are not authorized to view this subject");
