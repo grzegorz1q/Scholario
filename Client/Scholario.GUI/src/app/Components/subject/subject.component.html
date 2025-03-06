@@ -6,7 +6,7 @@
         <h2>{{ subject.name }}</h2>
         <p><strong>Grupy:</strong></p>
         <ul *ngFor="let group of subject.groups">
-            <li [routerLink]="['/subjects', subject.id, 'groups', group.id]">
+            <li [class.teacher]="isTeacher" [routerLink]="isTeacher ? ['/subjects', subject.id, 'groups', group.id] : null">
                 <a>{{ group.name }} - Wychowawca({{ group.teacherName }}) - {{ group.students.length }} uczniów</a>
             </li>
         </ul>

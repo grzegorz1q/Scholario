@@ -110,7 +110,7 @@ namespace Scholario.API.Controllers
             catch (KeyNotFoundException ex)
             {
                 Console.WriteLine($">[TeacherCtr] NotFound exception: {ex.Message}");
-                return BadRequest($"NotFound error: {ex.Message}");
+                return NotFound($"NotFound error: {ex.Message}");
             }
             catch (Exception ex)
             {

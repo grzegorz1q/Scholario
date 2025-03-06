@@ -1,7 +1,8 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { Subject } from '../../Type/Subject';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { AuthService } from '../../../Service/authService';
 
 @Component({
   selector: 'app-subject',
@@ -12,6 +13,11 @@ import { RouterModule } from '@angular/router';
 export class SubjectComponent {
   @Input() subject!: Subject;
   isSelected: boolean = false;
+  isTeacher = false;
+  private readonly authService = inject(AuthService);
+  ngOnInit(){
+    this.isTeacher = this.authService.isTeacher();
+  }
   getSubjectInfo(){
     this.isSelected = true
   }

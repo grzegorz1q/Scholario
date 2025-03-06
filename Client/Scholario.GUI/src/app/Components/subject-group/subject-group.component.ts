@@ -5,6 +5,7 @@ import { ApiService } from '../../../Service/api.service';
 import { CommonModule } from '@angular/common';
 import { Grade } from '../../Type/Grade';
 import { HttpErrorResponse } from '@angular/common/http';
+import { AuthService } from '../../../Service/authService';
 
 @Component({
   selector: 'app-subject-group',
@@ -24,17 +25,15 @@ export class SubjectGroupComponent {
 
   ngOnInit(): void {
     this.subjectId = +this.route.snapshot.paramMap.get('subjectId')!;
-    this.groupId = +this.route.snapshot.paramMap.get('groupId')!;
-    console.log("Subject ID:", this.subjectId);
-    console.log("Group ID:", this.groupId);
+    this.groupId = +this.route.snapshot.paramMap.get('groupId')!;  
 
-    // Po uzyskaniu ID, pobieramy listę studentów
     this.apiService.getStudentsBySubjectGroup(this.subjectId, this.groupId).subscribe(
       (students) => {
         this.students = students;
-        console.log(this.students);
       },
       (error: HttpErrorResponse) => {
+        this.router.navigate(['/subjects']);
+        console.log("blad")
         if(error.status == 403){
           alert('Nie masz dostępu do tych danych');
         }else if (error.status === 404) {
@@ -42,7 +41,6 @@ export class SubjectGroupComponent {
         }else {
           alert('Wystąpił błąd. Spróbuj ponownie później.');
         }
-        this.router.navigate(['/subjects']);
       }
     );
   }
