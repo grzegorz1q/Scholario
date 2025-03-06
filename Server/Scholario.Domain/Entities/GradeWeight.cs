@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,10 +9,15 @@ namespace Scholario.Domain.Entities
 {
     public enum GradeWeight
     {
-        Test = 5,           
-        Quiz = 3,           
-        OralAnswer = 2,     
-        Homework = 2,       
-        ExtraWork = 1
+        [Display(Name = "Sprawdzian")]
+        Sprawdzian = 5,
+        [Display(Name = "Kartkówka")]
+        Kartkówka = 3,
+        [Display(Name = "Odpowiedź")]
+        Odpowiedź = 2,
+        [Display(Name = "Praca domowa")]
+        PracaDomowa = 2,
+        [Display(Name = "Praca dodatkowa")]
+        PracaDodatkowa = 1
     }
 }
