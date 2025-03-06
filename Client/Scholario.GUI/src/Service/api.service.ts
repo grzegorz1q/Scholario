@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { AuthService } from '../Service/authService';
 import { Grade } from '../app/Type/Grade';
 import { StudentGrade } from '../app/Type/StudentGrade';
+import { Student } from '../app/Type/Student';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +33,11 @@ export class ApiService {
   getGradeByStudent(): Observable<StudentGrade[]> {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`);
     return this.http.get<StudentGrade[]>(`${this.apiUrl}/students/grade`, { headers });
+  }
+
+  getStudentsBySubjectGroup(subjectId: number, groupId: number): Observable<Student[]>{
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`);
+    return this.http.get<Student[]>(`${this.apiUrl}/teachers/subjects/${subjectId}/groups/${groupId}/students`, { headers });
   }
   
 }

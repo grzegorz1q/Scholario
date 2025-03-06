@@ -1,0 +1,16 @@
+<div *ngIf="students.length > 0; else noStudents">
+    <ul>
+      <li *ngFor="let student of students">
+        {{ student.firstName }} {{ student.lastName }}
+        <ul>
+          <li *ngFor="let grade of student.grades">
+            {{ grade.dateOfIssue }}: {{ grade.gradeValue }}
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+  <ng-template #noStudents>
+    <p>Brak studentów w tej grupie.</p>
+  </ng-template>
+  

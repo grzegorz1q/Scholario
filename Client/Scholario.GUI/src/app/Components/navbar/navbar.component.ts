@@ -38,12 +38,12 @@ export class NavbarComponent {
       case 'Teacher':
         this.menuItems = [
           { name: 'Strona główna', link: '/schedule' },
-          { name: 'Przedmioty', link: '#' },
+          { name: 'Przedmioty', link: '/subjects' },
         ];
         break;
       case 'Student':
         this.menuItems = [
-          { name: 'Moje przedmioty', link: '/schedule' },
+          { name: 'Moje przedmioty', link: '/subjects' },
           { name: 'Oceny', link: '/grade' },
         ];
         break;

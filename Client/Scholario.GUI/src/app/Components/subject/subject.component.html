@@ -1,0 +1,14 @@
+<div class="subject" (click)="getSubjectInfo()">{{subject.name}}</div>
+
+<div *ngIf="isSelected" class="modal">
+    <div class="modal-content">
+        <span class="close" (click)="isSelected = false">&times;</span>
+        <h2>{{ subject.name }}</h2>
+        <p><strong>Grupy:</strong></p>
+        <ul *ngFor="let group of subject.groups">
+            <li>
+                <a [routerLink]="['/subjects', subject.id, 'groups', group.id]">{{ group.name }} - Wychowawca({{ group.teacherName }}) - {{ group.students.length }} uczniów</a>
+            </li>
+        </ul>
+    </div>
+</div>
