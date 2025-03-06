@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Scholario.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,7 @@ namespace Scholario.Application.Dtos.Grade
     {
         public int? Id { get; set; }
         public int GradeValue { get; set; }
+        public GradeWeight GradeWeight { get; set; }
         public int SubjectId { get; set; }
         public int StudentId { get; set; }
     }
