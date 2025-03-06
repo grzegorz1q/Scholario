@@ -76,7 +76,7 @@ namespace Scholario.Application.Services
                 .Select(group => new SubjectGradesDto
                 {
                     SubjectName = group.First().Subject.Name, // Używamy nazwy przedmiotu z pierwszej oceny w grupie
-                    Grades = group.Select(g => g.GradeValue).ToList() // Lista ocen przypisanych do tego przedmiotu
+                    Grades = _mapper.Map<IEnumerable<ReadGradeByStudentDto>>(group) // Lista ocen przypisanych do tego przedmiotu
                 })
                 .ToList();
 

@@ -35,19 +35,19 @@ export class NavbarComponent {
         break;
       case 'Teacher':
         this.menuItems = [
-          { name: 'Strona główna', link: '#' },
+          { name: 'Strona główna', link: '/schedule' },
           { name: 'Przedmioty', link: '#' },
         ];
         break;
       case 'Student':
         this.menuItems = [
-          { name: 'Moje przedmioty', link: '#' },
+          { name: 'Moje przedmioty', link: '/schedule' },
           { name: 'Oceny', link: '/grade' },
         ];
         break;
       case 'Parent':
         this.menuItems = [
-          { name: 'Plan zajęć dziecka', link: '#' },
+          { name: 'Plan zajęć dziecka', link: '/schedule' },
           { name: 'Komunikacja z nauczycielami', link: '#' }
         ];
         break;

@@ -7,14 +7,26 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let grade of studentGrades">
-                <td>{{ grade.subjectName }}</td>
+            <tr *ngFor="let studentGrade of studentGrades">
+                <td>{{ studentGrade.subjectName }}</td>
                 <td>
                     <ul>
-                        <li *ngFor="let gradeValue of grade.grades">{{ gradeValue }}</li>
+                        <li 
+                            *ngFor="let g of studentGrade.grades"
+                            (click)="getAditionalInformation(); grade = g">
+                            {{ g.gradeValue }}
+                        </li>
                     </ul>
                 </td>
             </tr>
         </tbody>
     </table>
+</div>
+
+
+<div *ngIf="aditionalInformation" class="modal">
+    <div class="modal-content">
+        <span class="close" (click)="aditionalInformation = false">&times;</span>
+        <p><strong>Data:</strong> {{ grade?.dateOfIssue | date:'yyyy-MM-dd'}}</p>
+    </div>
 </div>

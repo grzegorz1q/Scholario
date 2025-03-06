@@ -1,9 +1,8 @@
 import { StudentGrade } from './../../Type/StudentGrade';
-import { Subject } from './../../Type/Subject';
 import { ApiService } from './../../../Service/api.service';
 import { Component, inject } from '@angular/core';
-import { Grade } from '../../Type/Grade';
 import { CommonModule, NgFor } from '@angular/common';
+import { Grade } from '../../Type/Grade';
 
 @Component({
   selector: 'app-grade-component',
@@ -14,7 +13,10 @@ import { CommonModule, NgFor } from '@angular/common';
 
 export class GradeComponent {
   private readonly apiService = inject(ApiService)
+
   studentGrades: StudentGrade[] = [];
+  grade: Grade | null = null;
+  aditionalInformation = false;
 
   ngOnInit() {
     this.getGrades()
@@ -32,5 +34,7 @@ export class GradeComponent {
     );
   }
 
-
+  getAditionalInformation(){
+    this.aditionalInformation = true;
+  }
 }
