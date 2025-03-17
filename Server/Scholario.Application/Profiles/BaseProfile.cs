@@ -36,8 +36,8 @@ namespace Scholario.Application.Profiles
             CreateMap<CreateSubjectDto, Subject>();
             CreateMap<Grade, ReadGradeByStudentDto>()
                 .ForMember(desc => desc.SubjectName, x => x.MapFrom(src => src.Subject.Name))
-                .ForMember(desc => desc.GradeWeightValue, x => x.MapFrom(src => src.GradeWeight))
-                .ForMember(desc => desc.GradeWeight, x => x.MapFrom(src => src.GradeWeight.ToString()));
+                .ForMember(desc => desc.GradeWeight, x => x.MapFrom(src => src.GradeWeight))
+                .ForMember(desc => desc.GradeWeightName, x => x.MapFrom(src => src.GradeWeight.ToString()));
             CreateMap<Subject, ReadSubjectDto>()
                 .ForMember(dest => dest.TeacherName, x => x.MapFrom(src => $"{src.Teacher.FirstName} {src.Teacher.LastName}"));
             CreateMap<Student, ParentSubjectDto>()

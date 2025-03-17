@@ -40,4 +40,8 @@ export class ApiService {
     return this.http.get<Student[]>(`${this.apiUrl}/teachers/subjects/${subjectId}/groups/${groupId}/students`, { headers });
   }
   
+  addGrade(grade: Grade): Observable<any>{
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`);
+    return this.http.post(`${this.apiUrl}/grades`, grade,{ headers, responseType: 'text' as 'json' });
+  }
 }

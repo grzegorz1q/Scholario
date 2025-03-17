@@ -65,7 +65,7 @@ namespace Scholario.API.Controllers
         }
 
         [HttpGet("groups")]
-        [Authorize(Roles = "Teacher")]
+        [Authorize(Roles = "Teacher")] // mozliwe ze niepotrzebne TODO: might be remove
         public async Task<IActionResult> GetLoggedTeacherGroups() //Zwracanie grup, które uczy zalogowany nauczyciel(grupa której jest wychowawcą zwracana jest w GroupController)
         {
             try

@@ -13,8 +13,8 @@ namespace Scholario.Application.Dtos.Grade
     {
         public int Id { get; set; }
         public float? GradeValue { get; set; }
-        public GradeWeight GradeWeightValue { get; set; }
-        public string GradeWeight { get; set; } = string.Empty;
+        public int GradeWeight { get; set; }
+        public string GradeWeightName { get; set; } = string.Empty;
         public string SubjectName { get; set; } = string.Empty;
         public int StudentId { get; set; }
         public DateTime DateOfIssue { get; set; } = DateTime.Now;

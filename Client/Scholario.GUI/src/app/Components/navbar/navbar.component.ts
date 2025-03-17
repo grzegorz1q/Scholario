@@ -43,6 +43,7 @@ export class NavbarComponent {
         break;
       case 'Student':
         this.menuItems = [
+          { name: 'Strona główna', link: '/schedule' },
           { name: 'Moje przedmioty', link: '/subjects' },
           { name: 'Oceny', link: '/grade' },
         ];

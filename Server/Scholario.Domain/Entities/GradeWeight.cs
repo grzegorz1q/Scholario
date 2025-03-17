@@ -12,9 +12,9 @@ namespace Scholario.Domain.Entities
         [Display(Name = "Sprawdzian")]
         Sprawdzian = 5,
         [Display(Name = "Kartkówka")]
-        Kartkówka = 3,
+        Kartkówka = 4,
         [Display(Name = "Odpowiedź")]
-        Odpowiedź = 2,
+        Odpowiedź = 3,
         [Display(Name = "Praca domowa")]
         PracaDomowa = 2,
         [Display(Name = "Praca dodatkowa")]
