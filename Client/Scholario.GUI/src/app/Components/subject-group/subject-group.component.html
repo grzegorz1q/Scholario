@@ -16,9 +16,34 @@
                   {{ g.gradeValue }}
                 </a>
               </td>
+              <td>
+                <button (click)="openGradeForm(student)">+</button>
+              </td>
           </tr>
       </tbody>
   </table>
+</div>
+<!-- Modal do dodawania nowej oceny -->
+<div *ngIf="showGradeForm" class="modal">
+  <div class="modal-content">
+    <span class="close" (click)="showGradeForm = false">&times;</span>
+    <h3>Dodaj ocenę dla {{ selectedStudent?.firstName }} {{ selectedStudent?.lastName }}</h3>
+    <form (submit)="addGrade($event)">
+      <label>
+        Ocena:
+        <input type="number" [(ngModel)]="newGrade.gradeValue" name="gradeValue" min="1" max="6" required>
+      </label>
+      <label>
+        Kategoria:
+        <select [(ngModel)]="newGrade.gradeWeight" name="gradeWeight" required>
+          <option *ngFor="let option of gradeWeightOptions" [value]="option.value">
+            {{ option.name }}
+          </option>
+        </select>
+      </label>
+      <button type="submit">Dodaj</button>
+    </form>
+  </div>
 </div>
 
 
@@ -27,7 +52,7 @@
       <span class="close" (click)="aditionalInformation = false">&times;</span>
       <p><strong>Data:</strong> {{ grade?.dateOfIssue | date:'yyyy-MM-dd'}}</p>
       <p><strong>Ocena:</strong> {{grade?.gradeValue}}</p>
-      <p><strong>Kategoria:</strong> {{grade?.gradeWeight}}</p>
-      <p><strong>Waga:</strong> {{grade?.gradeWeightValue}}</p>
+      <p><strong>Kategoria:</strong> {{grade?.gradeWeightName}}</p>
+      <p><strong>Waga:</strong> {{grade?.gradeWeight}}</p>
     </div>
 </div>
