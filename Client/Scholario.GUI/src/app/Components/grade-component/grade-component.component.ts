@@ -34,15 +34,15 @@ export class GradeComponent {
     );
   }
 
-  getWeightedAverage(grades: { gradeValue: number, gradeWeightValue: number }[]): number {
+  getWeightedAverage(grades: Grade[]): number {
     if (!grades || grades.length === 0) return 0;
 
     let totalWeight = 0;
     let weightedSum = 0;
 
     grades.forEach(g => {
-        weightedSum += g.gradeValue * g.gradeWeightValue;
-        totalWeight += g.gradeWeightValue;
+        weightedSum += g.gradeValue * g.gradeWeight;
+        totalWeight += g.gradeWeight;
     });
 
     return totalWeight > 0 ? parseFloat((weightedSum / totalWeight).toFixed(2)) : 0;
