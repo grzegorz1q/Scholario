@@ -36,18 +36,6 @@ namespace Scholario.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<LessonHour> CreateLessonHour(LessonHourDto lessonHourDto)
-        {
-            if (lessonHourDto == null)
-                throw new ArgumentNullException(nameof(lessonHourDto));
-
-            var newLessonHour = _mapper.Map<LessonHour>(lessonHourDto);
-            await _lessonHourRepository.AddLessonHour(newLessonHour);
-
-            return newLessonHour;
-        }
-
-
             public async Task<ScheduleEntry> CreateScheduleEntry(ScheduleEntryDto scheduleEntryDto)
             {
                 if (scheduleEntryDto == null)
