@@ -7,15 +7,15 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let lesson of lessons">
-                <td>{{ lesson }}</td>
+            <tr *ngFor="let lessonHour of lessonHours">
+                <td>{{ lessonHour.startTime }} - {{lessonHour.endTime}}</td>
                 <td *ngFor="let day of days">
                     <span 
-                        *ngIf="getScheduleEntry(day, lesson) !== '-'" 
-                        (click)="showSubjectDetails(getSubjectId(day, lesson))" >
-                        {{ getScheduleEntry(day, lesson) }}
+                        *ngIf="getScheduleEntry(day, lessonHour.lessonNumber) !== '-'" 
+                        (click)="showSubjectDetails(getSubjectId(day, lessonHour.lessonNumber))" >
+                        {{ getScheduleEntry(day, lessonHour.lessonNumber) }}
                     </span>
-                    <span *ngIf="getScheduleEntry(day, lesson) === '-'"></span>
+                    <span *ngIf="getScheduleEntry(day, lessonHour.lessonNumber) === '-'"></span>
                 </td>
             </tr>
         </tbody>

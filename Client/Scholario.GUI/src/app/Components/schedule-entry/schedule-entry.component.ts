@@ -3,6 +3,7 @@ import { ApiService } from '../../../Service/api.service';
 import { CommonModule } from '@angular/common';
 import { Subject } from '../../Type/Subject';
 import { ScheduleEntry } from '../../Type/ScheduleEntry';
+import { LessonHour } from '../../Type/LessonHour';
 
 @Component({
   selector: 'app-schedule-entry',
@@ -14,19 +15,29 @@ import { ScheduleEntry } from '../../Type/ScheduleEntry';
 export class ScheduleEntryComponent implements OnInit {
   selectedSubject: any = null;
   scheduleEntries: ScheduleEntry[] = [];  
+  lessonHours: LessonHour[] = [];
   subjects : Subject[] = [];
   days: string[] = ['Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek'];
-  lessons: number[] = [1, 2, 3, 4, 5, 6, 7, 8];
   schedule: string[][] = [];
   
   constructor(private apiService: ApiService) {}
 
   ngOnInit(){
+    this.getAllLessonHours();
     this.getSubject();
     this.getScheduleEntries();
   }
 
-
+  getAllLessonHours(){
+    this.apiService.getAllLessonHours().subscribe({
+      next: (response) => {
+        this.lessonHours = response;
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    })
+  }
   getScheduleEntries(){
     this.apiService.getScheduleEntries().subscribe(
       data => {
