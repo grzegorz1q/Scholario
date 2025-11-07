@@ -1,0 +1,37 @@
+.timetable-container {
+  display: flex;
+  gap: 20px;
+}
+
+.subjects-panel {
+  width: 200px;
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+
+.subject-item {
+  padding: 8px;
+  background: #e0e0ff;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  cursor: grab;
+}
+
+.timetable {
+  flex: 1;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid #999;
+  text-align: center;
+  height: 60px;
+}
+
+.timetable-cell {
+  min-height: 60px;
+}

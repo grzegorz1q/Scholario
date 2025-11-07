@@ -3,6 +3,7 @@ import { ApiService } from '../../../Service/api.service';
 import { Subject } from '../../Type/Subject';
 import { CommonModule } from '@angular/common';
 import { SubjectComponent } from "../subject/subject.component";
+import { ScheduleEntryService } from '../../../Service/schedule-entry.service';
 
 
 @Component({
@@ -13,13 +14,13 @@ import { SubjectComponent } from "../subject/subject.component";
 })
 export class SubjectsListComponent {
   subjects: Subject[] = [];
-  private readonly apiService = inject(ApiService);
+  private readonly scheduleEntryService = inject(ScheduleEntryService);
   
   ngOnInit(){
     this.getSubject();
   }
   getSubject() {
-    this.apiService.getSubjects().subscribe(
+    this.scheduleEntryService.getSubjects().subscribe(
       response => {
         this.subjects = response.subjects;
       },

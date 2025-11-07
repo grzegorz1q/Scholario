@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ApiService } from '../../../Service/api.service';
 import { CommonModule } from '@angular/common';
 import { Subject } from '../../Type/Subject';
 import { ScheduleEntry } from '../../Type/ScheduleEntry';
 import { LessonHour } from '../../Type/LessonHour';
+import { ScheduleEntryService } from '../../../Service/schedule-entry.service';
 
 @Component({
   selector: 'app-schedule-entry',
@@ -20,7 +20,7 @@ export class ScheduleEntryComponent implements OnInit {
   days: string[] = ['Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek'];
   schedule: string[][] = [];
   
-  constructor(private apiService: ApiService) {}
+  constructor(private scheduleService: ScheduleEntryService) {}
 
   ngOnInit(){
     this.getAllLessonHours();
@@ -29,7 +29,7 @@ export class ScheduleEntryComponent implements OnInit {
   }
 
   getAllLessonHours(){
-    this.apiService.getAllLessonHours().subscribe({
+    this.scheduleService.getAllLessonHours().subscribe({
       next: (response) => {
         this.lessonHours = response;
       },
@@ -39,7 +39,7 @@ export class ScheduleEntryComponent implements OnInit {
     })
   }
   getScheduleEntries(){
-    this.apiService.getScheduleEntries().subscribe(
+    this.scheduleService.getScheduleEntries().subscribe(
       data => {
         this.scheduleEntries = data.scheduleEntries;
       },
@@ -47,8 +47,15 @@ export class ScheduleEntryComponent implements OnInit {
     );
   }
 
+    loadScheduleEntries() {
+    this.scheduleService.getScheduleEntries().subscribe({
+      next: (data) => this.scheduleEntries = data.scheduleEntries,
+      error: (err) => console.error('Błąd przy pobieraniu planu:', err)
+    });
+  }
+
   getSubject() {
-    this.apiService.getSubjects().subscribe(
+    this.scheduleService.getSubjects().subscribe(
       response => {
         this.subjects = response.subjects;
       },
@@ -68,11 +75,10 @@ export class ScheduleEntryComponent implements OnInit {
     return entry ? entry.subjectName : "-";
   }
 
-  
   showSubjectDetails(subjectId: number | null): void {
     if (!subjectId) return;
     
-    this.apiService.getSubjects().subscribe(
+    this.scheduleService.getSubjects().subscribe(
       response => {
         const subject = response.subjects.find(s => s.id === subjectId);
         if (subject) {

@@ -8,6 +8,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from '../../../Service/authService';
 import { FormsModule } from '@angular/forms';
 import { GradeWeight, GradeWeightType } from '../../Type/GradeWeight';
+import { GradeService } from '../../../Service/grade.service';
+import { SubjectService } from '../../../Service/subject.service';
 
 @Component({
   selector: 'app-subject-group',
@@ -31,7 +33,8 @@ export class SubjectGroupComponent {
 
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  private readonly apiService = inject(ApiService);
+  private readonly gradeService = inject(GradeService);
+  private readonly subjectService = inject(SubjectService);
 
   ngOnInit(): void {
     this.subjectId = +this.route.snapshot.paramMap.get('subjectId')!;
@@ -55,7 +58,7 @@ export class SubjectGroupComponent {
     event.preventDefault();
     if (this.selectedStudent && this.newGrade.gradeValue) {
       this.newGrade.gradeWeight = Number(this.newGrade.gradeWeight);
-      this.apiService.addGrade(this.newGrade).subscribe({
+      this.gradeService.addGrade(this.newGrade).subscribe({
         next: () => {
           this.getStudentsBySubjectGroup();
           this.showGradeForm = false;
@@ -65,7 +68,7 @@ export class SubjectGroupComponent {
     }
   }
   getStudentsBySubjectGroup(){
-    this.apiService.getStudentsBySubjectGroup(this.subjectId, this.groupId).subscribe(
+    this.subjectService.getStudentsBySubjectGroup(this.subjectId, this.groupId).subscribe(
       (students) => {
         this.students = students;
       },
