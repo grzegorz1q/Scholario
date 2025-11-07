@@ -3,6 +3,7 @@ using Scholario.Application.Dtos;
 using Scholario.Application.Dtos.AttendanceRecord;
 using Scholario.Application.Dtos.Grade;
 using Scholario.Application.Dtos.Group;
+using Scholario.Application.Dtos.LessonHour;
 using Scholario.Application.Dtos.Message;
 using Scholario.Application.Dtos.Parent;
 using Scholario.Application.Dtos.ScheduleEntries;
@@ -57,6 +58,7 @@ namespace Scholario.Application.Profiles
                 .ForMember(dest => dest.Students, x => x.MapFrom(src => src.Students.Select(s => $"{s.FirstName} {s.LastName}")));
 
             CreateMap<LessonHourDto, LessonHour>();
+            CreateMap<LessonHour, LessonHourDto>();
 
             CreateMap<AttendanceRecordDto, AttendanceRecord>();
 

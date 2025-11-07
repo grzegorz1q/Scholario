@@ -138,6 +138,7 @@ builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<ISubjectService, SubjectService>();
 builder.Services.AddScoped<IGroupService, GroupService>();
 builder.Services.AddScoped<IScheduleEntryService, ScheduleEntryService>();
+builder.Services.AddScoped<ILessonHourService, LessonHourService>();
 builder.Services.AddScoped<IStudentAttendanceService, StudentAttendanceService>();
 
 //Hashowanie has³a

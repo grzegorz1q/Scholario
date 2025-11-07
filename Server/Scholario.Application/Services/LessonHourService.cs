@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Scholario.Application.Dtos.ScheduleEntries;
+using Scholario.Application.Dtos.LessonHour;
 using Scholario.Application.Interfaces;
 using Scholario.Domain.Entities;
 using Scholario.Domain.Interfaces;
@@ -24,6 +24,12 @@ namespace Scholario.Application.Services
             await _lessonHourRepository.AddLessonHour(newLessonHour);
 
             return newLessonHour;
+        }
+
+        public async Task<IEnumerable<LessonHourDto>> GetAllLessonHours()
+        {
+            var lessonHours = await _lessonHourRepository.GetAllLessonHours();
+            return _mapper.Map<IEnumerable<LessonHourDto>>(lessonHours);
         }
     }
 }
