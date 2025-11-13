@@ -25,7 +25,7 @@ export class ScheduleEntryComponent implements OnInit {
   ngOnInit(){
     this.getAllLessonHours();
     this.getSubject();
-    this.getScheduleEntries();
+    this.getLoggedUserScheduleEntries();
   }
 
   getAllLessonHours(){
@@ -38,34 +38,37 @@ export class ScheduleEntryComponent implements OnInit {
       }
     })
   }
-  getScheduleEntries(){
-    this.apiService.getScheduleEntries().subscribe(
-      data => {
-        this.scheduleEntries = data.scheduleEntries;
+  getLoggedUserScheduleEntries(){
+    this.apiService.getLoggedUserScheduleEntries().subscribe({
+      next: (response) => {
+        this.scheduleEntries = response;
       },
-      error => console.error('Błąd podczas pobierania planu zajęć:', error)
-    );
+      error: error => { 
+        console.error('Błąd podczas pobierania planu zajęć:', error)
+      }
+    });
+  }
+  getScheduleEntry(day: string, lesson: number): string {
+    const dayIndex = this.days.indexOf(day)+1; 
+    const entry = this.scheduleEntries.find(e => e.day === dayIndex && e.lessonNumber === lesson);
+    return entry ? entry.subjectName : "-";
   }
 
   getSubject() {
-    this.apiService.getSubjects().subscribe(
-      response => {
+    this.apiService.getSubjects().subscribe({
+      next: (response) => {
         this.subjects = response.subjects;
       },
-      error => console.error('Błąd podczas pobierania przedmiotów:', error)
-    );
+      error: (error) => {
+        console.error('Błąd podczas pobierania przedmiotów:', error)
+      }
+    });
   }
   
   getSubjectId(day: string, lesson: number): number | null {
     const dayIndex = this.days.indexOf(day) + 1;
     const entry = this.scheduleEntries.find(e => e.day === dayIndex && e.lessonNumber === lesson);
     return entry ? entry.subjectId : null;
-  }
-  
-  getScheduleEntry(day: string, lesson: number): string {
-    const dayIndex = this.days.indexOf(day) + 1; 
-    const entry = this.scheduleEntries.find(e => e.day === dayIndex && e.lessonNumber === lesson);
-    return entry ? entry.subjectName : "-";
   }
 
   
@@ -74,6 +77,7 @@ export class ScheduleEntryComponent implements OnInit {
     
     this.apiService.getSubjects().subscribe(
       response => {
+        console.log(response);
         const subject = response.subjects.find(s => s.id === subjectId);
         if (subject) {
           this.selectedSubject = subject;

@@ -6,6 +6,7 @@ import { Grade } from '../app/Type/Grade';
 import { StudentGrade } from '../app/Type/StudentGrade';
 import { Student } from '../app/Type/Student';
 import { LessonHour } from '../app/Type/LessonHour';
+import { ScheduleEntry } from '../app/Type/ScheduleEntry';
 
 @Injectable({
   providedIn: 'root'
@@ -23,9 +24,9 @@ export class ApiService {
   getAllLessonHours(): Observable<LessonHour[]>{
     return this.http.get<LessonHour[]>(`${this.apiUrl}/lesson-hours`);
   }
-  getScheduleEntries(): Observable<{ scheduleEntries: any[] }> {
+  getLoggedUserScheduleEntries(): Observable<ScheduleEntry[]> {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`);
-    return this.http.get<{ scheduleEntries: any[] }>(`${this.apiUrl}/schedule-entries/schedule/entries`, { headers });
+    return this.http.get<ScheduleEntry[]>(`${this.apiUrl}/schedule-entries`, { headers });
     
   }
 

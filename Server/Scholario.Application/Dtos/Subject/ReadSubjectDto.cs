@@ -1,11 +1,4 @@
 ﻿using Scholario.Application.Dtos.Group;
-using Scholario.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Scholario.Application.Dtos.Subject
 {
     public class ReadSubjectDto
