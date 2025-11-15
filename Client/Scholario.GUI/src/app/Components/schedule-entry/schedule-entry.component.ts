@@ -13,79 +13,45 @@ import { LessonHour } from '../../Type/LessonHour';
 })
 
 export class ScheduleEntryComponent implements OnInit {
-  selectedSubject: any = null;
   scheduleEntries: ScheduleEntry[] = [];  
   lessonHours: LessonHour[] = [];
-  subjects : Subject[] = [];
+  subjectsMap = new Map<number, Subject>();
   days: string[] = ['Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek'];
-  schedule: string[][] = [];
-  
+  scheduleTable: (ScheduleEntry | undefined)[][] = [];
+
   constructor(private apiService: ApiService) {}
 
   ngOnInit(){
-    this.getAllLessonHours();
-    this.getSubject();
-    this.getLoggedUserScheduleEntries();
+    this.loadData();
   }
 
-  getAllLessonHours(){
+  loadData(){
     this.apiService.getAllLessonHours().subscribe({
-      next: (response) => {
-        this.lessonHours = response;
+      next: lessonHours => {
+        this.lessonHours = lessonHours;
+        
+        this.apiService.getLoggedUserScheduleEntries().subscribe({
+          next: entries => {
+            this.scheduleEntries = entries;
+            this.buildScheduleTable();
+          },
+          error: error => console.error(error)
+        });
       },
-      error: (error) => {
-        console.error(error);
-      }
-    })
-  }
-  getLoggedUserScheduleEntries(){
-    this.apiService.getLoggedUserScheduleEntries().subscribe({
-      next: (response) => {
-        this.scheduleEntries = response;
-      },
-      error: error => { 
-        console.error('Błąd podczas pobierania planu zajęć:', error)
-      }
+      error: error => console.error(error)
     });
   }
-  getScheduleEntry(day: string, lesson: number): string {
+
+  buildScheduleTable(){
+    this.scheduleTable = this.lessonHours.map(lessonHour => 
+      this.days.map(day => 
+        this.getScheduleEntry(day, lessonHour.lessonNumber)
+      )
+    );
+  }
+  getScheduleEntry(day: string, lesson: number): ScheduleEntry | undefined{
     const dayIndex = this.days.indexOf(day)+1; 
     const entry = this.scheduleEntries.find(e => e.day === dayIndex && e.lessonNumber === lesson);
-    return entry ? entry.subjectName : "-";
-  }
-
-  getSubject() {
-    this.apiService.getSubjects().subscribe({
-      next: (response) => {
-        this.subjects = response.subjects;
-      },
-      error: (error) => {
-        console.error('Błąd podczas pobierania przedmiotów:', error)
-      }
-    });
-  }
-  
-  getSubjectId(day: string, lesson: number): number | null {
-    const dayIndex = this.days.indexOf(day) + 1;
-    const entry = this.scheduleEntries.find(e => e.day === dayIndex && e.lessonNumber === lesson);
-    return entry ? entry.subjectId : null;
-  }
-
-  
-  showSubjectDetails(subjectId: number | null): void {
-    if (!subjectId) return;
-    
-    this.apiService.getSubjects().subscribe(
-      response => {
-        console.log(response);
-        const subject = response.subjects.find(s => s.id === subjectId);
-        if (subject) {
-          this.selectedSubject = subject;
-        } else {
-          console.error('Nie znaleziono przedmiotu o ID:', subjectId);
-        }
-      },
-      error => console.error('Błąd podczas pobierania przedmiotów:', error)
-    );
+    return entry ? entry : undefined;
   }
 }

@@ -7,6 +7,7 @@ import { StudentGrade } from '../app/Type/StudentGrade';
 import { Student } from '../app/Type/Student';
 import { LessonHour } from '../app/Type/LessonHour';
 import { ScheduleEntry } from '../app/Type/ScheduleEntry';
+import { Subject } from '../app/Type/Subject';
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +34,11 @@ export class ApiService {
   getSubjects(): Observable<{ subjects: any[] }> {    // Do sprawdzenia "getSubjects(): Observable<Subject[]> {"
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`);
     return this.http.get<{ subjects: any[] }>(`${this.apiUrl}/subjects`, { headers });
+  }
+
+  getSubjectById(id: number): Observable<Subject>{
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`);
+    return this.http.get<Subject>(`${this.apiUrl}/subjects/${id}`, { headers });
   }
 
   getGradeByStudent(): Observable<StudentGrade[]> {

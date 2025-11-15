@@ -38,6 +38,23 @@ namespace Scholario.API.Controllers
                 return BadRequest($"Unexpected error: {ex.Message}");
             }
         }
+        [HttpGet("id")]
+        public async Task<IActionResult> GetSubjectById(int id)
+        {
+            try
+            {
+                var subject = await _subjectService.GetSubjectById(id);
+                return Ok(subject);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         [HttpGet]
         [Authorize(Roles ="Teacher,Parent,Student")]
         public async Task<IActionResult> GetLoggedUserSubjects()
