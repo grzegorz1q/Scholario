@@ -3,6 +3,7 @@ import { ApiService } from '../../../Service/api.service';
 import { Subject } from '../../Type/Subject';
 import { CommonModule } from '@angular/common';
 import { SubjectComponent } from "../subject/subject.component";
+import { LoggedUserSubjects } from '../../Type/LoggedUserSubjects';
 
 
 @Component({
@@ -12,18 +13,18 @@ import { SubjectComponent } from "../subject/subject.component";
   styleUrl: './subjects-list.component.scss'
 })
 export class SubjectsListComponent {
-  subjects: Subject[] = [];
+  subjects: LoggedUserSubjects | undefined;
   private readonly apiService = inject(ApiService);
   
   ngOnInit(){
-    this.getSubject();
+    this.getSubjects();
   }
-  getSubject() {
-    this.apiService.getSubjects().subscribe(
-      response => {
-        this.subjects = response.subjects;
+  getSubjects() {
+    this.apiService.getLoggedUserSubjects().subscribe({
+      next: response => {
+        this.subjects = response;
       },
-      error => console.error('Błąd podczas pobierania przedmiotów:', error)
-    );
+      error: error => console.error('Błąd podczas pobierania przedmiotów:', error)
+  });
   }
 }

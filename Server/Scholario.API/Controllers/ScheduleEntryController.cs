@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Scholario.Application.Dtos.LessonHour;
 using Scholario.Application.Dtos.ScheduleEntries;
 using Scholario.Application.Interfaces;
 using System.Security.Claims;
@@ -37,8 +36,8 @@ namespace Scholario.API.Controllers
             }
         }
 
-        [HttpGet("schedule/entries")]
-        public async Task<IActionResult> GetStudentSchedule()
+        [HttpGet]
+        public async Task<IActionResult> GetUserSchedule()
         {
             try
             {
@@ -49,9 +48,13 @@ namespace Scholario.API.Controllers
                     return Unauthorized("User ID not found in token.");
                 }
                 var userId = int.Parse(userIdClaim);
-                var userSchedule = await _scheduleEntryService.GetStudentSchedule(userId);
+                var userSchedule = await _scheduleEntryService.GetUserSchedule(userId);
 
                 return Ok(userSchedule);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
             }
             catch (ArgumentNullException ex)
             {

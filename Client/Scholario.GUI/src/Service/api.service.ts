@@ -6,6 +6,9 @@ import { Grade } from '../app/Type/Grade';
 import { StudentGrade } from '../app/Type/StudentGrade';
 import { Student } from '../app/Type/Student';
 import { LessonHour } from '../app/Type/LessonHour';
+import { ScheduleEntry } from '../app/Type/ScheduleEntry';
+import { Subject } from '../app/Type/Subject';
+import { LoggedUserSubjects } from '../app/Type/LoggedUserSubjects';
 
 @Injectable({
   providedIn: 'root'
@@ -23,15 +26,20 @@ export class ApiService {
   getAllLessonHours(): Observable<LessonHour[]>{
     return this.http.get<LessonHour[]>(`${this.apiUrl}/lesson-hours`);
   }
-  getScheduleEntries(): Observable<{ scheduleEntries: any[] }> {
+  getLoggedUserScheduleEntries(): Observable<ScheduleEntry[]> {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`);
-    return this.http.get<{ scheduleEntries: any[] }>(`${this.apiUrl}/schedule-entries/schedule/entries`, { headers });
+    return this.http.get<ScheduleEntry[]>(`${this.apiUrl}/schedule-entries`, { headers });
     
   }
 
-  getSubjects(): Observable<{ subjects: any[] }> {    // Do sprawdzenia "getSubjects(): Observable<Subject[]> {"
+  getLoggedUserSubjects(): Observable<LoggedUserSubjects> {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`);
-    return this.http.get<{ subjects: any[] }>(`${this.apiUrl}/subjects`, { headers });
+    return this.http.get<LoggedUserSubjects>(`${this.apiUrl}/subjects`, { headers });
+  }
+
+  getSubjectById(id: number): Observable<Subject>{
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`);
+    return this.http.get<Subject>(`${this.apiUrl}/subjects/${id}`, { headers });
   }
 
   getGradeByStudent(): Observable<StudentGrade[]> {

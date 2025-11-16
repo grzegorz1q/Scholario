@@ -1,8 +1,11 @@
 export type ScheduleEntry = {
-    teacherName: string;
     subjectId : number;
-    subjectName: string;
-    groupName: string;
+    subjectName: string; // maybe change to optional - "?"
+    groupId: number;
+    groupName: string; // maybe change to optional - "?"
+    teacherName: string;
     day: number;
     lessonNumber: number;
+    studentId: number;
+    studentName: string;
   }
