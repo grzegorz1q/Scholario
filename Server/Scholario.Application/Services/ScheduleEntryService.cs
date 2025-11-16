@@ -103,7 +103,13 @@ namespace Scholario.Application.Services
                     if (group == null)
                         throw new Exception($"Student {stu.FirstName} {stu.LastName} has no group assigned");
 
-                    parentScheduleEntries.AddRange(_mapper.Map<IEnumerable<ReadScheduleEntryDto>>(group.ScheduleEntries));
+                    foreach(var entry in group.ScheduleEntries)
+                    {
+                        var dto = _mapper.Map<ReadScheduleEntryDto>(entry);
+                        dto.StudentId = stu.Id;
+                        dto.StudentName = $"{stu.FirstName} {stu.LastName}";
+                        parentScheduleEntries.Add(dto);
+                    }
                 }
                 return parentScheduleEntries;
             }

@@ -8,6 +8,7 @@ import { Student } from '../app/Type/Student';
 import { LessonHour } from '../app/Type/LessonHour';
 import { ScheduleEntry } from '../app/Type/ScheduleEntry';
 import { Subject } from '../app/Type/Subject';
+import { LoggedUserSubjects } from '../app/Type/LoggedUserSubjects';
 
 @Injectable({
   providedIn: 'root'
@@ -31,9 +32,9 @@ export class ApiService {
     
   }
 
-  getSubjects(): Observable<{ subjects: any[] }> {    // Do sprawdzenia "getSubjects(): Observable<Subject[]> {"
+  getLoggedUserSubjects(): Observable<LoggedUserSubjects> {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`);
-    return this.http.get<{ subjects: any[] }>(`${this.apiUrl}/subjects`, { headers });
+    return this.http.get<LoggedUserSubjects>(`${this.apiUrl}/subjects`, { headers });
   }
 
   getSubjectById(id: number): Observable<Subject>{

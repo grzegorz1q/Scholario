@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { Subject } from '../../Type/Subject';
 import { ScheduleEntry } from '../../Type/ScheduleEntry';
 import { LessonHour } from '../../Type/LessonHour';
+import { AuthService } from '../../../Service/authService';
 
 @Component({
   selector: 'app-schedule-entry',
@@ -15,16 +16,17 @@ import { LessonHour } from '../../Type/LessonHour';
 export class ScheduleEntryComponent implements OnInit {
   scheduleEntries: ScheduleEntry[] = [];  
   lessonHours: LessonHour[] = [];
-  subjectsMap = new Map<number, Subject>();
   days: string[] = ['Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek'];
-  scheduleTable: (ScheduleEntry | undefined)[][] = [];
+  scheduleTable: ScheduleEntry[][][] = [];
+  role: string | null = null;
 
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService, private authService: AuthService) {}
 
   ngOnInit(){
+    this.role = this.authService.getUserRole();
     this.loadData();
   }
-
+  
   loadData(){
     this.apiService.getAllLessonHours().subscribe({
       next: lessonHours => {
@@ -48,10 +50,11 @@ export class ScheduleEntryComponent implements OnInit {
         this.getScheduleEntry(day, lessonHour.lessonNumber)
       )
     );
+    console.log(this.scheduleTable);
   }
-  getScheduleEntry(day: string, lesson: number): ScheduleEntry | undefined{
+  getScheduleEntry(day: string, lesson: number): ScheduleEntry[]{
     const dayIndex = this.days.indexOf(day)+1; 
-    const entry = this.scheduleEntries.find(e => e.day === dayIndex && e.lessonNumber === lesson);
-    return entry ? entry : undefined;
+    return this.scheduleEntries.filter(e => e.day === dayIndex && e.lessonNumber === lesson);
   }
+
 }
