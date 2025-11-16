@@ -18,16 +18,16 @@ export class SubjectsListComponent {
   subjects: Subject[] = [];
   private readonly scheduleEntryService = inject(ScheduleEntryService);
 
-  ngOnInit(){
+  ngOnInit() {
     this.getSubjects();
   }
 
   getSubjects() {
-    this.scheduleEntryService.getSubjects().subscribe(
-      response => {
+    this.scheduleEntryService.getSubjects().subscribe({
+      next: response => {
         this.subjects = response.subjects;
       },
       error: error => console.error('Błąd podczas pobierania przedmiotów:', error)
-  });
+    });
   }
 }

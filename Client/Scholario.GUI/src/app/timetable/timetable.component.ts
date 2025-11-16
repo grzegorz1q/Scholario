@@ -44,7 +44,7 @@ loadData() {
   });
 
   this.scheduleService.getSubjects().subscribe(r => this.subjects = r.subjects);
-  this.scheduleService.getScheduleEntries().subscribe(r => this.scheduleEntries = r.scheduleEntries);
+  this.scheduleService.getScheduleEntries().subscribe(r => this.scheduleEntries = r);
 }
 
 
@@ -62,6 +62,7 @@ loadData() {
       lessonNumber: lessonNumber
     }).subscribe(() => this.loadData());
   }
+  
 
   getSubjectName(day: number, lessonNumber: number): string {
     const entry = this.scheduleEntries.find(
@@ -69,6 +70,8 @@ loadData() {
     );
     return entry ? entry.subjectName : '';
   }
+
+  //getalllessonhour - - trzeba zrobic
 
 }
 

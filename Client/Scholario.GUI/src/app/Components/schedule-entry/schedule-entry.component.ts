@@ -4,6 +4,7 @@ import { Subject } from '../../Type/Subject';
 import { ScheduleEntry } from '../../Type/ScheduleEntry';
 import { LessonHour } from '../../Type/LessonHour';
 import { ScheduleEntryService } from '../../../Service/schedule-entry.service';
+import { AuthService } from '../../../Service/authService';
 
 @Component({
   selector: 'app-schedule-entry',
@@ -32,7 +33,7 @@ export class ScheduleEntryComponent implements OnInit {
       next: lessonHours => {
         this.lessonHours = lessonHours;
         
-        this.scheduleService.getLoggedUserScheduleEntries().subscribe({
+        this.scheduleService.getScheduleEntries().subscribe({
           next: entries => {
             this.scheduleEntries = entries;
             this.buildScheduleTable();

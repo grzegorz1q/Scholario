@@ -15,11 +15,12 @@ export class ScheduleEntryService {
   constructor(private http:HttpClient, private authService: AuthService) { }
 
 
-    getScheduleEntries(): Observable<{ scheduleEntries: any[] }> {
+    getScheduleEntries(): Observable<ScheduleEntry[]> {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`);
-      return this.http.get<{ scheduleEntries: any[] }>(`${this.apiUrl}/schedule-entries/schedule/entries`, { headers });
+      return this.http.get<ScheduleEntry[]>(`${this.apiUrl}/schedule-entries`, { headers });
     }
 
+    // Tu moze być blad z typem 
     createScheduleEntry(entry: ScheduleEntry): Observable<any> {
       return this.http.post(`${this.apiUrl}/schedule-entries/schedule/create`, entry);
     }

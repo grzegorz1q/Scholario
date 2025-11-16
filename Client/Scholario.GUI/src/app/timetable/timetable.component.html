@@ -27,7 +27,7 @@
                 [cdkDropListConnectedTo]="['subjectsList']"
                 [cdkDropListData]="[]"
                 (cdkDropListDropped)="drop($event, dayIndex, hour.lessonNumber)">
-                {{ getSubjectName(dayIndex + 1, hour.lessonNumber) }}
+                {{ getSubjectName(dayIndex, hour.lessonNumber) }}
             </div>
         </td>
       </tr>
