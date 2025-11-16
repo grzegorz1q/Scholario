@@ -64,41 +64,38 @@ namespace Scholario.Application.Services
                 return scheduleEntry;
             }
 
-        public async Task<StudentScheduleDto> GetStudentSchedule(int userId)
+        public async Task<IEnumerable<ReadScheduleEntryDto>> GetUserSchedule(int userId)
         {
             if (userId < 0)
                 throw new ArgumentOutOfRangeException(nameof(userId));
 
             var person = await _personRepository.GetPerson(userId);
             if (person == null)
-                throw new Exception("User not found");
-
-            var scheduleList = new StudentScheduleDto();
-            var allScheduleEntries = new List<ScheduleEntry>();
+                throw new KeyNotFoundException("User not found");
 
             if (person is Student student)
             {
                 var group = student.Group;
                 if (group == null)
-                    throw new Exception("Group not found");
+                    throw new KeyNotFoundException("Group not found");
 
-                scheduleList.ScheduleEntries = _mapper.Map<ICollection<ScheduleEntryDto>>(group.ScheduleEntries);
+                return _mapper.Map<IEnumerable<ReadScheduleEntryDto>>(group.ScheduleEntries);
 
             }
             else if (person is Teacher teacher)
             {
                 var subjects = teacher.Subjects;
-                if (subjects == null || !subjects.Any())
+                if (subjects == null || subjects.Count == 0)
                     throw new Exception("Teacher has no assigned subjects");
-
-                scheduleList.ScheduleEntries = _mapper.Map<ICollection<ScheduleEntryDto>>(subjects.SelectMany(s => s.ScheduleEntries));
+                var teacherScheduleEntries = subjects.SelectMany(s => s.ScheduleEntries);
+                return teacherScheduleEntries.Select(e => _mapper.Map<ReadScheduleEntryDto>(e));
             }
             else if (person is Parent parent)
             {
+                var parentScheduleEntries = new List<ReadScheduleEntryDto>();
                 var students = parent.Students;
-                if (students == null || !students.Any())
+                if (students == null || students.Count == 0)
                     throw new Exception("This parent doesn't have any students");
-
 
                 foreach (var stu in students)
                 {
@@ -106,33 +103,20 @@ namespace Scholario.Application.Services
                     if (group == null)
                         throw new Exception($"Student {stu.FirstName} {stu.LastName} has no group assigned");
 
-                    allScheduleEntries.AddRange(group.ScheduleEntries);
+                    foreach(var entry in group.ScheduleEntries)
+                    {
+                        var dto = _mapper.Map<ReadScheduleEntryDto>(entry);
+                        dto.StudentId = stu.Id;
+                        dto.StudentName = $"{stu.FirstName} {stu.LastName}";
+                        parentScheduleEntries.Add(dto);
+                    }
                 }
-
-                scheduleList.ScheduleEntries = _mapper.Map<ICollection<ScheduleEntryDto>>(allScheduleEntries);
+                return parentScheduleEntries;
             }
             else
             {
                 throw new Exception("Invalid user type");
             }
-
-            foreach (var entry in scheduleList.ScheduleEntries)
-            {
-                var subject = await _subjectRepository.GetSubject(entry.SubjectId);
-                if (subject == null)
-                {
-                    throw new Exception("Subject not found");
-                }
-                else
-                {
-                    var teacher = await _teacherRepository.GetTeacher(subject.TeacherId);
-                    entry.TeacherName = teacher != null
-                        ? $"{teacher.FirstName} {teacher.LastName}"
-                        : "Brak nauczyciela";
-                }
-            }
-
-            return scheduleList;
         }
     }
 }

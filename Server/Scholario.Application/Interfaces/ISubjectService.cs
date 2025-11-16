@@ -6,5 +6,6 @@ namespace Scholario.Application.Interfaces
     {
         Task CreateSubject(CreateSubjectDto createSubjectDto);
         Task<UserSubjectsDto> GetLoggedUserSubjects(int userId);
+        Task<ReadSubjectDto> GetSubjectById(int subjectId);
     }
 }

@@ -61,5 +61,10 @@ namespace Scholario.Application.Services
                 throw new Exception("This user has no subjects asigned");
             return response;
         }
+        public async Task<ReadSubjectDto> GetSubjectById(int subjectId)
+        {
+            var subject = await _subjectRepository.GetSubject(subjectId) ?? throw new KeyNotFoundException("Subject not found!");
+            return _mapper.Map<ReadSubjectDto>(subject);
+        }
     }
 }

@@ -6,6 +6,6 @@ namespace Scholario.Application.Interfaces
     public interface IScheduleEntryService
     {
         Task<ScheduleEntry> CreateScheduleEntry(ScheduleEntryDto scheduleEntryDto);
-        Task<StudentScheduleDto> GetStudentSchedule(int userId);
+        Task<IEnumerable<ReadScheduleEntryDto>> GetUserSchedule(int userId);
     }
 }

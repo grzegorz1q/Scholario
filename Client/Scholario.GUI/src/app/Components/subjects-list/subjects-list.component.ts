@@ -4,6 +4,7 @@ import { Subject } from '../../Type/Subject';
 import { CommonModule } from '@angular/common';
 import { SubjectComponent } from "../subject/subject.component";
 import { ScheduleEntryService } from '../../../Service/schedule-entry.service';
+import { LoggedUserSubjects } from '../../Type/LoggedUserSubjects';
 
 
 @Component({
@@ -13,18 +14,20 @@ import { ScheduleEntryService } from '../../../Service/schedule-entry.service';
   styleUrl: './subjects-list.component.scss'
 })
 export class SubjectsListComponent {
+
   subjects: Subject[] = [];
   private readonly scheduleEntryService = inject(ScheduleEntryService);
-  
+
   ngOnInit(){
-    this.getSubject();
+    this.getSubjects();
   }
-  getSubject() {
+
+  getSubjects() {
     this.scheduleEntryService.getSubjects().subscribe(
       response => {
         this.subjects = response.subjects;
       },
-      error => console.error('Błąd podczas pobierania przedmiotów:', error)
-    );
+      error: error => console.error('Błąd podczas pobierania przedmiotów:', error)
+  });
   }
 }
