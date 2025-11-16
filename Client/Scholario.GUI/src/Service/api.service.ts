@@ -2,13 +2,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AuthService } from '../Service/authService';
-import { Grade } from '../app/Type/Grade';
-import { StudentGrade } from '../app/Type/StudentGrade';
-import { Student } from '../app/Type/Student';
-import { LessonHour } from '../app/Type/LessonHour';
-import { ScheduleEntry } from '../app/Type/ScheduleEntry';
-import { Subject } from '../app/Type/Subject';
-import { LoggedUserSubjects } from '../app/Type/LoggedUserSubjects';
 
 @Injectable({
   providedIn: 'root'
@@ -21,39 +14,5 @@ export class ApiService {
   login(email: string, password: string): Observable<string> {
     const loginDto = { email, password };
     return this.http.post<string>(`${this.apiUrl}/accounts/login`, loginDto, { responseType: 'text' as 'json' });
-  }
-
-  getAllLessonHours(): Observable<LessonHour[]>{
-    return this.http.get<LessonHour[]>(`${this.apiUrl}/lesson-hours`);
-  }
-  getLoggedUserScheduleEntries(): Observable<ScheduleEntry[]> {
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`);
-    return this.http.get<ScheduleEntry[]>(`${this.apiUrl}/schedule-entries`, { headers });
-    
-  }
-
-  getLoggedUserSubjects(): Observable<LoggedUserSubjects> {
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`);
-    return this.http.get<LoggedUserSubjects>(`${this.apiUrl}/subjects`, { headers });
-  }
-
-  getSubjectById(id: number): Observable<Subject>{
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`);
-    return this.http.get<Subject>(`${this.apiUrl}/subjects/${id}`, { headers });
-  }
-
-  getGradeByStudent(): Observable<StudentGrade[]> {
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`);
-    return this.http.get<StudentGrade[]>(`${this.apiUrl}/students/grade`, { headers });
-  }
-
-  getStudentsBySubjectGroup(subjectId: number, groupId: number): Observable<Student[]>{
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`);
-    return this.http.get<Student[]>(`${this.apiUrl}/teachers/subjects/${subjectId}/groups/${groupId}/students`, { headers });
-  }
-  
-  addGrade(grade: Grade): Observable<any>{
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`);
-    return this.http.post(`${this.apiUrl}/grades`, grade,{ headers, responseType: 'text' as 'json' });
   }
 }

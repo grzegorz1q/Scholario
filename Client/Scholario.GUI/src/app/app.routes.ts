@@ -5,6 +5,7 @@ import { AuthGuard } from '../Service/auth.guard';
 import { GradeComponent } from './Components/grade-component/grade-component.component';
 import { SubjectsListComponent } from './Components/subjects-list/subjects-list.component';
 import { SubjectGroupComponent } from './Components/subject-group/subject-group.component';
+import { TimetableComponent } from './timetable/timetable.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' }, 
@@ -13,5 +14,5 @@ export const routes: Routes = [
   { path: 'grade', component: GradeComponent, canActivate: [AuthGuard] }, 
   { path: 'subjects', component: SubjectsListComponent, canActivate: [AuthGuard]},
   { path: 'subjects/:subjectId/groups/:groupId', component: SubjectGroupComponent, canActivate: [AuthGuard]},
-
+  { path: 'timetable', component: TimetableComponent}
 ];

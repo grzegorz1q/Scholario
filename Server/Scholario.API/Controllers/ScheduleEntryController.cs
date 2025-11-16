@@ -16,13 +16,13 @@ namespace Scholario.API.Controllers
             _scheduleEntryService = scheduleEntriesService;
         }
         [HttpPost("schedule/create")]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateScheduleEntry([FromBody] ScheduleEntryDto scheduleEntryDto)
         {
             try
             {
                 var createdScheduleEntry = await _scheduleEntryService.CreateScheduleEntry(scheduleEntryDto);
-                return Ok("ScheduleEntry added successfully");
+                return Ok(new { message = "ScheduleEntry added successfully"});
             }
             catch (ArgumentNullException ex)
             {

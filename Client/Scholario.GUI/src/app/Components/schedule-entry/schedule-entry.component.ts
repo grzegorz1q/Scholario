@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ApiService } from '../../../Service/api.service';
 import { CommonModule } from '@angular/common';
 import { Subject } from '../../Type/Subject';
 import { ScheduleEntry } from '../../Type/ScheduleEntry';
 import { LessonHour } from '../../Type/LessonHour';
-import { AuthService } from '../../../Service/authService';
+import { ScheduleEntryService } from '../../../Service/schedule-entry.service';
 
 @Component({
   selector: 'app-schedule-entry',
@@ -20,19 +19,20 @@ export class ScheduleEntryComponent implements OnInit {
   scheduleTable: ScheduleEntry[][][] = [];
   role: string | null = null;
 
-  constructor(private apiService: ApiService, private authService: AuthService) {}
+  constructor(private scheduleService: ScheduleEntryService, private authService: AuthService) {}
 
   ngOnInit(){
     this.role = this.authService.getUserRole();
     this.loadData();
   }
   
+  
   loadData(){
-    this.apiService.getAllLessonHours().subscribe({
+    this.scheduleService.getAllLessonHours().subscribe({
       next: lessonHours => {
         this.lessonHours = lessonHours;
         
-        this.apiService.getLoggedUserScheduleEntries().subscribe({
+        this.scheduleService.getLoggedUserScheduleEntries().subscribe({
           next: entries => {
             this.scheduleEntries = entries;
             this.buildScheduleTable();
