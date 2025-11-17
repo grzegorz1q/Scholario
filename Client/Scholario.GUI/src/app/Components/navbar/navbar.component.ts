@@ -32,7 +32,8 @@ export class NavbarComponent {
         this.menuItems = [
           { name: 'Panel Admina', link: '#' },
           { name: 'Zarządzanie użytkownikami', link: '#' },
-          { name: 'Raporty', link: '#' }
+          { name: 'Raporty', link: '#' },
+          { name: 'Plan', link: '/timetable'}
         ];
         break;
       case 'Teacher':

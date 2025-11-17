@@ -1,36 +1,43 @@
-<div class="subjects-panel" 
-     cdkDropList 
-     id="subjectsList" 
-     [cdkDropListData]="subjects"
-     [cdkDropListConnectedTo]="dayDropLists">
+<div class="subjects-panel" cdkDropList id="subjectsList" [cdkDropListData]="subjects"
+  [cdkDropListConnectedTo]="dayDropLists">
   <h3>Przedmioty</h3>
   <div *ngFor="let subject of subjects" class="subject-item" cdkDrag>
-    {{ subject.name }}
+    {{ subject.name }} - {{getInitials(subject)}}
   </div>
 </div>
 
-<div class="timetable">
-  <table>
-    <thead>
-      <tr>
-        <th>Godz.</th>
-        <th *ngFor="let day of days">{{ day }}</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let hour of lessonHours">
-        <td *ngFor="let day of days; let dayIndex = index">
-            <div
-                class="timetable-cell"
-                cdkDropList
-                [id]="'dropList-' + dayIndex + '-' + hour.lessonNumber"
-                [cdkDropListConnectedTo]="['subjectsList']"
-                [cdkDropListData]="[]"
-                (cdkDropListDropped)="drop($event, dayIndex, hour.lessonNumber)">
-                {{ getSubjectName(dayIndex, hour.lessonNumber) }}
+<form>
+  <div class="timetable">
+    <div>
+      <select [(ngModel)]="selectedGroupId" name="groupSelect">
+        <option *ngFor="let group of groups" [value]="group.id"> {{group.name}} </option>
+      </select>
+    </div>
+
+    <p>Wybrana grupa: {{ selectedGroupId }}</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Godz.</th>
+          <th *ngFor="let day of days">{{ day }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let hour of lessonHours">
+          <td> {{hour.startTime}}-{{hour.endTime}} </td>
+          <td *ngFor="let day of days; let dayIndex = index">
+            <div class="timetable-cell" cdkDropList [id]="'dropList-' + dayIndex + '-' + hour.lessonNumber"
+              [cdkDropListConnectedTo]="['subjectsList']" [cdkDropListData]="[]"
+              (cdkDropListDropped)="drop($event, dayIndex, hour.lessonNumber)">
+              {{ getSubjectName(dayIndex, hour.lessonNumber) }}
             </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+          </td>
+        </tr>
+      </tbody>
+          <input type="submit"/>
+    </table>
+  </div>
+</form>
+
+

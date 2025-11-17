@@ -19,7 +19,7 @@ namespace Scholario.API.Controllers
         }
 
         [HttpPost]
-        //[Authorize(Roles = "Teacher")]
+        [Authorize(Roles = "Teacher,Admin")]
         public async Task<IActionResult> CreateSubject(CreateSubjectDto createSubjectDto)
         {
             try
@@ -55,7 +55,7 @@ namespace Scholario.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet]
+        [HttpGet("user")]
         [Authorize(Roles ="Teacher,Parent,Student")]
         public async Task<IActionResult> GetLoggedUserSubjects()
         {
@@ -68,6 +68,33 @@ namespace Scholario.API.Controllers
                 }
                 var userId = int.Parse(userIdClaim);
                 var subjects = await _subjectService.GetLoggedUserSubjects(userId);
+
+                return Ok(subjects);
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                Console.WriteLine($"{ex.Message}");
+                return BadRequest($"Invalid data: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($">[SubjectCtr] Unhandled exception: {ex.Message}");
+                return BadRequest($"Unexpected error: {ex.Message}");
+            }
+        }
+        [HttpGet]
+        [Authorize(Roles = "Teacher,Admin")]
+        public async Task<IActionResult> GetSubjects()
+        {
+            try
+            {
+                var userIdClaim = (User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                if (userIdClaim == null)
+                {
+                    return Unauthorized("User's ID is missing in the token.");
+                }
+                var userId = int.Parse(userIdClaim);
+                var subjects = await _subjectService.GetSubjects();
 
                 return Ok(subjects);
             }

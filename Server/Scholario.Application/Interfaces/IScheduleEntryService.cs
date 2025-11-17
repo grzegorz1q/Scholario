@@ -1,4 +1,5 @@
-﻿using Scholario.Application.Dtos.ScheduleEntries;
+﻿using Scholario.Application.Dtos.Group;
+using Scholario.Application.Dtos.ScheduleEntries;
 using Scholario.Domain.Entities;
 
 namespace Scholario.Application.Interfaces

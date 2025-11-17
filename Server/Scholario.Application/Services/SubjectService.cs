@@ -66,5 +66,11 @@ namespace Scholario.Application.Services
             var subject = await _subjectRepository.GetSubject(subjectId) ?? throw new KeyNotFoundException("Subject not found!");
             return _mapper.Map<ReadSubjectDto>(subject);
         }
+
+        public async Task<IEnumerable<ReadSubjectDto>> GetSubjects()
+        {
+            var subjects = await _subjectRepository.GetAllSubjects() ?? throw new KeyNotFoundException("Subjects not found");
+            return _mapper.Map<IEnumerable<ReadSubjectDto>>(subjects);
+        }
     }
 }

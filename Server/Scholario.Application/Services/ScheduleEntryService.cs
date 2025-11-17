@@ -49,8 +49,8 @@ namespace Scholario.Application.Services
                 if (group == null)
                     throw new Exception("Group not found");
 
-                if (group.Subjects == null || !group.Subjects.Any(s => s.Id == subject.Id))
-                    throw new Exception("Group is not asigned to subject");
+                //if (group.Subjects == null || !group.Subjects.Any(s => s.Id == subject.Id))
+                //    throw new Exception("Group is not asigned to subject");
 
                 var lessonHour = await _lessonHourRepository.GetLessonByNumber(scheduleEntryDto.LessonNumber);
                 if (lessonHour == null)

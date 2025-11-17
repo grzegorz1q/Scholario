@@ -37,6 +37,7 @@ namespace Scholario.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,Teacher")]
         public async Task<IActionResult> GetUserSchedule()
         {
             try
