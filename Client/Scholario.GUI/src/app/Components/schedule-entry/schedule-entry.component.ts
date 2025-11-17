@@ -58,4 +58,8 @@ export class ScheduleEntryComponent implements OnInit {
     return this.scheduleEntries.filter(e => e.day === dayIndex && e.lessonNumber === lesson);
   }
 
+  getTeacherNameInitials(teacherName: string): string{
+    const namArr = teacherName.split(' ');
+    return `${namArr[0].charAt(0)} ${namArr[1].charAt(0)}`;
+  }
 }
