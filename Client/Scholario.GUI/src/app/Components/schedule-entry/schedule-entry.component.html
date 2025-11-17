@@ -23,7 +23,7 @@
                             <strong>{{entry.subjectName}}</strong><br>
                             {{entry.groupName}}<br>
                             <span>Uczeń: {{entry.studentName}}</span><br>
-                            <span>{{entry.teacherName.charAt(0)}} {{entry.teacherName.charAt(10).toUpperCase()}}</span>
+                            <span>{{getTeacherNameInitials(entry.teacherName ?? '')}}</span>
                         </div>
                     </div>
                 </td>
