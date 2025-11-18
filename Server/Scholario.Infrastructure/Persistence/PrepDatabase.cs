@@ -139,6 +139,7 @@ namespace Scholario.Infrastructure.Persistence
                 new Student(){FirstName="Adam", LastName="Nowak", Email="adam.nowak@test.pl", Password="adamnowak", GroupId=groupId, ParentId=parentId},
                 new Student(){FirstName="Ala", LastName="Nowakowska", Email="ala.nowakowska@test.pl", Password="alanowakswska", GroupId=groupId, ParentId=parentId},
                 new Student(){FirstName="Ada", LastName="Kowalska", Email="ada.kowalska@test.pl", Password="adakowalska", GroupId=groupId1, ParentId=parentId1},
+                new Student(){FirstName="Ola", LastName="Glo", Email="ola.glo@test.pl", Password="olaglo", GroupId=groupId1, ParentId=parentId},
                 
             };
             foreach (var e in students)

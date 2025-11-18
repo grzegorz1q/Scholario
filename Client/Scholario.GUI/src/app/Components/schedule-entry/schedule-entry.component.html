@@ -14,23 +14,30 @@
                         <div *ngFor="let entry of cell">
                             <strong>{{entry.subjectName}}</strong><br>
                             {{entry.groupName}}<br>
-                            <span *ngIf="role === 'Parent'">Uczeń: {{entry.studentName}}</span>
                             <span *ngIf="role !== 'Teacher'">Nauczyciel: {{getTeacherNameInitials(entry.teacherName ?? '')}}</span>
                         </div>
                     </div>
-                    <div class="entries" *ngIf="role === 'Parent'">
-                        <div *ngFor="let entry of cell">
-                            <strong>{{entry.subjectName}}</strong><br>
-                            {{entry.groupName}}<br>
-                            <span>Uczeń: {{entry.studentName}}</span><br>
-                            <span>Nauczyciel: {{getTeacherNameInitials(entry.teacherName ?? '')}}</span>
+                    <div *ngIf="role === 'Parent'" class="parent-schedule-cell">
+                        <div *ngFor="let group of getGroupedEntries(cell)" class="group-entry">
+                            <div class="subject-info">
+                                <strong>{{group.subjectName}} - {{getTeacherNameInitials(group.teacherName ?? '')}}</strong><br>
+                                {{group.groupName}}<br>
+                            </div>
+                            <div class="students-indicators">
+                                <span *ngFor="let student of group.students" 
+                                      class="student-indicator"
+                                      [style.background-color]="student.color"
+                                      [title]="student.name">
+                                </span>
+                            </div>
                         </div>
+                        
                     </div>
                 </td>
             </tr>
         </tbody>
     </table>
     <div class="legend">
-        
+        <app-parent-legend [childs]=""></app-parent-legend>
     </div>
 </div>
