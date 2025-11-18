@@ -35,7 +35,33 @@ th, td {
     font-size: 20px;
 }
 
-.entries{
-    display: flex;
-    justify-content: space-between;
+// schedule-entry.component.scss DO PRZEANALIZOWANIA
+.parent-schedule-cell {
+  .group-entry {
+    margin-bottom: 8px;
+    padding: 8px;
+    border-radius: 4px;
+    background-color: #f8f9fa;
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  
+  .subject-info {
+    margin-bottom: 8px;
+  }
+  
+  .students-indicators {
+    gap: 4px;
+  }
+  
+  .student-indicator {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  }
 }
