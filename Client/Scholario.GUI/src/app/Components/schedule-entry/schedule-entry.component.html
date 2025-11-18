@@ -20,9 +20,8 @@
                     <div *ngIf="role === 'Parent'" class="parent-schedule-cell">
                         <div *ngFor="let group of getGroupedEntries(cell)" class="group-entry">
                             <div class="subject-info">
-                                <strong>{{group.subjectName}}</strong><br>
+                                <strong>{{group.subjectName}} - {{getTeacherNameInitials(group.teacherName ?? '')}}</strong><br>
                                 {{group.groupName}}<br>
-                                <span>Nauczyciel: {{getTeacherNameInitials(group.teacherName ?? '')}}</span>
                             </div>
                             <div class="students-indicators">
                                 <span *ngFor="let student of group.students" 
