@@ -1,6 +1,6 @@
 .form-container{
     display: flex;
-    //justify-content: center;
+    justify-content: space-between;
     //align-items: center;
     //flex-direction: column;
     width: 100%;
@@ -35,7 +35,7 @@ th, td {
     font-size: 20px;
 }
 
-// schedule-entry.component.scss DO PRZEANALIZOWANIA
+// schedule-entry.component.scss DO PRZEANALIZOWANIA/EWENTUALNEJ ZMIANY
 .parent-schedule-cell {
   .group-entry {
     margin-bottom: 8px;

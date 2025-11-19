@@ -1,1 +1,7 @@
-<p>parent-legend works!</p>
+<div class="parent-legend">
+    <h4>Legenda - Twoje dzieci</h4>
+    <div *ngFor="let child of children" class="legend-item">
+        <span class="color-indicator" [style.background-color]="childColors.get(child.id)"></span>
+        <span class="child-name">{{ child.firstName }} {{child.lastName}}</span>
+    </div>
+</div>
