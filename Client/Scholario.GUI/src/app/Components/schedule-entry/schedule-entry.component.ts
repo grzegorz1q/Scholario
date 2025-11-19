@@ -57,18 +57,21 @@ export class ScheduleEntryComponent implements OnInit {
   }
 
   initializeChildrenData(){
-    const uniqueChildren = new Map<number, any>();
-    this.scheduleEntries.forEach(entry => {
-      if(entry.studentId && entry.studentName){
-        if(!uniqueChildren.has(entry.studentId)){
-          uniqueChildren.set(entry.studentId,{
-            id: entry.studentId,
-            name: entry.studentName
-          });
+    const childrenMap = new Map<number, Student>();
+    this.scheduleEntries.forEach(entry =>{
+      if(entry.studentId && entry.studentName && !childrenMap.has(entry.studentId)){
+        const nameArr = entry.studentName.split(' ');
+        const child: Student = {
+          id: entry.studentId,
+          firstName: nameArr[0],
+          lastName: nameArr[1],
+          grades: []
         }
-    }
+        childrenMap.set(entry.studentId,child);
+      }
     });
-    this.children = Array.from(uniqueChildren.values());
+    this.children = Array.from(childrenMap.values());
+
     this.children.forEach((child, index) => {
       this.childColors.set(child.id, this.colorPalette[index % this.colorPalette.length]);
     })
