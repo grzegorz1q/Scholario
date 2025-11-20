@@ -110,6 +110,7 @@ export class ScheduleEntryComponent implements OnInit {
           subjectName: entry.subjectName,
           groupName: entry.groupName,
           teacherName: entry.teacherName,
+          classroomNumber: entry.classroomNumber,
           students: []
         });
       }

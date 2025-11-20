@@ -1,9 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Scholario.Domain.Entities;
 
 namespace Scholario.Infrastructure.Persistence
@@ -19,6 +14,7 @@ namespace Scholario.Infrastructure.Persistence
         public virtual DbSet<Notification> Notifications { get; set; }
         public virtual DbSet<LessonHour> LessonHours { get; set; }
         public virtual DbSet<ScheduleEntry> ScheduleEntries { get; set; }
+        public virtual DbSet<Classroom> Classrooms { get; set; }
         public virtual DbSet<StudentAttendance> StudentAttendances { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
@@ -135,6 +131,12 @@ namespace Scholario.Infrastructure.Persistence
                 .HasOne(se => se.LessonHour)
                 .WithMany(lh => lh.ScheduleEntries)
                 .HasForeignKey(se => se.LessonHourId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Classroom>()
+                .HasMany(c => c.ScheduleEntries)
+                .WithOne(se => se.Classroom)
+                .HasForeignKey(se => se.ClassroomId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             //Relacja StudentAttendances -> Student

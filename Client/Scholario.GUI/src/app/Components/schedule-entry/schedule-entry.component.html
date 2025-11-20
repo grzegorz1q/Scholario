@@ -14,6 +14,7 @@
                         <div *ngFor="let entry of cell" class="schedule-entry">
                             <strong>{{entry.subjectName}}</strong><br>
                             {{entry.groupName}}<br>
+                            s. {{entry.classroomNumber}}<br>
                             <span *ngIf="role !== 'Teacher'">Nauczyciel: {{getTeacherNameInitials(entry.teacherName ?? '')}}</span>
                         </div>
                     </div>
@@ -22,6 +23,7 @@
                             <div class="subject-info">
                                 <strong>{{group.subjectName}} - {{getTeacherNameInitials(group.teacherName ?? '')}}</strong><br>
                                 {{group.groupName}}<br>
+                                s. {{group.classroomNumber}}<br>
                             </div>
                             <div class="students-indicators">
                                 <span *ngFor="let student of group.students" 

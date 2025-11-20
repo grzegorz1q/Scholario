@@ -10,6 +10,7 @@
         public int LessonNumber { get; set; }
 
         public string TeacherName { get; set; } = string.Empty;
+        public int ClassroomNumber { get; set; }
         //For Parent
         public int StudentId { get; set; }
         public string StudentName { get; set; } = string.Empty;
