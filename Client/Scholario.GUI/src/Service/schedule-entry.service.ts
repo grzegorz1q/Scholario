@@ -2,8 +2,10 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from '../Service/authService';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Subject} from '../app/Type/Subject'
 import { ScheduleEntry } from '../app/Type/ScheduleEntry';
 import { LessonHour } from '../app/Type/LessonHour';
+import { group } from '@angular/animations';
 
 @Injectable({
   providedIn: 'root'
@@ -33,5 +35,19 @@ export class ScheduleEntryService {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`);
       return this.http.get<{ subjects: any[] }>(`${this.apiUrl}/subjects/user`, { headers });
     }
-  
+
+    getSubjectsByGroupId(id: number): Observable<Subject[]> {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`);
+      return this.http.get<Subject[]>(`${this.apiUrl}/subjects/group/${id}`, { headers });
+    }
+
+    getScheduleByGroupId(id: number): Observable<ScheduleEntry[]>{
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`);
+      return this.http.get<ScheduleEntry[]>(`${this.apiUrl}/schedule-entries/group/${id}`, { headers });
+    }
+
+  //   saveScheduleEntries(groupId: number, entries: any[]): Observable<any> {
+  //   const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}, 'Content-Type': 'application/json'`,);
+  //   return this.http.post(`${this.apiUrl}/schedule/save-group/${groupId}`, entries, { headers });
+  // }
 }

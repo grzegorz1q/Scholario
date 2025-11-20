@@ -53,6 +53,13 @@ builder.Services.AddCors(options =>
         .AllowCredentials()
         );
 });
+//PT -- 20.11
+
+builder.Services.AddControllers()
+    .AddJsonOptions(opts =>
+    {
+        opts.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+    });
 
 //Authorization custom policies
 
