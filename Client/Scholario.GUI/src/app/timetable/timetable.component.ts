@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 import { Group } from '../Type/Group';
 import { GroupService } from '../../Service/group.service';
 import { FormsModule } from "@angular/forms";
+import { DayOfWeek } from '../Type/DayOfWeek';
 
 @Component({
   selector: 'app-timetable',
@@ -21,19 +22,21 @@ import { FormsModule } from "@angular/forms";
 export class TimetableComponent implements OnInit {
   days = ['Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek'];
   lessonHours: LessonHour[] = [];
-  selectedGroupId: number | null = null;
+  selectedGroupId: number = 1;
   subjects: Subject[] = [];
   scheduleEntries: ScheduleEntry[] = [];
   dayDropLists: string[] = [];
   groups: Group[] = [];
   initialsOfName: string[] = [];
 
-  constructor(private scheduleService: ScheduleEntryService, private subjectService: SubjectService, private groupService: GroupService) { }
+  constructor(private scheduleService: ScheduleEntryService, private subjectService: SubjectService, private groupService: GroupService) { console.log("Konstruktor TimetableComponent"); }
 
   ngOnInit() {
+    this.selectedGroupId = 1;
     this.loadData();
-    this.generateDropListIds();
     this.getAllGroups();
+    this.groupSubject();
+    this.onGroupChange();
   }
 
   generateDropListIds() {
@@ -45,33 +48,30 @@ export class TimetableComponent implements OnInit {
     }
   }
 
+  groupSubject() {
+    this.scheduleService.getScheduleByGroupId(this.selectedGroupId).subscribe(entries => {
+      this.scheduleEntries = entries.filter(e => e.groupId === this.selectedGroupId);
+    });
+    this.generateDropListIds();
+  }
+
   loadData() {
     this.scheduleService.getAllLessonHours().subscribe(hours => {
       this.lessonHours = hours;
       this.generateDropListIds();
     });
-
-    //this.subjectService.getSubjects().subscribe(r => this.subjects = r);
-    //this.scheduleService.getScheduleEntries().subscribe(r => this.scheduleEntries = r);
-    if (this.selectedGroupId != null) {
-      this.scheduleService.getScheduleByGroupId(this.selectedGroupId).subscribe(entries => {
-        this.scheduleEntries = entries.filter(e => e.groupId === this.selectedGroupId);
-      });
-    } else {
-      this.scheduleEntries = [];
-    }
-
   }
 
-  // PT
   onGroupChange() {
-    if (this.selectedGroupId == null) {
-      this.subjects = [];
-      return;
-    }
+    this.scheduleService.getSubjectsByGroupId(this.selectedGroupId).subscribe(r => this.subjects = r);
+    this.scheduleService.getScheduleByGroupId(this.selectedGroupId)
+      .subscribe(entries => {
+        this.scheduleEntries = entries.map(e => ({
+          ...e,
+          day: DayOfWeek[e.day as unknown as keyof typeof DayOfWeek] as DayOfWeek
+        }));
+      });
 
-    this.scheduleService.getSubjectsByGroupId(this.selectedGroupId)
-      .subscribe(r => this.subjects = r);
   }
 
   getAllGroups() {
@@ -90,10 +90,6 @@ export class TimetableComponent implements OnInit {
 
     const subject = event.previousContainer.data[event.previousIndex];
 
-    const existingIndex = this.scheduleEntries.findIndex(
-      e => e.day === dayIndex && e.lessonNumber === lessonNumber
-    );
-
     const newEntry: ScheduleEntry = {
       subjectId: subject.id,
       subjectName: subject.name,
@@ -102,17 +98,20 @@ export class TimetableComponent implements OnInit {
       lessonNumber: lessonNumber
     };
 
+    const existingIndex = this.scheduleEntries.findIndex(
+      e => e.day === dayIndex && e.lessonNumber === lessonNumber
+    );
+
     if (existingIndex >= 0) {
-      this.scheduleEntries[existingIndex] = newEntry;
+      this.scheduleEntries[existingIndex] = newEntry; // nadpisanie
     } else {
-      this.scheduleEntries.push(newEntry);
+      this.scheduleEntries.push(newEntry); // dodanie nowego
     }
 
     this.scheduleService.createScheduleEntry(newEntry).subscribe({
       next: () => console.log('Zapisano w bazie')
     });
   }
-
 
   getSubjectName(day: number, lessonNumber: number): string {
     const entry = this.scheduleEntries.find(
