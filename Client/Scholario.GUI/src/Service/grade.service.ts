@@ -22,4 +22,10 @@ export class GradeService {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`);
     return this.http.get<StudentGrade[]>(`${this.apiUrl}/students/grade`, { headers });
   }
+
+  updateGrade(grade: Grade): Observable<any>{
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`);
+    return this.http.put(`${this.apiUrl}/grades`, grade, { headers, responseType: 'text' as 'json' });
+  }
+
 }

@@ -85,6 +85,8 @@ namespace Scholario.Application.Services
             if (!isTeachingInGroup)
                 throw new UnauthorizedAccessException("Teacher is not teaching this student");
             grade.GradeValue = updateStudentGradeDto.GradeValue;
+            grade.DateOfIssue = DateTime.Now;
+            grade.GradeWeight = updateStudentGradeDto.GradeWeight;
             await _gradeRepository.UpdateGrade(grade);
         }
         public async Task DeleteGradeFromStudent(int id)
