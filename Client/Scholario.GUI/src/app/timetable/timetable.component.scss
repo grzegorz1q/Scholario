@@ -1,37 +1,68 @@
-.timetable-container {
+.form-container {
   display: flex;
   gap: 20px;
+  width: 100%;
+  height: 100%;
+  font-family: 'Lucida Sans', sans-serif;
 }
 
 .subjects-panel {
   width: 200px;
+  height: 890px;
   padding: 10px;
   border: 1px solid #ccc;
+  border-radius: 10px;
+  background: gainsboro;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .subject-item {
   padding: 8px;
-  background: #e0e0ff;
   margin-bottom: 8px;
+  background: #e0e0ff;
   border-radius: 4px;
   cursor: grab;
 }
 
-.timetable {
+.timetable-form {
   flex: 1;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
+.group-select {
+  margin-bottom: 10px;
 }
 
-th, td {
-  border: 1px solid #999;
+.timetable-table {
+  border-collapse: collapse;
+  width: 100%;
+  max-width: 1000px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  border-radius: 10px;
+  overflow: hidden;
+  background: gainsboro;
+}
+
+.timetable-table th, .timetable-table td {
+  border: 1px solid black;
+  padding: 15px;
   text-align: center;
-  height: 60px;
+  font-size: 20px;
 }
 
 .timetable-cell {
   min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.save-btn {
+  margin-top: 10px;
+  padding: 10px 20px;
+  font-size: 18px;
+  border-radius: 6px;
+  border: none;
+  background-color: #4CAF50;
+  color: white;
+  cursor: pointer;
 }

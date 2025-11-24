@@ -10,4 +10,5 @@ export type ScheduleEntry = {
     lessonNumber: number;
     studentId?: number;
     studentName?: string;
+    _isNew?: boolean;
   }

@@ -9,7 +9,6 @@ namespace Scholario.Application.Interfaces
         Task<ScheduleEntry> CreateScheduleEntry(ScheduleEntryDto scheduleEntryDto);
         Task<IEnumerable<ReadScheduleEntryDto>> GetUserSchedule(int userId);
         Task<IEnumerable<ReadScheduleEntryDto>> GetScheduleByGroupId(int groupId);
-        //Task<IEnumerable<ScheduleEntryDto>> SaveScheduleEntriesForGroup(int groupId, IEnumerable<ScheduleEntryDto> entries); // ewentualnie ScheduleEntryDto[] zamiast IEnumerable
-
+       // Task<IEnumerable<ScheduleEntryDto>> SaveScheduleEntriesForGroup(int groupId, IEnumerable<ScheduleEntryDto> entries); // ewentualnie ScheduleEntryDto[] zamiast IEnumerable
     }
 }

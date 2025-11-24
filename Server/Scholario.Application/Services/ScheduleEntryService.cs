@@ -57,13 +57,13 @@ namespace Scholario.Application.Services
                 throw new Exception("LessonHour not found for the given LessonNumber");
 
             var scheduleConflict = await _scheduleEntryRepository.Exists(scheduleEntryDto.GroupId, scheduleEntryDto.Day, scheduleEntryDto.LessonNumber);
-            if(scheduleConflict)
+            if (scheduleConflict)
             {
                 throw new InvalidOperationException($"Conflict: Group {scheduleEntryDto.GroupId} already has a lesson scheduled on {scheduleEntryDto.Day} at lesson {scheduleEntryDto.LessonNumber}.");
             }
 
             var scheduleEntry = _mapper.Map<ScheduleEntry>(scheduleEntryDto);
-            scheduleEntry.LessonHourId = lessonHour.Id;  
+            scheduleEntry.LessonHourId = lessonHour.Id;
 
             await _scheduleEntryRepository.AddScheduleEntry(scheduleEntry);
 
@@ -119,7 +119,7 @@ namespace Scholario.Application.Services
                     if (group == null)
                         throw new Exception($"Student {stu.FirstName} {stu.LastName} has no group assigned");
 
-                    foreach(var entry in group.ScheduleEntries)
+                    foreach (var entry in group.ScheduleEntries)
                     {
                         var dto = _mapper.Map<ReadScheduleEntryDto>(entry);
                         dto.StudentId = stu.Id;
@@ -136,38 +136,39 @@ namespace Scholario.Application.Services
             }
         }
 
-        //public async Task<IEnumerable<ScheduleEntryDto>> SaveScheduleEntriesForGroup(int groupId, IEnumerable<ScheduleEntryDto> entries)
-        //{
-        //    if (entries == null)
-        //        throw new ArgumentNullException(nameof(entries));
-
-        //    var group = await _groupRepository.GetGroup(groupId);
-        //    if (group == null)
-        //        throw new KeyNotFoundException("Group not found");
-
-        //    var savedEntries = new List<ScheduleEntry>();
-
-        //    foreach (var entryDto in entries)
+        //    public async Task<IEnumerable<ScheduleEntryDto>> SaveScheduleEntriesForGroup(int groupId, IEnumerable<ScheduleEntryDto> entries)
         //    {
-        //        var conflict = await _scheduleEntryRepository.Exists(groupId, entryDto.Day, entryDto.LessonNumber);
-        //        if (conflict)
+        //        if (entries == null)
+        //            throw new ArgumentNullException(nameof(entries));
+
+        //        var group = await _groupRepository.GetGroup(groupId);
+        //        if (group == null)
+        //            throw new KeyNotFoundException("Group not found");
+
+        //        var savedEntries = new List<ScheduleEntry>();
+
+        //        foreach (var entryDto in entries)
         //        {
-        //            continue;
+        //            var conflict = await _scheduleEntryRepository.Exists(groupId, entryDto.Day, entryDto.LessonNumber);
+        //            if (conflict)
+        //            {
+        //                continue;
+        //            }
+
+        //            var lessonHour = await _lessonHourRepository.GetLessonByNumber(entryDto.LessonNumber);
+        //            if (lessonHour == null)
+        //                throw new Exception($"LessonHour not found for lesson number {entryDto.LessonNumber}");
+
+        //            var scheduleEntry = _mapper.Map<ScheduleEntry>(entryDto);
+        //            scheduleEntry.LessonHourId = lessonHour.Id;
+        //            scheduleEntry.GroupId = groupId;
+
+        //            await _scheduleEntryRepository.AddScheduleEntry(scheduleEntry);
+        //            savedEntries.Add(scheduleEntry);
         //        }
 
-        //        var lessonHour = await _lessonHourRepository.GetLessonByNumber(entryDto.LessonNumber);
-        //        if (lessonHour == null)
-        //            throw new Exception($"LessonHour not found for lesson number {entryDto.LessonNumber}");
-
-        //        var scheduleEntry = _mapper.Map<ScheduleEntry>(entryDto);
-        //        scheduleEntry.LessonHourId = lessonHour.Id;
-        //        scheduleEntry.GroupId = groupId;
-
-        //        await _scheduleEntryRepository.AddScheduleEntry(scheduleEntry);
-        //        savedEntries.Add(scheduleEntry);
+        //        return _mapper.Map<IEnumerable<ScheduleEntryDto>>(savedEntries);
         //    }
-
-        //    return _mapper.Map<IEnumerable<ScheduleEntryDto>>(savedEntries);
         //}
     }
 }

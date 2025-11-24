@@ -24,6 +24,8 @@ namespace Scholario.Infrastructure.Repositories
                 throw new ArgumentNullException(nameof(scheduleEntry));
             await _appDbContext.ScheduleEntries.AddAsync(scheduleEntry);
             await _appDbContext.SaveChangesAsync();
+
+            //_appDbContext.ChangeTracker.Clear();
         }
 
         public async Task DeleteScheduleEntry(int id)

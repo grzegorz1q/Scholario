@@ -15,14 +15,24 @@ namespace Scholario.API.Controllers
         {
             _scheduleEntryService = scheduleEntriesService;
         }
-        [HttpPost("schedule/create")]
+
+        [HttpPost("schedule/creates")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> CreateScheduleEntry([FromBody] ScheduleEntryDto scheduleEntryDto)
+        public async Task<IActionResult> CreateScheduleEntries([FromBody] List<ScheduleEntryDto> entries)
         {
+            if (entries == null || entries.Count == 0)
+                return BadRequest("No schedule entries provided.");
+
+            var saved = new List<ScheduleEntryDto>();
+
             try
             {
-                var createdScheduleEntry = await _scheduleEntryService.CreateScheduleEntry(scheduleEntryDto);
-                return Ok(new { message = "ScheduleEntry added successfully" });
+                foreach (var dto in entries)
+                {
+                    await _scheduleEntryService.CreateScheduleEntry(dto);
+                }
+
+                return Ok(new { message = "Schedule entries saved successfully" });
             }
             catch (ArgumentNullException ex)
             {
@@ -36,26 +46,27 @@ namespace Scholario.API.Controllers
             }
         }
 
-        //[HttpPost("schedule/save-group/{groupId}")]
-        //[Authorize(Roles = "Admin")]
-        //public async Task<IActionResult> SaveScheduleForGroup(int groupId, [FromBody] List<ScheduleEntryDto> entries)
-        //{
-        //    if (entries == null || !entries.Any())
-        //        return BadRequest("No schedule entries provided.");
+        [HttpPost("schedule/create")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> CreateScheduleEntry([FromBody] ScheduleEntryDto scheduleEntryDto)
+        {
 
-        //    try
-        //    {
-        //        var savedEntries = await _scheduleEntryService.SaveScheduleEntriesForGroup(groupId, entries);
-        //        return Ok(new { message = "Schedule saved successfully", savedCount = savedEntries.Count() });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine($">[ScheduleEntryCtr] Error saving schedule: {ex.Message}");
-        //        return StatusCode(500, $"Internal server error: {ex.Message}");
-        //    }
-        //}
-
-
+            try
+            {
+                var createScheduleEntry = await _scheduleEntryService.CreateScheduleEntry(scheduleEntryDto);
+                return Ok(new { message = "Schedule entries saved successfully" });
+            }
+            catch (ArgumentNullException ex)
+            {
+                Console.WriteLine($">[ScheduleEntryCtr] Received null value: {ex.Message}");
+                return BadRequest($"Invalid data: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($">[ScheduleEntryCtr] Unhandled exception: {ex.Message}");
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
 
         [HttpGet]
         [Authorize(Roles = "Admin,Teacher,Student,Parent")]

@@ -32,6 +32,7 @@ export class TimetableComponent implements OnInit {
   constructor(private scheduleService: ScheduleEntryService, private subjectService: SubjectService, private groupService: GroupService) { console.log("Konstruktor TimetableComponent"); }
 
   ngOnInit() {
+    console.log("Metoda ngOnInit");
     this.selectedGroupId = 1;
     this.loadData();
     this.getAllGroups();
@@ -71,7 +72,6 @@ export class TimetableComponent implements OnInit {
           day: DayOfWeek[e.day as unknown as keyof typeof DayOfWeek] as DayOfWeek
         }));
       });
-
   }
 
   getAllGroups() {
@@ -95,7 +95,8 @@ export class TimetableComponent implements OnInit {
       subjectName: subject.name,
       groupId: Number(this.selectedGroupId),
       day: dayIndex,
-      lessonNumber: lessonNumber
+      lessonNumber: lessonNumber,
+      _isNew: true
     };
 
     const existingIndex = this.scheduleEntries.findIndex(
@@ -103,15 +104,36 @@ export class TimetableComponent implements OnInit {
     );
 
     if (existingIndex >= 0) {
-      this.scheduleEntries[existingIndex] = newEntry; // nadpisanie
+      this.scheduleEntries[existingIndex] = newEntry;
     } else {
-      this.scheduleEntries.push(newEntry); // dodanie nowego
+      this.scheduleEntries.push(newEntry);
     }
-
-    this.scheduleService.createScheduleEntry(newEntry).subscribe({
-      next: () => console.log('Zapisano w bazie')
-    });
   }
+
+saveSchedule() {
+  const toSave = this.scheduleEntries.filter(e => e._isNew);
+
+  if (toSave.length === 0) {
+    alert("Brak nowych wpisów do zapisania!");
+    return;
+  }
+
+  console.log("Przed zapisem saveSchedule:");
+  console.table(toSave);
+
+  this.scheduleService.createScheduleEntries(toSave).subscribe({
+    next: () => {
+      alert("Plan zapisany pomyślnie!");
+      toSave.forEach(e => e._isNew = false);
+      console.table(this.scheduleEntries);
+    },
+    error: (err) => {
+      console.error(err);
+      alert("Błąd przy zapisie planu!");
+      console.table(this.scheduleEntries);
+    }
+  });
+}
 
   getSubjectName(day: number, lessonNumber: number): string {
     const entry = this.scheduleEntries.find(
