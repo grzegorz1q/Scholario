@@ -1,13 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { Student } from '../../Type/Student';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ApiService } from '../../../Service/api.service';
 import { CommonModule } from '@angular/common';
 import { Grade } from '../../Type/Grade';
 import { HttpErrorResponse } from '@angular/common/http';
-import { AuthService } from '../../../Service/authService';
 import { FormsModule } from '@angular/forms';
-import { GradeWeight, GradeWeightType } from '../../Type/GradeWeight';
+import { GradeWeight } from '../../Type/GradeWeight';
 import { GradeService } from '../../../Service/grade.service';
 import { SubjectService } from '../../../Service/subject.service';
 
@@ -30,6 +28,8 @@ export class SubjectGroupComponent {
     name: name.replace(/([a-z])([A-Z])/g, '$1 $2'),
     value
   }));
+
+  readView = true;
 
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
@@ -67,6 +67,17 @@ export class SubjectGroupComponent {
       });
     }
   }
+  updateGrade(grade: Grade){
+    console.log(grade);
+    this.gradeService.updateGrade(grade).subscribe({
+      next: response => {
+        this.getStudentsBySubjectGroup(); //works but I think that it's not good practice. 
+                                          // Probably better to add GetGradeById method
+        this.readView = true;
+      },
+      error: error => console.error(error)
+    });
+  }
   getStudentsBySubjectGroup(){
     this.subjectService.getStudentsBySubjectGroup(this.subjectId, this.groupId).subscribe(
       (students) => {
@@ -86,6 +97,7 @@ export class SubjectGroupComponent {
     );
   }
   getAditionalInformation(){
+    this.readView = true;
     this.aditionalInformation = true;
   }
 }
