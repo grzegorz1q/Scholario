@@ -5,7 +5,6 @@ import { Observable } from 'rxjs';
 import { Subject } from '../app/Type/Subject'
 import { ScheduleEntry } from '../app/Type/ScheduleEntry';
 import { LessonHour } from '../app/Type/LessonHour';
-import { group } from '@angular/animations';
 
 @Injectable({
   providedIn: 'root'
@@ -22,9 +21,9 @@ export class ScheduleEntryService {
     return this.http.get<ScheduleEntry[]>(`${this.apiUrl}/schedule-entries`, { headers });
   }
 
-  getSubjects(): Observable<{ subjects: any[] }> {    // Do sprawdzenia "getSubjects(): Observable<Subject[]> {"
+    getSubjects(): Observable<Subject[]> {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`);
-    return this.http.get<{ subjects: any[] }>(`${this.apiUrl}/subjects/user`, { headers });
+    return this.http.get<Subject[]>(`${this.apiUrl}/subjects`, { headers });
   }
 
   createScheduleEntry(entry: ScheduleEntry): Observable<ScheduleEntry> {

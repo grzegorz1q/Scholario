@@ -33,7 +33,9 @@ export class NavbarComponent {
           { name: 'Panel Admina', link: '#' },
           { name: 'Zarządzanie użytkownikami', link: '#' },
           { name: 'Raporty', link: '#' },
-          { name: 'Plan', link: '/timetable'}
+          { name: 'Plan', link: '/timetable'},
+          { name: 'Zajęcia', link: '/subject'}
+          
         ];
         break;
       case 'Teacher':
