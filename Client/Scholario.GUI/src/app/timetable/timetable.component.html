@@ -1,9 +1,16 @@
 <div class="form-container">
   <div class="subjects-panel" cdkDropList id="subjectsList" [cdkDropListData]="subjects"
-       [cdkDropListConnectedTo]="dayDropLists">
+    [cdkDropListConnectedTo]="dayDropLists">
     <h3>Przedmioty</h3>
     <div *ngFor="let subject of subjects" class="subject-item" cdkDrag>
       {{ subject.name }} - {{ getInitials(subject) }}
+    </div>
+  </div>
+
+  <div class="classroom-panel">
+    <h3>Sale</h3>
+    <div *ngFor="let classroom of classrooms" class="classroom-item">
+      <input type="checkbox" [(ngModel)]="classroom.number" [value]="classroom.number"/> {{classroom.number}}
     </div>
   </div>
 
@@ -26,11 +33,9 @@
         <tr *ngFor="let hour of lessonHours; let i = index">
           <td>{{ hour.startTime }} - {{ hour.endTime }}</td>
           <td *ngFor="let day of days; let dayIndex = index">
-            <div class="timetable-cell" cdkDropList 
-                 [id]="'dropList-' + dayIndex + '-' + hour.lessonNumber"
-                 [cdkDropListConnectedTo]="['subjectsList']" 
-                 [cdkDropListData]="[]"
-                 (cdkDropListDropped)="drop($event, dayIndex, hour.lessonNumber)">
+            <div class="timetable-cell" cdkDropList [id]="'dropList-' + dayIndex + '-' + hour.lessonNumber"
+              [cdkDropListConnectedTo]="['subjectsList']" [cdkDropListData]="[]"
+              (cdkDropListDropped)="drop($event, dayIndex, hour.lessonNumber)">
               {{ getSubjectName(dayIndex, hour.lessonNumber) }}
             </div>
           </td>

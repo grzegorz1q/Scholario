@@ -11,6 +11,8 @@ import { Group } from '../Type/Group';
 import { GroupService } from '../../Service/group.service';
 import { FormsModule } from "@angular/forms";
 import { DayOfWeek } from '../Type/DayOfWeek';
+import { Classroom } from '../Type/Classroom';
+import { ClassroomService } from '../../Service/classroom.service';
 
 @Component({
   selector: 'app-timetable',
@@ -28,8 +30,9 @@ export class TimetableComponent implements OnInit {
   dayDropLists: string[] = [];
   groups: Group[] = [];
   initialsOfName: string[] = [];
+  classrooms: Classroom[] = [];
 
-  constructor(private scheduleService: ScheduleEntryService, private subjectService: SubjectService, private groupService: GroupService) { console.log("Konstruktor TimetableComponent"); }
+  constructor(private scheduleService: ScheduleEntryService, private subjectService: SubjectService, private groupService: GroupService, private classroomService: ClassroomService) { }
 
   ngOnInit() {
     console.log("Metoda ngOnInit");
@@ -38,6 +41,17 @@ export class TimetableComponent implements OnInit {
     this.getAllGroups();
     this.groupSubject();
     this.onGroupChange();
+    this.getClassrooms();
+  }
+
+  getClassrooms(){
+    this.classroomService.getClassrooms().subscribe({
+      next: (classrooms) =>
+        this.classrooms = classrooms,
+      error: (err) => {
+        console.error(err)
+      }
+    });
   }
 
   generateDropListIds() {
