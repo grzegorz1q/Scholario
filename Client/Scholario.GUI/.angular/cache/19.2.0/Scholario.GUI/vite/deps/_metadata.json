@@ -1,49 +1,49 @@
 {
-  "hash": "94e9a2cb",
-  "configHash": "1c405cac",
+  "hash": "d9d3af4e",
+  "configHash": "5a688537",
   "lockfileHash": "6bb35dfe",
-  "browserHash": "bf10ece9",
+  "browserHash": "a9d5c609",
   "optimized": {
+    "@angular/cdk/drag-drop": {
+      "src": "../../../../../../node_modules/@angular/cdk/fesm2022/drag-drop.mjs",
+      "file": "@angular_cdk_drag-drop.js",
+      "fileHash": "5e17cea1",
+      "needsInterop": false
+    },
     "@angular/common": {
       "src": "../../../../../../node_modules/@angular/common/fesm2022/common.mjs",
       "file": "@angular_common.js",
-      "fileHash": "ea2d7cf9",
+      "fileHash": "299bc497",
       "needsInterop": false
     },
     "@angular/common/http": {
       "src": "../../../../../../node_modules/@angular/common/fesm2022/http.mjs",
       "file": "@angular_common_http.js",
-      "fileHash": "e05e33b8",
+      "fileHash": "baf27166",
       "needsInterop": false
     },
     "@angular/core": {
       "src": "../../../../../../node_modules/@angular/core/fesm2022/core.mjs",
       "file": "@angular_core.js",
-      "fileHash": "dbd0501a",
+      "fileHash": "4e2280f5",
       "needsInterop": false
     },
     "@angular/forms": {
       "src": "../../../../../../node_modules/@angular/forms/fesm2022/forms.mjs",
       "file": "@angular_forms.js",
-      "fileHash": "a579fc13",
+      "fileHash": "564550bc",
       "needsInterop": false
     },
     "@angular/platform-browser": {
       "src": "../../../../../../node_modules/@angular/platform-browser/fesm2022/platform-browser.mjs",
       "file": "@angular_platform-browser.js",
-      "fileHash": "705db31b",
+      "fileHash": "2971e38a",
       "needsInterop": false
     },
     "@angular/router": {
       "src": "../../../../../../node_modules/@angular/router/fesm2022/router.mjs",
       "file": "@angular_router.js",
-      "fileHash": "06daf4b5",
-      "needsInterop": false
-    },
-    "@angular/cdk/drag-drop": {
-      "src": "../../../../../../node_modules/@angular/cdk/fesm2022/drag-drop.mjs",
-      "file": "@angular_cdk_drag-drop.js",
-      "fileHash": "9af7e22f",
+      "fileHash": "6b3dffbd",
       "needsInterop": false
     }
   },

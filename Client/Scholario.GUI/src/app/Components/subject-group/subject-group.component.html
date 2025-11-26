@@ -50,9 +50,17 @@
 <div *ngIf="aditionalInformation" class="modal">
     <div class="modal-content">
       <span class="close" (click)="aditionalInformation = false">&times;</span>
-      <p><strong>Data:</strong> {{ grade?.dateOfIssue | date:'yyyy-MM-dd'}}</p>
-      <p><strong>Ocena:</strong> {{grade?.gradeValue}}</p>
-      <p><strong>Kategoria:</strong> {{grade?.gradeWeightName}}</p>
-      <p><strong>Waga:</strong> {{grade?.gradeWeight}}</p>
+      <ng-template [ngIf]="readView">
+        <p><strong>Data:</strong> {{ grade?.dateOfIssue | date:'yyyy-MM-dd hh:mm:ss'}}</p>
+        <p><strong>Ocena:</strong> {{grade?.gradeValue}}</p>
+        <p><strong>Kategoria:</strong> {{grade?.gradeWeightName}}</p>
+        <p><strong>Waga:</strong> {{grade?.gradeWeight}}</p>
+        <button (click)="readView = false">Edytuj</button>
+      </ng-template>
+      <ng-template [ngIf]="!readView && grade">
+        <form (submit)="updateGrade(grade)">
+          <button type="submit">Zatwierdź</button>
+        </form> 
+      </ng-template>
     </div>
 </div>

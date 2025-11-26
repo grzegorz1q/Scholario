@@ -93,6 +93,15 @@ namespace Scholario.Infrastructure.Persistence
             }
             if (_appDbContext.Database.CanConnect())
             {
+                if (!_appDbContext.Classrooms.Any())
+                {
+                    var classrooms = GetClassrooms();
+                    _appDbContext.Classrooms.AddRange(classrooms);
+                    _appDbContext.SaveChanges();
+                }
+            }
+            if (_appDbContext.Database.CanConnect())
+            {
                 if (!_appDbContext.ScheduleEntries.Any())
                 {
                     var scheduleEntries = GetScheduleEntries();
@@ -139,6 +148,7 @@ namespace Scholario.Infrastructure.Persistence
                 new Student(){FirstName="Adam", LastName="Nowak", Email="adam.nowak@test.pl", Password="adamnowak", GroupId=groupId, ParentId=parentId},
                 new Student(){FirstName="Ala", LastName="Nowakowska", Email="ala.nowakowska@test.pl", Password="alanowakswska", GroupId=groupId, ParentId=parentId},
                 new Student(){FirstName="Ada", LastName="Kowalska", Email="ada.kowalska@test.pl", Password="adakowalska", GroupId=groupId1, ParentId=parentId1},
+                new Student(){FirstName="Ola", LastName="Glo", Email="ola.glo@test.pl", Password="olaglo", GroupId=groupId1, ParentId=parentId},
                 
             };
             foreach (var e in students)
@@ -236,18 +246,32 @@ namespace Scholario.Infrastructure.Persistence
             var lessonHour1 = _appDbContext.LessonHours.First().Id;
             var lessonHour2 = _appDbContext.LessonHours.Skip(1).First().Id;
             var lessonHour3 = _appDbContext.LessonHours.Skip(2).First().Id;
-
+            var classroom1 = _appDbContext.Classrooms.First().Id;
+            var classroom2 = _appDbContext.Classrooms.Skip(1).First().Id;
+            var classroom3 = _appDbContext.Classrooms.Skip(2).First().Id;
+            var classroom4 = _appDbContext.Classrooms.Skip(3).First().Id;
 
             var scheduleEntries = new List<ScheduleEntry>()
             {
-                new ScheduleEntry() { SubjectId = subject1.Id, GroupId = group.Id, Day = DayOfWeek.Monday, LessonHourId = lessonHour1},
-                new ScheduleEntry() { SubjectId = subject1.Id, GroupId = group.Id, Day = DayOfWeek.Monday, LessonHourId = lessonHour2},
-                new ScheduleEntry() { SubjectId = subject2.Id, GroupId = group.Id, Day = DayOfWeek.Monday, LessonHourId = lessonHour3},
-                new ScheduleEntry() { SubjectId = subject2.Id, GroupId = group1.Id, Day = DayOfWeek.Monday, LessonHourId = lessonHour1},
-                new ScheduleEntry() { SubjectId = subject1.Id, GroupId = group1.Id, Day = DayOfWeek.Tuesday, LessonHourId = lessonHour1},
-                new ScheduleEntry() { SubjectId = subject2.Id, GroupId = group1.Id, Day = DayOfWeek.Tuesday, LessonHourId = lessonHour2},
+                new ScheduleEntry() { SubjectId = subject1.Id, GroupId = group.Id, Day = DayOfWeek.Monday, LessonHourId = lessonHour1, ClassroomId = classroom1},
+                new ScheduleEntry() { SubjectId = subject1.Id, GroupId = group.Id, Day = DayOfWeek.Monday, LessonHourId = lessonHour2, ClassroomId = classroom2},
+                new ScheduleEntry() { SubjectId = subject2.Id, GroupId = group.Id, Day = DayOfWeek.Monday, LessonHourId = lessonHour3, ClassroomId = classroom1},
+                new ScheduleEntry() { SubjectId = subject2.Id, GroupId = group1.Id, Day = DayOfWeek.Monday, LessonHourId = lessonHour1, ClassroomId = classroom2},
+                new ScheduleEntry() { SubjectId = subject1.Id, GroupId = group1.Id, Day = DayOfWeek.Tuesday, LessonHourId = lessonHour1, ClassroomId = classroom3},
+                new ScheduleEntry() { SubjectId = subject2.Id, GroupId = group1.Id, Day = DayOfWeek.Tuesday, LessonHourId = lessonHour2, ClassroomId = classroom4}
             };
             return scheduleEntries;
+        }
+        private IEnumerable<Classroom> GetClassrooms()
+        {
+            var classrooms = new List<Classroom>()
+            {
+                new Classroom() { Number = 101, Capacity = 25 },
+                new Classroom() { Number = 102, Capacity = 20 },
+                new Classroom() { Number = 103, Capacity = 30 },
+                new Classroom() { Number = 104, Capacity = 15 }
+            };
+            return classrooms;
         }
 
     }
