@@ -136,6 +136,7 @@ builder.Services.AddScoped<ITeacherRepository, TeacherRepository>();
 builder.Services.AddScoped<IPersonRepository, PersonRepository>();
 builder.Services.AddScoped<ISubjectRepository, SubjectRepository>();
 builder.Services.AddScoped<IStudentAttendanceRepository, StudentAttendanceRepository>();
+builder.Services.AddScoped<IClassRoomRepository, ClassRoomRepository>();
 
 //Adds services to the Dependency Injection Container
 builder.Services.AddScoped<IGradeService, GradeService>();
@@ -147,6 +148,7 @@ builder.Services.AddScoped<IGroupService, GroupService>();
 builder.Services.AddScoped<IScheduleEntryService, ScheduleEntryService>();
 builder.Services.AddScoped<ILessonHourService, LessonHourService>();
 builder.Services.AddScoped<IStudentAttendanceService, StudentAttendanceService>();
+builder.Services.AddScoped<IClassroomService, ClassroomService>();
 
 //Hashowanie has³a
 builder.Services.AddScoped<IPasswordHasher<Person>, PasswordHasher<Person>>();
