@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { SubjectComponent } from "../subject/subject.component";
 import { ScheduleEntryService } from '../../../Service/schedule-entry.service';
 import { LoggedUserSubjects } from '../../Type/LoggedUserSubjects';
+import { SubjectService } from '../../../Service/subject.service';
 
 
 @Component({
@@ -16,14 +17,14 @@ import { LoggedUserSubjects } from '../../Type/LoggedUserSubjects';
 export class SubjectsListComponent {
 
   subjects: Subject[] = [];
-  private readonly scheduleEntryService = inject(ScheduleEntryService);
+  private readonly subjectService = inject(SubjectService)
 
   ngOnInit() {
     this.getSubjects();
   }
 
   getSubjects() {
-    this.scheduleEntryService.getSubjects().subscribe({
+    this.subjectService.getSubjects().subscribe({
       next: response => {
         this.subjects = response.subjects;
       },

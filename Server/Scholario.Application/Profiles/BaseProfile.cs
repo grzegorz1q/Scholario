@@ -67,6 +67,10 @@ namespace Scholario.Application.Profiles
 
             CreateMap<SubjectGradesDto, Grade>();
 
+            CreateMap<Subject, ReadGroupDto>()
+                .ForMember(dest => dest.TeacherName, x => x.MapFrom(src => $"{src.Teacher.FirstName} {src.Teacher.LastName}"));
+
+
         }
     }
 }

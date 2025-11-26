@@ -24,6 +24,8 @@ namespace Scholario.Infrastructure.Repositories
                 throw new ArgumentNullException(nameof(scheduleEntry));
             await _appDbContext.ScheduleEntries.AddAsync(scheduleEntry);
             await _appDbContext.SaveChangesAsync();
+
+            //_appDbContext.ChangeTracker.Clear();
         }
 
         public async Task DeleteScheduleEntry(int id)
@@ -57,6 +59,18 @@ namespace Scholario.Infrastructure.Repositories
                 throw new ArgumentNullException(nameof(scheduleEntry));
             _appDbContext.ScheduleEntries.Update(scheduleEntry);
             await _appDbContext.SaveChangesAsync();
+        }
+
+        public async Task<bool> Exists(int groupId, DayOfWeek day, int lessonNumber)
+        {
+            var lessonHour = await _appDbContext.LessonHours
+                .FirstOrDefaultAsync(lh => lh.LessonNumber == lessonNumber);
+
+            if (lessonHour == null)
+                return false;
+
+            return await _appDbContext.ScheduleEntries
+                .AnyAsync(e => e.GroupId == groupId && e.Day == day && e.LessonHourId == lessonHour.Id);
         }
     }
 }

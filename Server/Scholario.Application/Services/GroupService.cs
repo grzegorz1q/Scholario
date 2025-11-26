@@ -27,6 +27,12 @@ namespace Scholario.Application.Services
             _mapper = mapper;
         }
 
+        public async Task<IEnumerable<ReadGroupDto>> GetAllGroups()
+        {
+            var groups = await _groupRepository.GetAllGroups() ?? throw new ArgumentNullException("Groups not found");
+            return _mapper.Map<IEnumerable<ReadGroupDto>>(groups);
+        }
+
         public async Task<IEnumerable<ReadGroupDto>> GetLoggedTeacherGroups(int teacherId)
         {
             var teacher = await _teacherRepository.GetTeacher(teacherId);

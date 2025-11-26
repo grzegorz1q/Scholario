@@ -4,6 +4,7 @@ import { ScheduleEntry } from '../../Type/ScheduleEntry';
 import { LessonHour } from '../../Type/LessonHour';
 import { ScheduleEntryService } from '../../../Service/schedule-entry.service';
 import { AuthService } from '../../../Service/authService';
+import { DayOfWeek } from '../../Type/DayOfWeek';
 import { ParentLegendComponent } from "./parent-legend/parent-legend.component";
 import { Student } from '../../Type/Student';
 
@@ -15,11 +16,13 @@ import { Student } from '../../Type/Student';
 })
 
 export class ScheduleEntryComponent implements OnInit {
-  scheduleEntries: ScheduleEntry[] = [];  
+  scheduleEntries: ScheduleEntry[] = [];
   lessonHours: LessonHour[] = [];
   days: string[] = ['Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek'];
   scheduleTable: ScheduleEntry[][][] = [];
   role: string | null = null;
+
+  constructor(private scheduleService: ScheduleEntryService, private authService: AuthService) { }
 
   children: Student[] = [];
   childColors: Map<number, string> = new Map();
@@ -28,21 +31,25 @@ export class ScheduleEntryComponent implements OnInit {
     '#DDA0DD', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E9'
   ]
 
-  constructor(private scheduleService: ScheduleEntryService, private authService: AuthService) {}
 
-  ngOnInit(){
+  ngOnInit() {
     this.role = this.authService.getUserRole();
     this.loadData();
   }
-  
-  
-  loadData(){
+
+
+  loadData() {
     this.scheduleService.getAllLessonHours().subscribe({
       next: lessonHours => {
         this.lessonHours = lessonHours;
-        
+
         this.scheduleService.getScheduleEntries().subscribe({
           next: entries => {
+            this.scheduleEntries = entries.map(e => ({
+              ...e,
+              day: DayOfWeek[e.day as unknown as keyof typeof DayOfWeek] as DayOfWeek
+            }));
+            console.table(this.scheduleEntries);
             this.scheduleEntries = entries;
             if (this.role === 'Parent') {
               this.initializeChildrenData();
@@ -56,6 +63,10 @@ export class ScheduleEntryComponent implements OnInit {
     });
   }
 
+
+  buildScheduleTable() {
+    this.scheduleTable = this.lessonHours.map(lessonHour =>
+      this.days.map(day =>
   initializeChildrenData(){
     const childrenMap = new Map<number, Student>();
     this.scheduleEntries.forEach(entry =>{
@@ -86,8 +97,8 @@ export class ScheduleEntryComponent implements OnInit {
     console.log(this.scheduleTable);
   }
 
-  getScheduleEntry(day: string, lesson: number): ScheduleEntry[]{
-    const dayIndex = this.days.indexOf(day)+1; 
+  getScheduleEntry(day: string, lesson: number): ScheduleEntry[] {
+    const dayIndex = this.days.indexOf(day);
     return this.scheduleEntries.filter(e => e.day === dayIndex && e.lessonNumber === lesson);
   }
 

@@ -6,12 +6,15 @@ import { GradeComponent } from './Components/grade-component/grade-component.com
 import { SubjectsListComponent } from './Components/subjects-list/subjects-list.component';
 import { SubjectGroupComponent } from './Components/subject-group/subject-group.component';
 import { TimetableComponent } from './timetable/timetable.component';
+import { SubjectComponent } from './Components/subject/subject.component';
+import { SubjectManagementComponent } from './Components/subject-management/subject-management.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' }, 
   { path: 'login', component: LoginComponent }, 
   { path: 'schedule', component: ScheduleEntryComponent, canActivate: [AuthGuard] }, 
   { path: 'grade', component: GradeComponent, canActivate: [AuthGuard] }, 
+  { path: 'subject', component: SubjectManagementComponent, canActivate: [AuthGuard]},
   { path: 'subjects', component: SubjectsListComponent, canActivate: [AuthGuard]},
   { path: 'subjects/:subjectId/groups/:groupId', component: SubjectGroupComponent, canActivate: [AuthGuard]},
   { path: 'timetable', component: TimetableComponent}

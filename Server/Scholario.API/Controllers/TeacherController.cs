@@ -44,7 +44,7 @@ namespace Scholario.API.Controllers
         }
 
         [HttpPut("group")]
-        [Authorize(Roles = "Teacher")]
+        [Authorize(Roles = "Teacher,Admin")]
         public async Task<IActionResult> AddOrChangeTeacherToGroup(AddOrChangeTeacherToGroupDto addTeacherToGroupDto)
         {
             try
