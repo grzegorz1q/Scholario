@@ -6,7 +6,7 @@
         public string Name { get; set; } = string.Empty;
         public string? Description { get; set; }
         public virtual Teacher Teacher { get; set; } = default!;
-        public int TeacherId { get; set; }
+        public int? TeacherId { get; set; }
         public virtual ICollection<Grade> Grades { get; set; } = default!;
         public virtual ICollection<Group> Groups { get; set; } = default!;
         public virtual ICollection<ScheduleEntry> ScheduleEntries { get; set; } = default!;

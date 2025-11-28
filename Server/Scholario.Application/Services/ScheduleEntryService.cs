@@ -36,33 +36,49 @@ namespace Scholario.Application.Services
             _mapper = mapper;
         }
 
-            public async Task<ScheduleEntry> CreateScheduleEntry(ScheduleEntryDto scheduleEntryDto)
+        public async Task<ScheduleEntry> CreateScheduleEntry(ScheduleEntryDto scheduleEntryDto)
+        {
+            if (scheduleEntryDto == null)
+                throw new ArgumentNullException(nameof(scheduleEntryDto));
+
+            var subject = await _subjectRepository.GetSubject(scheduleEntryDto.SubjectId);
+            if (subject == null)
+                throw new Exception("Subject not found");
+
+            var group = await _groupRepository.GetGroup(scheduleEntryDto.GroupId);
+            if (group == null)
+                throw new Exception("Group not found");
+
+            //if (group.Subjects == null || !group.Subjects.Any(s => s.Id == subject.Id))
+            //    throw new Exception("Group is not asigned to subject");
+
+            var lessonHour = await _lessonHourRepository.GetLessonByNumber(scheduleEntryDto.LessonNumber);
+            if (lessonHour == null)
+                throw new Exception("LessonHour not found for the given LessonNumber");
+
+            var scheduleConflict = await _scheduleEntryRepository.Exists(scheduleEntryDto.GroupId, scheduleEntryDto.Day, scheduleEntryDto.LessonNumber);
+            if (scheduleConflict)
             {
-                if (scheduleEntryDto == null)
-                    throw new ArgumentNullException(nameof(scheduleEntryDto));
-
-                var subject = await _subjectRepository.GetSubject(scheduleEntryDto.SubjectId);
-                if (subject == null)
-                    throw new Exception("Subject not found");
-
-                var group = await _groupRepository.GetGroup(scheduleEntryDto.GroupId);
-                if (group == null)
-                    throw new Exception("Group not found");
-
-                if (group.Subjects == null || !group.Subjects.Any(s => s.Id == subject.Id))
-                    throw new Exception("Group is not asigned to subject");
-
-                var lessonHour = await _lessonHourRepository.GetLessonByNumber(scheduleEntryDto.LessonNumber);
-                if (lessonHour == null)
-                    throw new Exception("LessonHour not found for the given LessonNumber");
-
-                var scheduleEntry = _mapper.Map<ScheduleEntry>(scheduleEntryDto);
-                scheduleEntry.LessonHourId = lessonHour.Id;  
-
-                await _scheduleEntryRepository.AddScheduleEntry(scheduleEntry);
-
-                return scheduleEntry;
+                throw new InvalidOperationException($"Conflict: Group {scheduleEntryDto.GroupId} already has a lesson scheduled on {scheduleEntryDto.Day} at lesson {scheduleEntryDto.LessonNumber}.");
             }
+
+            var scheduleEntry = _mapper.Map<ScheduleEntry>(scheduleEntryDto);
+            scheduleEntry.LessonHourId = lessonHour.Id;
+
+            await _scheduleEntryRepository.AddScheduleEntry(scheduleEntry);
+
+            return scheduleEntry;
+        }
+
+        public async Task<IEnumerable<ReadScheduleEntryDto>> GetScheduleByGroupId(int groupId)
+        {
+            if (groupId < 0) throw new ArgumentOutOfRangeException(nameof(groupId));
+
+            var group = await _groupRepository.GetGroup(groupId);
+            if (group == null) throw new KeyNotFoundException("Group not found");
+
+            return _mapper.Map<IEnumerable<ReadScheduleEntryDto>>(group.ScheduleEntries);
+        }
 
         public async Task<IEnumerable<ReadScheduleEntryDto>> GetUserSchedule(int userId)
         {
@@ -103,7 +119,7 @@ namespace Scholario.Application.Services
                     if (group == null)
                         throw new Exception($"Student {stu.FirstName} {stu.LastName} has no group assigned");
 
-                    foreach(var entry in group.ScheduleEntries)
+                    foreach (var entry in group.ScheduleEntries)
                     {
                         var dto = _mapper.Map<ReadScheduleEntryDto>(entry);
                         dto.StudentId = stu.Id;
@@ -113,10 +129,46 @@ namespace Scholario.Application.Services
                 }
                 return parentScheduleEntries;
             }
+
             else
             {
                 throw new Exception("Invalid user type");
             }
         }
+
+        //    public async Task<IEnumerable<ScheduleEntryDto>> SaveScheduleEntriesForGroup(int groupId, IEnumerable<ScheduleEntryDto> entries)
+        //    {
+        //        if (entries == null)
+        //            throw new ArgumentNullException(nameof(entries));
+
+        //        var group = await _groupRepository.GetGroup(groupId);
+        //        if (group == null)
+        //            throw new KeyNotFoundException("Group not found");
+
+        //        var savedEntries = new List<ScheduleEntry>();
+
+        //        foreach (var entryDto in entries)
+        //        {
+        //            var conflict = await _scheduleEntryRepository.Exists(groupId, entryDto.Day, entryDto.LessonNumber);
+        //            if (conflict)
+        //            {
+        //                continue;
+        //            }
+
+        //            var lessonHour = await _lessonHourRepository.GetLessonByNumber(entryDto.LessonNumber);
+        //            if (lessonHour == null)
+        //                throw new Exception($"LessonHour not found for lesson number {entryDto.LessonNumber}");
+
+        //            var scheduleEntry = _mapper.Map<ScheduleEntry>(entryDto);
+        //            scheduleEntry.LessonHourId = lessonHour.Id;
+        //            scheduleEntry.GroupId = groupId;
+
+        //            await _scheduleEntryRepository.AddScheduleEntry(scheduleEntry);
+        //            savedEntries.Add(scheduleEntry);
+        //        }
+
+        //        return _mapper.Map<IEnumerable<ScheduleEntryDto>>(savedEntries);
+        //    }
+        //}
     }
 }

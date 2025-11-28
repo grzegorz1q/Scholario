@@ -19,7 +19,7 @@ namespace Scholario.API.Controllers
         }
 
         [HttpPost]
-        //[Authorize(Roles = "Teacher")]
+        [Authorize(Roles = "Teacher,Admin")]
         public async Task<IActionResult> CreateSubject(CreateSubjectDto createSubjectDto)
         {
             try
@@ -34,10 +34,32 @@ namespace Scholario.API.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($">[GradeCtr] Unhandled exception: {ex.Message}");
+                Console.WriteLine($">[SubjectCtr] Unhandled exception: {ex.Message}");
                 return BadRequest($"Unexpected error: {ex.Message}");
             }
         }
+
+        [HttpPut("subject/group")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> AddSubjectToGroup(AddSubjectToGroupDto addSubjectToGroup)
+        {
+            try
+            {
+                await _subjectService.AddSubjectToGroup(addSubjectToGroup);
+                return Ok("Subject update successfully");
+            }
+            catch (ArgumentNullException ex)
+            {
+                Console.WriteLine($"{ex.Message}");
+                return BadRequest($"Invalid data: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($">[SubjectCtr] Unhandled exception: {ex.Message}");
+                return BadRequest($"Unexpected error: {ex.Message}");
+            }
+        }
+
         [HttpGet("id")]
         public async Task<IActionResult> GetSubjectById(int id)
         {
@@ -55,7 +77,7 @@ namespace Scholario.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet]
+        [HttpGet("user")]
         [Authorize(Roles ="Teacher,Parent,Student")]
         public async Task<IActionResult> GetLoggedUserSubjects()
         {
@@ -78,8 +100,55 @@ namespace Scholario.API.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($">[GradeCtr] Unhandled exception: {ex.Message}");
+                Console.WriteLine($">[SubjectCtr] Unhandled exception: {ex.Message}");
                 return BadRequest($"Unexpected error: {ex.Message}");
+            }
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Teacher,Admin")]
+        public async Task<IActionResult> GetSubjects()
+        {
+            try
+            {
+                var userIdClaim = (User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                if (userIdClaim == null)
+                {
+                    return Unauthorized("User's ID is missing in the token.");
+                }
+                var userId = int.Parse(userIdClaim);
+                var subjects = await _subjectService.GetSubjects();
+
+                return Ok(subjects);
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                Console.WriteLine($"{ex.Message}");
+                return BadRequest($"Invalid data: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($">[SubjectCtr] Unhandled exception: {ex.Message}");
+                return BadRequest($"Unexpected error: {ex.Message}");
+            }
+        }
+
+        [HttpGet("group/{groupId}")]
+        [Authorize(Roles = "Teacher,Admin")]
+        public async Task<IActionResult> GetSubjectsByGroupId(int groupId)
+        {
+            try
+            {
+                var subjects = await _subjectService.GetSubjectsByGroupId(groupId);
+                return Ok(subjects);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
     }

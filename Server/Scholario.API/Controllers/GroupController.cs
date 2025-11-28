@@ -14,7 +14,7 @@ namespace Scholario.API.Controllers
         {
             _groupService = groupService;
         }
-        [HttpGet]
+        [HttpGet("user")]
         [Authorize(Roles ="Teacher, Parent, Student")]
         public async Task<IActionResult> GetLoggedUserGroup() //Grupy dla poszczególnych kont(grupa nauczyciela to grupa, której jest wychowawcą)
         {
@@ -37,7 +37,35 @@ namespace Scholario.API.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($">[GradeCtr] Unhandled exception: {ex.Message}");
+                Console.WriteLine($">[GroupCtr] Unhandled exception: {ex.Message}");
+                return BadRequest($"Unexpected error: {ex.Message}");
+            }
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Teacher,Admin")]
+        public async Task<IActionResult> GetAllGroups() 
+        {
+            try
+            {
+                var userIdClaim = (User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                if (userIdClaim == null)
+                {
+                    return Unauthorized("User's ID is missing in the token.");
+                }
+                var userId = int.Parse(userIdClaim);
+                var groups = await _groupService.GetAllGroups();
+
+                return Ok(groups);
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                Console.WriteLine($"{ex.Message}");
+                return BadRequest($"Invalid data: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($">[GroupCtr] Unhandled exception: {ex.Message}");
                 return BadRequest($"Unexpected error: {ex.Message}");
             }
         }

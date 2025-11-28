@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Scholario.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using Scholario.Infrastructure.Persistence;
 namespace Scholario.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251120170432_ChangeTeacherModel")]
+    partial class ChangeTeacherModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,25 +41,6 @@ namespace Scholario.Infrastructure.Migrations
                     b.HasIndex("SubjectsId");
 
                     b.ToTable("GroupSubjects", (string)null);
-                });
-
-            modelBuilder.Entity("Scholario.Domain.Entities.Classroom", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Capacity")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Number")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Classrooms");
                 });
 
             modelBuilder.Entity("Scholario.Domain.Entities.DescriptiveAssessment", b =>
@@ -276,9 +260,6 @@ namespace Scholario.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ClassroomId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Day")
                         .HasColumnType("int");
 
@@ -292,8 +273,6 @@ namespace Scholario.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ClassroomId");
 
                     b.HasIndex("GroupId");
 
@@ -478,12 +457,6 @@ namespace Scholario.Infrastructure.Migrations
 
             modelBuilder.Entity("Scholario.Domain.Entities.ScheduleEntry", b =>
                 {
-                    b.HasOne("Scholario.Domain.Entities.Classroom", "Classroom")
-                        .WithMany("ScheduleEntries")
-                        .HasForeignKey("ClassroomId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("Scholario.Domain.Entities.Group", "Group")
                         .WithMany("ScheduleEntries")
                         .HasForeignKey("GroupId")
@@ -501,8 +474,6 @@ namespace Scholario.Infrastructure.Migrations
                         .HasForeignKey("SubjectId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("Classroom");
 
                     b.Navigation("Group");
 
@@ -557,11 +528,6 @@ namespace Scholario.Infrastructure.Migrations
                     b.Navigation("Group");
 
                     b.Navigation("Parent");
-                });
-
-            modelBuilder.Entity("Scholario.Domain.Entities.Classroom", b =>
-                {
-                    b.Navigation("ScheduleEntries");
                 });
 
             modelBuilder.Entity("Scholario.Domain.Entities.DescriptiveAssessment", b =>
