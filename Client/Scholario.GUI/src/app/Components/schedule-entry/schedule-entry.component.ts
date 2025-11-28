@@ -50,7 +50,6 @@ export class ScheduleEntryComponent implements OnInit {
               day: DayOfWeek[e.day as unknown as keyof typeof DayOfWeek] as DayOfWeek
             }));
             console.table(this.scheduleEntries);
-            this.scheduleEntries = entries;
             if (this.role === 'Parent') {
               this.initializeChildrenData();
             }
@@ -63,10 +62,6 @@ export class ScheduleEntryComponent implements OnInit {
     });
   }
 
-
-  buildScheduleTable() {
-    this.scheduleTable = this.lessonHours.map(lessonHour =>
-      this.days.map(day =>
   initializeChildrenData(){
     const childrenMap = new Map<number, Student>();
     this.scheduleEntries.forEach(entry =>{
