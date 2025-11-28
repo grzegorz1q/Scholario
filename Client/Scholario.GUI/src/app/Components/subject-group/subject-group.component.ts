@@ -68,9 +68,10 @@ export class SubjectGroupComponent {
     }
   }
   updateGrade(grade: Grade){
-    console.log(grade);
+    grade.gradeWeight = Number(grade.gradeWeight);
     this.gradeService.updateGrade(grade).subscribe({
       next: response => {
+        console.log(grade.gradeWeight);
         this.getStudentsBySubjectGroup(); //works but I think that it's not good practice. 
                                           // Probably better to add GetGradeById method
         this.readView = true;

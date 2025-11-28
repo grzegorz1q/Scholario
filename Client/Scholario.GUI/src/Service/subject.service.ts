@@ -13,7 +13,6 @@ export class SubjectService {
   private apiUrl = 'http://localhost:5256';
   
   constructor(private http:HttpClient, private authService: AuthService) { }
-
   
   getStudentsBySubjectGroup(subjectId: number, groupId: number): Observable<Student[]>{
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`);

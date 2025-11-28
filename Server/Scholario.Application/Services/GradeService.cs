@@ -87,6 +87,7 @@ namespace Scholario.Application.Services
             grade.GradeValue = updateStudentGradeDto.GradeValue;
             grade.DateOfIssue = DateTime.Now;
             grade.GradeWeight = updateStudentGradeDto.GradeWeight;
+
             await _gradeRepository.UpdateGrade(grade);
         }
         public async Task DeleteGradeFromStudent(int id)
