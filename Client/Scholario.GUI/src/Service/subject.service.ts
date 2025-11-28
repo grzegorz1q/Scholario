@@ -21,6 +21,7 @@ export class SubjectService {
     return this.http.get<Student[]>(`${this.apiUrl}/teachers/subjects/${subjectId}/groups/${groupId}/students`, { headers });
   }
 
+  //dodac loggedUserSubjects bo nei dzial teraz wysewietlanie przedmiotow zalogowanego uzytkownika. Teacher nei moze wejsc w przedmioty i grupe
   getSubjects(): Observable<{ subjects: Subject[] }> {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`);
     return this.http.get<{ subjects: Subject[] }>(`${this.apiUrl}/subjects`, { headers });
