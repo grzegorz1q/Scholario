@@ -17,5 +17,5 @@ export const routes: Routes = [
   { path: 'subject', component: SubjectManagementComponent, canActivate: [AuthGuard]},
   { path: 'subjects', component: SubjectsListComponent, canActivate: [AuthGuard]},
   { path: 'subjects/:subjectId/groups/:groupId', component: SubjectGroupComponent, canActivate: [AuthGuard]},
-  { path: 'timetable', component: TimetableComponent}
+  { path: 'timetable', component: TimetableComponent, canActivate: [AuthGuard]}
 ];

@@ -136,7 +136,7 @@ builder.Services.AddScoped<ITeacherRepository, TeacherRepository>();
 builder.Services.AddScoped<IPersonRepository, PersonRepository>();
 builder.Services.AddScoped<ISubjectRepository, SubjectRepository>();
 builder.Services.AddScoped<IStudentAttendanceRepository, StudentAttendanceRepository>();
-builder.Services.AddScoped<IClassRoomRepository, ClassRoomRepository>();
+builder.Services.AddScoped<IClassroomRepository, ClassroomRepository>();
 
 //Adds services to the Dependency Injection Container
 builder.Services.AddScoped<IGradeService, GradeService>();

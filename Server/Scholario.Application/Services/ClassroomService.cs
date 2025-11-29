@@ -13,8 +13,8 @@ namespace Scholario.Application.Services
     public class ClassroomService : IClassroomService
     {
         private readonly IMapper _mapper;
-        private readonly IClassRoomRepository _classRoomRepository;
-        public ClassroomService(IClassRoomRepository classRoomRepository,IMapper mapper) 
+        private readonly IClassroomRepository _classRoomRepository;
+        public ClassroomService(IClassroomRepository classRoomRepository,IMapper mapper) 
         {
             _classRoomRepository = classRoomRepository;
             _mapper = mapper;
@@ -25,5 +25,7 @@ namespace Scholario.Application.Services
             var classrooms = await _classRoomRepository.GetClassrooms();
             return _mapper.Map<IEnumerable<ReadClassRoomDto>>(classrooms);
         }
+
+
     }
 }

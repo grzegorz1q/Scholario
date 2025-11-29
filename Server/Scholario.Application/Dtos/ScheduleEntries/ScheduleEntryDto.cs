@@ -7,5 +7,6 @@
         public int GroupId { get; set; }
         public DayOfWeek Day { get; set; }
         public int LessonNumber { get; set; }
+        public int ClassroomNumber { get; set; }
     }
 }

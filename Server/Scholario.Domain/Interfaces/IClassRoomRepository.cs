@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace Scholario.Domain.Interfaces
 {
-    public interface IClassRoomRepository
+    public interface IClassroomRepository
     {
         Task<IEnumerable<Classroom>> GetClassrooms();
+        Task<Classroom?> GetClassroomByNumber(int number);
+        Task<bool> IsClassroomOccupied(int classroomId, DayOfWeek day, int lessonNumber);
     }
 }

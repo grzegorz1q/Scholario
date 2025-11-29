@@ -20,11 +20,13 @@ namespace Scholario.Application.Services
         private readonly IStudentRepository _studentRepository;
         private readonly ITeacherRepository _teacherRepository;
         private readonly IPersonRepository _personRepository;
+        private readonly IClassroomRepository _classroomRepository;
         private readonly IMapper _mapper;
 
         public ScheduleEntryService(ISubjectRepository subjectRepository, IGroupRepository groupRepository,
             ILessonHourRepository lessonHourRepository, IScheduleEntryRepository scheduleEntryRepository,
-            IStudentRepository studentRepository, ITeacherRepository teacherRepository, IPersonRepository personRepository, IMapper mapper)
+            IStudentRepository studentRepository, ITeacherRepository teacherRepository, IPersonRepository personRepository,
+            IClassroomRepository classroomRepository, IMapper mapper)
         {
             _subjectRepository = subjectRepository;
             _groupRepository = groupRepository;
@@ -33,6 +35,7 @@ namespace Scholario.Application.Services
             _lessonHourRepository = lessonHourRepository;
             _teacherRepository = teacherRepository;
             _personRepository = personRepository;
+            _classroomRepository = classroomRepository;
             _mapper = mapper;
         }
 
@@ -56,14 +59,25 @@ namespace Scholario.Application.Services
             if (lessonHour == null)
                 throw new Exception("LessonHour not found for the given LessonNumber");
 
+            var classroom = await _classroomRepository.GetClassroomByNumber(scheduleEntryDto.ClassroomNumber);
+            if (classroom == null)
+                throw new Exception("Classroom not found");
+
             var scheduleConflict = await _scheduleEntryRepository.Exists(scheduleEntryDto.GroupId, scheduleEntryDto.Day, scheduleEntryDto.LessonNumber);
             if (scheduleConflict)
             {
                 throw new InvalidOperationException($"Conflict: Group {scheduleEntryDto.GroupId} already has a lesson scheduled on {scheduleEntryDto.Day} at lesson {scheduleEntryDto.LessonNumber}.");
             }
 
+            var isOccupied = await _classroomRepository.IsClassroomOccupied(classroom.Id, scheduleEntryDto.Day, scheduleEntryDto.LessonNumber);
+            if (isOccupied)
+            {
+                throw new InvalidOperationException($"Conflict: Classroom {classroom.Number} is already occupied on {scheduleEntryDto.Day} at lesson {scheduleEntryDto.LessonNumber}.");
+            }
+
             var scheduleEntry = _mapper.Map<ScheduleEntry>(scheduleEntryDto);
             scheduleEntry.LessonHourId = lessonHour.Id;
+            scheduleEntry.ClassroomId = classroom.Id;
 
             await _scheduleEntryRepository.AddScheduleEntry(scheduleEntry);
 

@@ -63,14 +63,12 @@ namespace Scholario.Infrastructure.Repositories
 
         public async Task<bool> Exists(int groupId, DayOfWeek day, int lessonNumber)
         {
-            var lessonHour = await _appDbContext.LessonHours
-                .FirstOrDefaultAsync(lh => lh.LessonNumber == lessonNumber);
+            var lessonHour = await _appDbContext.LessonHours.FirstOrDefaultAsync(lh => lh.LessonNumber == lessonNumber);
 
             if (lessonHour == null)
                 return false;
 
-            return await _appDbContext.ScheduleEntries
-                .AnyAsync(e => e.GroupId == groupId && e.Day == day && e.LessonHourId == lessonHour.Id);
+            return await _appDbContext.ScheduleEntries.AnyAsync(e => e.GroupId == groupId && e.Day == day && e.LessonHourId == lessonHour.Id);
         }
     }
 }

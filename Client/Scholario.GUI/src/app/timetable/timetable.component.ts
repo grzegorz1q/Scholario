@@ -31,6 +31,9 @@ export class TimetableComponent implements OnInit {
   groups: Group[] = [];
   initialsOfName: string[] = [];
   classrooms: Classroom[] = [];
+  selectedClassroom: number = 0
+  showModal = false;
+  modalEntry: ScheduleEntry | null = null;
 
   constructor(private scheduleService: ScheduleEntryService, private subjectService: SubjectService, private groupService: GroupService, private classroomService: ClassroomService) { }
 
@@ -44,7 +47,7 @@ export class TimetableComponent implements OnInit {
     this.getClassrooms();
   }
 
-  getClassrooms(){
+  getClassrooms() {
     this.classroomService.getClassrooms().subscribe({
       next: (classrooms) =>
         this.classrooms = classrooms,
@@ -52,6 +55,11 @@ export class TimetableComponent implements OnInit {
         console.error(err)
       }
     });
+  }
+
+  setClassroom(number: number) {
+    this.selectedClassroom = number;
+    console.log(this.selectedClassroom)
   }
 
   generateDropListIds() {
@@ -110,6 +118,7 @@ export class TimetableComponent implements OnInit {
       groupId: Number(this.selectedGroupId),
       day: dayIndex,
       lessonNumber: lessonNumber,
+      classroomNumber: null,
       _isNew: true
     };
 
@@ -122,32 +131,44 @@ export class TimetableComponent implements OnInit {
     } else {
       this.scheduleEntries.push(newEntry);
     }
+
+    this.modalEntry = newEntry;
+    this.showModal = true;
   }
 
-saveSchedule() {
-  const toSave = this.scheduleEntries.filter(e => e._isNew);
-
-  if (toSave.length === 0) {
-    alert("Brak nowych wpisów do zapisania!");
-    return;
-  }
-
-  console.log("Przed zapisem saveSchedule:");
-  console.table(toSave);
-
-  this.scheduleService.createScheduleEntries(toSave).subscribe({
-    next: () => {
-      alert("Plan zapisany pomyślnie!");
-      toSave.forEach(e => e._isNew = false);
-      console.table(this.scheduleEntries);
-    },
-    error: (err) => {
-      console.error(err);
-      alert("Błąd przy zapisie planu!");
-      console.table(this.scheduleEntries);
+  selectClassroom(classroomNumber: number) {
+    if (this.modalEntry) {
+      this.modalEntry.classroomNumber = classroomNumber;
     }
-  });
-}
+
+    this.showModal = false;
+    this.modalEntry = null;
+  }
+
+  saveSchedule() {
+    const toSave = this.scheduleEntries.filter(e => e._isNew);
+
+    if (toSave.length === 0) {
+      alert("Brak nowych wpisów do zapisania!");
+      return;
+    }
+
+    console.log("Przed zapisem saveSchedule:");
+    console.table(toSave);
+
+    this.scheduleService.createScheduleEntries(toSave).subscribe({
+      next: () => {
+        alert("Plan zapisany pomyślnie!");
+        toSave.forEach(e => e._isNew = false);
+        console.table(this.scheduleEntries);
+      },
+      error: (err) => {
+        console.error(err);
+        alert("Błąd przy zapisie planu!");
+        console.table(this.scheduleEntries);
+      }
+    });
+  }
 
   getSubjectName(day: number, lessonNumber: number): string {
     const entry = this.scheduleEntries.find(

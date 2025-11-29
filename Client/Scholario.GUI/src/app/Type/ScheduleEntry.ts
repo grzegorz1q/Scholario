@@ -8,7 +8,7 @@ export type ScheduleEntry = {
     teacherName?: string;
     day: DayOfWeek;
     lessonNumber: number;
-    classroomNumber?: number; // must be included in creating schedule entry (timetable component) 
+    classroomNumber?: number | null; // must be included in creating schedule entry (timetable component) 
     studentId?: number;
     studentName?: string;
     _isNew?: boolean;

@@ -4,6 +4,7 @@ export type Classroom = {
     id: number,
     number: number,
     capacity: number,
-    scheduleEntries: ScheduleEntry[]
+    scheduleEntries: ScheduleEntry[],
+    occupied?: boolean
 }
 
