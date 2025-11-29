@@ -32,10 +32,13 @@ export class LoginComponent {
         localStorage.setItem('auth_token', response);
 
         if (this.authService.isAdmin()) {
-          this.router.navigate(['/timetable']); 
+          this.router.navigate(['/timetable']);
         } else if (this.authService.isTeacher()) {
           this.router.navigate(['/schedule']);
-        } else {
+        } else if (this.authService.isStudent()) {
+          this.router.navigate(['schedule']);
+        }
+        else {
           this.router.navigate(['/home']);
         }
       },

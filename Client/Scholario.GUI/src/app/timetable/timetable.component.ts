@@ -133,6 +133,7 @@ export class TimetableComponent implements OnInit {
     }
 
     this.modalEntry = newEntry;
+    
     this.showModal = true;
   }
 

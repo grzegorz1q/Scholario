@@ -12,7 +12,7 @@
       <span class="close" (click)="showModal = false">&times;</span>
 
       <h3>Wybierz salę</h3>
-
+      
       <div *ngFor="let classroom of classrooms" class="classroom-item">
         <input type="radio" name="selectedRoom" (change)="selectClassroom(classroom.number)" />
         <span>{{ classroom.number }}</span>
