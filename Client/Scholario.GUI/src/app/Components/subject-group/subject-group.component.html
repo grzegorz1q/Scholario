@@ -56,7 +56,7 @@
         <p><strong>Kategoria:</strong> {{grade?.gradeWeightName}}</p>
         <p><strong>Waga:</strong> {{grade?.gradeWeight}}</p>
         <button (click)="readView = false">Edytuj</button>
-        <!-- <button (click)="removeGrade()">Usuń</button> -->
+        <button (click)="deleteGrade(grade?.id)">Usuń</button>
       </ng-template>
       <ng-template [ngIf]="!readView && grade">
         <form (submit)="updateGrade(grade); aditionalInformation=false">
