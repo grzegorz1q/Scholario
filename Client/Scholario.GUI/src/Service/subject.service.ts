@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { Student } from '../app/Type/Student';
 import { Subject } from '../app/Type/Subject';
 import { SubjectCreateDto } from '../app/Type/SubjectCreateDto';
+import { LoggedUserSubjects } from '../app/Type/LoggedUserSubjects';
 
 
 @Injectable({
@@ -21,13 +22,17 @@ export class SubjectService {
     return this.http.get<Student[]>(`${this.apiUrl}/teachers/subjects/${subjectId}/groups/${groupId}/students`, { headers });
   }
 
-  //dodac loggedUserSubjects bo nei dzial teraz wysewietlanie przedmiotow zalogowanego uzytkownika. Teacher nei moze wejsc w przedmioty i grupe
+  getLoggedUserSubjects(): Observable<LoggedUserSubjects>{
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`);
+    return this.http.get<LoggedUserSubjects>(`${this.apiUrl}/subjects/user`, { headers });
+  }
+
   getSubjects(): Observable<{ subjects: Subject[] }> {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`);
     return this.http.get<{ subjects: Subject[] }>(`${this.apiUrl}/subjects`, { headers });
   }
 
-  createSubject(subject: SubjectCreateDto): Observable<Subject> {
+  createSubject(subject: SubjectCreateDto): Observable<Subject> { //jak to dziala? czy jest gdzies wykorzystane? subject nie jest przekazywany
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`);
     return this.http.post<Subject>(`${this.apiUrl}/subjects`, { headers });
   }

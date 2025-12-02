@@ -79,6 +79,16 @@ export class SubjectGroupComponent {
       error: error => console.error(error)
     });
   }
+  deleteGrade(gradeId?: number){
+    this.gradeService.deleteGrade(gradeId).subscribe({
+      next: () => {
+        this.getStudentsBySubjectGroup();
+        this.aditionalInformation = false;
+        console.log('Grade deleted successfully')
+      },
+      error: error => console.error(error)
+    });
+  }
   getStudentsBySubjectGroup(){
     this.subjectService.getStudentsBySubjectGroup(this.subjectId, this.groupId).subscribe(
       (students) => {
