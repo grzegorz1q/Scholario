@@ -42,6 +42,11 @@ export class SubjectGroupComponent {
 
     this.getStudentsBySubjectGroup();
   }
+  getAverageFromGrades(grades: Grade[]): number {
+    return grades.reduce((sum, grade) => sum + (grade.gradeValue*grade.gradeWeight), 0) 
+          / 
+          grades.reduce((sum, grade) => sum + grade.gradeWeight, 0);
+  }
   openGradeForm(student: any) {
     this.selectedStudent = student;
     this.newGrade = {
