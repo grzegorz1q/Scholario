@@ -4,6 +4,7 @@
           <tr>
               <th>Uczeń</th>
               <th>Oceny</th>
+              <th>Średnia</th>
           </tr>
       </thead>
       <tbody>
@@ -15,6 +16,9 @@
                   (click)="getAditionalInformation(); grade = g">
                   {{ g.gradeValue }}
                 </a>
+              </td>
+              <td>
+                {{getAverageFromGrades(student.grades) | number:'1.2-2'}}
               </td>
               <td>
                 <button (click)="openGradeForm(student)">+</button>
