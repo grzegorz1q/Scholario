@@ -43,6 +43,6 @@
         <app-parent-legend [children]="children" [childColors]="childColors"></app-parent-legend>
     </div>
     <div>
-        <app-schedule-filter (onFilterChange)="handleFilterChange($event)"></app-schedule-filter>
+        <app-schedule-filter (filtersChanged)="handleFiltersChanged($event)"></app-schedule-filter>
     </div>
 </div>

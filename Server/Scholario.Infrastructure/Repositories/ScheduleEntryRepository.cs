@@ -2,11 +2,6 @@
 using Scholario.Domain.Interfaces;
 using Scholario.Domain.Entities;
 using Scholario.Infrastructure.Persistence;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Scholario.Infrastructure.Repositories
 {
@@ -71,6 +66,22 @@ namespace Scholario.Infrastructure.Repositories
 
             return await _appDbContext.ScheduleEntries
                 .AnyAsync(e => e.GroupId == groupId && e.Day == day && e.LessonHourId == lessonHour.Id);
+        }
+
+        public async Task<IEnumerable<ScheduleEntry>> GetFilteredScheduleEntries(int? groupId, int? teacherId, int? classroomId)
+        {
+            var scheduleEntries = _appDbContext.ScheduleEntries.AsQueryable();
+
+            if (groupId.HasValue)
+                scheduleEntries = scheduleEntries.Where(se => se.GroupId == groupId);
+
+            if (teacherId.HasValue)
+                scheduleEntries = scheduleEntries.Where(se => se.Subject.TeacherId == teacherId);
+
+            if (classroomId.HasValue)
+                scheduleEntries = scheduleEntries.Where(se => se.ClassroomId == classroomId);
+
+            return await scheduleEntries.ToListAsync();
         }
     }
 }

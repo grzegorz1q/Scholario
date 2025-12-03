@@ -1,7 +1,7 @@
 <form>
     <div class="group">
         <label>Grupa: </label>
-        <select name="selectedGroupId" [(ngModel)]="selectedGroupId" (ngModelChange)="onGroupChange()">
+        <select name="selectedGroupId" [(ngModel)]="filters.groupId" (ngModelChange)="onFiltersChange()">
             <option [ngValue]="null">-brak-</option>
             <option *ngFor="let group of availableGroups" [ngValue]="group.id">{{ group.name }}</option>
         </select>

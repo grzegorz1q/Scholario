@@ -3,11 +3,6 @@ using Scholario.Application.Dtos.ScheduleEntries;
 using Scholario.Application.Interfaces;
 using Scholario.Domain.Entities;
 using Scholario.Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Scholario.Application.Services
 {
@@ -17,21 +12,17 @@ namespace Scholario.Application.Services
         private readonly IGroupRepository _groupRepository;
         private readonly IScheduleEntryRepository _scheduleEntryRepository;
         private readonly ILessonHourRepository _lessonHourRepository;
-        private readonly IStudentRepository _studentRepository;
-        private readonly ITeacherRepository _teacherRepository;
         private readonly IPersonRepository _personRepository;
         private readonly IMapper _mapper;
 
         public ScheduleEntryService(ISubjectRepository subjectRepository, IGroupRepository groupRepository,
             ILessonHourRepository lessonHourRepository, IScheduleEntryRepository scheduleEntryRepository,
-            IStudentRepository studentRepository, ITeacherRepository teacherRepository, IPersonRepository personRepository, IMapper mapper)
+            IPersonRepository personRepository, IMapper mapper)
         {
             _subjectRepository = subjectRepository;
             _groupRepository = groupRepository;
             _scheduleEntryRepository = scheduleEntryRepository;
-            _studentRepository = studentRepository;
             _lessonHourRepository = lessonHourRepository;
-            _teacherRepository = teacherRepository;
             _personRepository = personRepository;
             _mapper = mapper;
         }
@@ -68,6 +59,12 @@ namespace Scholario.Application.Services
             await _scheduleEntryRepository.AddScheduleEntry(scheduleEntry);
 
             return scheduleEntry;
+        }
+
+        public async Task<IEnumerable<ReadScheduleEntryDto>> GetFilteredScheduleEntries(int? groupId, int? teacherId, int? classroomId)
+        {
+            var filtered = await _scheduleEntryRepository.GetFilteredScheduleEntries(groupId, teacherId, classroomId);
+            return _mapper.Map<IEnumerable<ReadScheduleEntryDto>>(filtered);
         }
 
         public async Task<IEnumerable<ReadScheduleEntryDto>> GetScheduleByGroupId(int groupId)

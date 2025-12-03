@@ -38,8 +38,26 @@ export class ScheduleEntryComponent implements OnInit {
     this.loadData();
   }
 
-  handleFilterChange(groupId: number) {
-    console.log("Selected Group ID:", groupId);
+  handleFiltersChanged(filters: any) {
+    const noFilters =
+    !filters.groupId &&
+    !filters.teacherId &&
+    !filters.classroomId;
+
+    if (noFilters) {
+      this.loadData();
+      return;
+    }
+    this.scheduleService.getFilteredScheduleEntries(filters.groupId, filters.teacherId, filters.classroomId).subscribe({
+      next: entries =>{
+        this.scheduleEntries = entries.map(e => ({
+          ...e,
+          day: DayOfWeek[e.day as unknown as keyof typeof DayOfWeek] as DayOfWeek
+        }));
+        this.buildScheduleTable();
+      },
+      error: error => console.error(error)
+    })
   }
 
   loadData() {

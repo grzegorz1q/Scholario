@@ -12,9 +12,12 @@ import { FormsModule } from '@angular/forms';
 })
 export class ScheduleFilterComponent implements OnInit {
   availableGroups: Group[] = [];
-  selectedGroupId: number | null = null;
-  @Output() onFilterChange = new EventEmitter<number>();
-
+  filters = {
+    groupId: null,
+    teacherId: null,
+    classroomId: null
+  }
+  @Output() filtersChanged = new EventEmitter<any>();
   constructor(private groupService: GroupService) {}
 
   ngOnInit() {
@@ -31,12 +34,14 @@ export class ScheduleFilterComponent implements OnInit {
     });
   }
 
-  onGroupChange() {
-    this.onFilterChange.emit(this.selectedGroupId!);
+  onFiltersChange() {
+    this.filtersChanged.emit(this.filters);
   }
 
   clearFilters() {
-    this.selectedGroupId = null;
-    this.onFilterChange.emit(this.selectedGroupId!);
+    this.filters.groupId = null;
+    this.filters.teacherId = null;
+    this.filters.classroomId = null;
+    this.filtersChanged.emit(this.filters);
   }
 }

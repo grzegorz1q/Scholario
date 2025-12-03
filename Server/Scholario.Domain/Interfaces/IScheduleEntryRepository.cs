@@ -1,9 +1,4 @@
 ﻿using Scholario.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Scholario.Domain.Interfaces
 {
@@ -15,5 +10,6 @@ namespace Scholario.Domain.Interfaces
         Task UpdateScheduleEntry(ScheduleEntry scheduleEntry);
         Task DeleteScheduleEntry(int id);
         Task<bool> Exists(int groupId, DayOfWeek day, int lessonNumber);
+        Task<IEnumerable<ScheduleEntry>> GetFilteredScheduleEntries(int? groupId, int? teacherId, int? classroomId);
     }
 }

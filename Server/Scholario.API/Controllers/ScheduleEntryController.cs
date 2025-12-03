@@ -101,6 +101,24 @@ namespace Scholario.API.Controllers
             }
         }
 
+        [HttpGet("filter")]
+        [Authorize(Roles = "Admin,Teacher,Student,Parent")]
+        public async Task<IActionResult> GetFilteredScheduleEntries(
+            [FromQuery] int? groupId,
+            [FromQuery] int? teacherId,
+            [FromQuery] int? classroomId)
+        {
+            try
+            {
+                var result = await _scheduleEntryService.GetFilteredScheduleEntries(groupId, teacherId, classroomId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
 
         [HttpGet("group/{groupId}")]
         [Authorize(Roles = "Admin,Teacher")]

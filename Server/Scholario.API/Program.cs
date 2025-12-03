@@ -55,7 +55,7 @@ builder.Services.AddCors(options =>
 });
 //PT -- 20.11
 
-builder.Services.AddControllers()
+builder.Services.AddControllers() //to mozna do jednego AddControllers() zamiast do 3 osobno
     .AddJsonOptions(opts =>
     {
         opts.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
