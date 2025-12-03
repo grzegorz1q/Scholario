@@ -1,0 +1,10 @@
+<form>
+    <div class="group">
+        <label>Grupa: </label>
+        <select name="selectedGroupId" [(ngModel)]="selectedGroupId" (ngModelChange)="onGroupChange()">
+            <option [ngValue]="null">-brak-</option>
+            <option *ngFor="let group of availableGroups" [ngValue]="group.id">{{ group.name }}</option>
+        </select>
+    </div>
+    <button type="reset" (click)="clearFilters()">Wyczyść filtry</button>
+</form>

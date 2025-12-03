@@ -7,10 +7,11 @@ import { AuthService } from '../../../Service/authService';
 import { DayOfWeek } from '../../Type/DayOfWeek';
 import { ParentLegendComponent } from "./parent-legend/parent-legend.component";
 import { Student } from '../../Type/Student';
+import { ScheduleFilterComponent } from "./schedule-filter/schedule-filter.component";
 
 @Component({
   selector: 'app-schedule-entry',
-  imports: [CommonModule, ParentLegendComponent],
+  imports: [CommonModule, ParentLegendComponent, ScheduleFilterComponent],
   templateUrl: './schedule-entry.component.html',
   styleUrls: ['./schedule-entry.component.scss']
 })
@@ -37,6 +38,9 @@ export class ScheduleEntryComponent implements OnInit {
     this.loadData();
   }
 
+  handleFilterChange(groupId: number) {
+    console.log("Selected Group ID:", groupId);
+  }
 
   loadData() {
     this.scheduleService.getAllLessonHours().subscribe({

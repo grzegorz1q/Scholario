@@ -43,7 +43,7 @@ namespace Scholario.API.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Teacher,Admin")]
+        [Authorize(Roles = "Teacher,Admin, Parent")]
         public async Task<IActionResult> GetAllGroups() 
         {
             try

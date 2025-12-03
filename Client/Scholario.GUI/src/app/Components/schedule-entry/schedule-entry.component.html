@@ -42,4 +42,7 @@
     <div class="legend" *ngIf="role==='Parent'">
         <app-parent-legend [children]="children" [childColors]="childColors"></app-parent-legend>
     </div>
+    <div>
+        <app-schedule-filter (onFilterChange)="handleFilterChange($event)"></app-schedule-filter>
+    </div>
 </div>
