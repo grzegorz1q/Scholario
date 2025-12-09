@@ -34,6 +34,7 @@ export class TimetableComponent implements OnInit {
   selectedClassroom: number = 0
   showModal = false;
   modalEntry: ScheduleEntry | null = null;
+  emptyClassroom: Classroom[] = [];
 
   constructor(private scheduleService: ScheduleEntryService, private subjectService: SubjectService, private groupService: GroupService, private classroomService: ClassroomService) { }
 
@@ -56,6 +57,11 @@ export class TimetableComponent implements OnInit {
       }
     });
   }
+
+  // getEmptyClassroom(dayIndex: number, lessonNumber: number) {
+  //   const usedRooms = this.scheduleEntries.filter(e => e.day === dayIndex && e.lessonNumber === lessonNumber && e.classroomNumber).map(e => e.classroomNumber)
+  //   return this.classrooms.filter(c => !usedRooms.includes(c.number));
+  // }
 
   setClassroom(number: number) {
     this.selectedClassroom = number;
@@ -133,7 +139,7 @@ export class TimetableComponent implements OnInit {
     }
 
     this.modalEntry = newEntry;
-    
+    //this.getEmptyClassroom(dayIndex, lessonNumber)
     this.showModal = true;
   }
 
@@ -175,7 +181,13 @@ export class TimetableComponent implements OnInit {
     const entry = this.scheduleEntries.find(
       e => e.day === day && e.lessonNumber === lessonNumber
     );
-    return entry ? entry.subjectName : '';
+    if (!entry) return '';
+
+    if (entry.classroomNumber) {
+      return `${entry.subjectName}\ns. ${entry.classroomNumber}`;
+    }
+
+    return entry.subjectName;
   }
 
   getInitials(subject: Subject) {
