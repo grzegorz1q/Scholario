@@ -50,6 +50,11 @@ export class ScheduleEntryService {
     return this.http.get<ScheduleEntry[]>(`${this.apiUrl}/schedule-entries/group/${id}`, { headers });
   }
 
+  getScheduleByDayAndLesson(day: number, lessonNumber: number): Observable<ScheduleEntry[]> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`);
+    return this.http.get<ScheduleEntry[]>(`${this.apiUrl}/schedule-entries/byDayAndLesson?day=${day}&lessonNumber=${lessonNumber}`, { headers });
+  }
+
   save(entryOrEntries: ScheduleEntry | ScheduleEntry[]) {
     if (Array.isArray(entryOrEntries)) {
       return this.createScheduleEntries(entryOrEntries);

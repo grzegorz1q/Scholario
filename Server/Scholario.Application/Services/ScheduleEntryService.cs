@@ -75,6 +75,15 @@ namespace Scholario.Application.Services
                 throw new InvalidOperationException($"Conflict: Classroom {classroom.Number} is already occupied on {scheduleEntryDto.Day} at lesson {scheduleEntryDto.LessonNumber}.");
             }
 
+            if (subject.TeacherId.HasValue)
+            {
+                var teacherId = subject.TeacherId.Value;
+                var teacherScheduleEntries = await _scheduleEntryRepository.GetScheduleByTeacherAndDayAndLesson(teacherId, scheduleEntryDto.Day, scheduleEntryDto.LessonNumber);
+
+                if (teacherScheduleEntries.Any())
+                    throw new InvalidOperationException($"Conflict: Teacher {subject.Teacher.LastName} already teaches another group on {scheduleEntryDto.Day} at lesson {scheduleEntryDto.LessonNumber}.");
+            }
+
             var scheduleEntry = _mapper.Map<ScheduleEntry>(scheduleEntryDto);
             scheduleEntry.LessonHourId = lessonHour.Id;
             scheduleEntry.ClassroomId = classroom.Id;
@@ -148,6 +157,12 @@ namespace Scholario.Application.Services
             {
                 throw new Exception("Invalid user type");
             }
+        }
+
+        public async Task<IEnumerable<ReadScheduleEntryDto>> GetScheduleByDayAndLesson(int day, int lessonNumber)
+        {
+            var entries = await _scheduleEntryRepository.GetScheduleByDayAndLesson(day, lessonNumber);
+            return _mapper.Map<IEnumerable<ReadScheduleEntryDto>>(entries);
         }
 
         //    public async Task<IEnumerable<ScheduleEntryDto>> SaveScheduleEntriesForGroup(int groupId, IEnumerable<ScheduleEntryDto> entries)

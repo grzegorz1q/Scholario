@@ -70,5 +70,25 @@ namespace Scholario.Infrastructure.Repositories
 
             return await _appDbContext.ScheduleEntries.AnyAsync(e => e.GroupId == groupId && e.Day == day && e.LessonHourId == lessonHour.Id);
         }
+
+        public async Task<IEnumerable<ScheduleEntry>> GetScheduleByDayAndLesson(int day, int lessonNumber)
+        {
+            return await _appDbContext.ScheduleEntries
+                .Include(e => e.LessonHour)
+                .Where(e => (int)e.Day == day && e.LessonHour.LessonNumber == lessonNumber)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<ScheduleEntry>> GetScheduleByTeacherAndDayAndLesson(int teacherId, DayOfWeek day, int lessonNumber)
+        {
+            var lessonHour = await _appDbContext.LessonHours.FirstOrDefaultAsync(lh => lh.LessonNumber == lessonNumber);
+            if (lessonHour == null)
+                return Enumerable.Empty<ScheduleEntry>();
+
+            return await _appDbContext.ScheduleEntries
+                .Include(e => e.Subject)
+                .Where(e => e.Subject.TeacherId == teacherId && e.Day == day && e.LessonHourId == lessonHour.Id)
+                .ToListAsync();
+        }
     }
 }

@@ -35,6 +35,7 @@ export class TimetableComponent implements OnInit {
   showModal = false;
   modalEntry: ScheduleEntry | null = null;
   emptyClassroom: Classroom[] = [];
+  errorMessage: string | null = null;
 
   constructor(private scheduleService: ScheduleEntryService, private subjectService: SubjectService, private groupService: GroupService, private classroomService: ClassroomService) { }
 
@@ -58,10 +59,27 @@ export class TimetableComponent implements OnInit {
     });
   }
 
-  // getEmptyClassroom(dayIndex: number, lessonNumber: number) {
-  //   const usedRooms = this.scheduleEntries.filter(e => e.day === dayIndex && e.lessonNumber === lessonNumber && e.classroomNumber).map(e => e.classroomNumber)
+  // getEmptyClassrooms(dayIndex: number, lessonNumber: number): Classroom[] {
+  //   const usedRooms = this.scheduleEntries.filter(e => e.day === dayIndex && e.lessonNumber === lessonNumber && e.classroomNumber).map(e => e.classroomNumber);
   //   return this.classrooms.filter(c => !usedRooms.includes(c.number));
   // }
+
+  getEmptyClassrooms(dayIndex: number, lessonNumber: number): void {
+    this.scheduleService.getScheduleByDayAndLesson(dayIndex, lessonNumber)
+      .subscribe({
+        next: (entries: ScheduleEntry[] | undefined) => {
+          const usedRooms = (entries ?? [])
+            .map(e => e.classroomNumber)
+            .filter(Boolean) as number[];
+
+          this.emptyClassroom = this.classrooms.filter(c => !usedRooms.includes(c.number));
+        },
+        error: (err) => {
+          console.error(err);
+          this.emptyClassroom = [...this.classrooms];
+        }
+      });
+  }
 
   setClassroom(number: number) {
     this.selectedClassroom = number;
@@ -138,8 +156,9 @@ export class TimetableComponent implements OnInit {
       this.scheduleEntries.push(newEntry);
     }
 
+    //this.emptyClassroom = this.getEmptyClassrooms(dayIndex, lessonNumber);
+    this.getEmptyClassrooms(dayIndex, lessonNumber)
     this.modalEntry = newEntry;
-    //this.getEmptyClassroom(dayIndex, lessonNumber)
     this.showModal = true;
   }
 
@@ -154,25 +173,22 @@ export class TimetableComponent implements OnInit {
 
   saveSchedule() {
     const toSave = this.scheduleEntries.filter(e => e._isNew);
+    this.errorMessage = null;
 
     if (toSave.length === 0) {
       alert("Brak nowych wpisów do zapisania!");
       return;
     }
 
-    console.log("Przed zapisem saveSchedule:");
-    console.table(toSave);
-
     this.scheduleService.createScheduleEntries(toSave).subscribe({
       next: () => {
         alert("Plan zapisany pomyślnie!");
         toSave.forEach(e => e._isNew = false);
-        console.table(this.scheduleEntries);
       },
       error: (err) => {
         console.error(err);
-        alert("Błąd przy zapisie planu!");
-        console.table(this.scheduleEntries);
+        this.errorMessage = err.error?.message || "Błąd przy zapisie planu!";
+        this.onGroupChange();
       }
     });
   }

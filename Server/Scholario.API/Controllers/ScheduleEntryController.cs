@@ -101,7 +101,6 @@ namespace Scholario.API.Controllers
             }
         }
 
-
         [HttpGet("group/{groupId}")]
         [Authorize(Roles = "Admin,Teacher")]
         public async Task<IActionResult> GetScheduleByGroup(int groupId)
@@ -119,6 +118,14 @@ namespace Scholario.API.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        [HttpGet("byDayAndLesson")]
+        [Authorize(Roles = "Admin,Teacher")]
+        public async Task<IActionResult> GetByDayAndLesson([FromQuery] int day, [FromQuery] int lessonNumber)
+        {
+            var entries = await _scheduleEntryService.GetScheduleByDayAndLesson(day, lessonNumber);
+            return Ok(entries);
         }
     }
 }
