@@ -13,10 +13,11 @@ import { FormsModule } from "@angular/forms";
 import { DayOfWeek } from '../Type/DayOfWeek';
 import { Classroom } from '../Type/Classroom';
 import { ClassroomService } from '../../Service/classroom.service';
+import { MatSnackBar , MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-timetable',
-  imports: [DragDropModule, CommonModule, FormsModule],
+  imports: [DragDropModule, CommonModule, FormsModule, MatSnackBarModule],
   templateUrl: './timetable.component.html',
   styleUrl: './timetable.component.scss'
 })
@@ -37,7 +38,12 @@ export class TimetableComponent implements OnInit {
   emptyClassroom: Classroom[] = [];
   errorMessage: string | null = null;
 
-  constructor(private scheduleService: ScheduleEntryService, private subjectService: SubjectService, private groupService: GroupService, private classroomService: ClassroomService) { }
+  constructor(private scheduleService: ScheduleEntryService,
+              private subjectService: SubjectService, 
+              private groupService: GroupService, 
+              private classroomService: ClassroomService,
+              private snackBar: MatSnackBar
+    ) { }
 
   ngOnInit() {
     console.log("Metoda ngOnInit");
@@ -176,18 +182,19 @@ export class TimetableComponent implements OnInit {
     this.errorMessage = null;
 
     if (toSave.length === 0) {
-      alert("Brak nowych wpisów do zapisania!");
+      this.snackBar.open("Brak nowych wpisów do zapisania!", "OK", { duration: 3000 });
       return;
     }
 
     this.scheduleService.createScheduleEntries(toSave).subscribe({
       next: () => {
-        alert("Plan zapisany pomyślnie!");
+        this.snackBar.open("Plan zapisany pomyślnie!", "OK", { duration: 3000 });
         toSave.forEach(e => e._isNew = false);
       },
       error: (err) => {
         console.error(err);
-        this.errorMessage = err.error?.message || "Błąd przy zapisie planu!";
+        const message = err.error?.message || "Błąd przy zapisie planu!";
+        this.snackBar.open(message, "OK", { duration: 4000 });
         this.onGroupChange();
       }
     });
