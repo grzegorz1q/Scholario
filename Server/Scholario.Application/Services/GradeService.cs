@@ -3,11 +3,6 @@ using Scholario.Application.Dtos.Grade;
 using Scholario.Application.Interfaces;
 using Scholario.Domain.Entities;
 using Scholario.Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Scholario.Application.Services
 {
@@ -87,6 +82,7 @@ namespace Scholario.Application.Services
             grade.GradeValue = updateStudentGradeDto.GradeValue;
             grade.DateOfIssue = DateTime.Now;
             grade.GradeWeight = updateStudentGradeDto.GradeWeight;
+
             await _gradeRepository.UpdateGrade(grade);
         }
         public async Task DeleteGradeFromStudent(int id)

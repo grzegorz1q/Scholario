@@ -21,11 +21,6 @@ export class ScheduleEntryService {
     return this.http.get<ScheduleEntry[]>(`${this.apiUrl}/schedule-entries`, { headers });
   }
 
-    getSubjects(): Observable<Subject[]> {
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`);
-    return this.http.get<Subject[]>(`${this.apiUrl}/subjects`, { headers });
-  }
-
   createScheduleEntry(entry: ScheduleEntry): Observable<ScheduleEntry> {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`);
     return this.http.post<ScheduleEntry>(`${this.apiUrl}/schedule-entries/schedule/create`, entry, { headers, responseType: 'text' as 'json' });

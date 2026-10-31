@@ -42,6 +42,11 @@ export class SubjectGroupComponent {
 
     this.getStudentsBySubjectGroup();
   }
+  getAverageFromGrades(grades: Grade[]): number {
+    return grades.reduce((sum, grade) => sum + (grade.gradeValue*grade.gradeWeight), 0) 
+          / 
+          grades.reduce((sum, grade) => sum + grade.gradeWeight, 0);
+  }
   openGradeForm(student: any) {
     this.selectedStudent = student;
     this.newGrade = {
@@ -68,12 +73,23 @@ export class SubjectGroupComponent {
     }
   }
   updateGrade(grade: Grade){
-    console.log(grade);
+    grade.gradeWeight = Number(grade.gradeWeight);
     this.gradeService.updateGrade(grade).subscribe({
       next: response => {
+        console.log(grade.gradeWeight);
         this.getStudentsBySubjectGroup(); //works but I think that it's not good practice. 
                                           // Probably better to add GetGradeById method
         this.readView = true;
+      },
+      error: error => console.error(error)
+    });
+  }
+  deleteGrade(gradeId?: number){
+    this.gradeService.deleteGrade(gradeId).subscribe({
+      next: () => {
+        this.getStudentsBySubjectGroup();
+        this.aditionalInformation = false;
+        console.log('Grade deleted successfully')
       },
       error: error => console.error(error)
     });

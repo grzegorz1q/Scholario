@@ -1,9 +1,6 @@
 import { Component, inject } from '@angular/core';
-import { ApiService } from '../../../Service/api.service';
-import { Subject } from '../../Type/Subject';
 import { CommonModule } from '@angular/common';
 import { SubjectComponent } from "../subject/subject.component";
-import { ScheduleEntryService } from '../../../Service/schedule-entry.service';
 import { LoggedUserSubjects } from '../../Type/LoggedUserSubjects';
 import { SubjectService } from '../../../Service/subject.service';
 
@@ -16,7 +13,7 @@ import { SubjectService } from '../../../Service/subject.service';
 })
 export class SubjectsListComponent {
 
-  subjects: Subject[] = [];
+  subjects: LoggedUserSubjects | undefined = undefined;
   private readonly subjectService = inject(SubjectService)
 
   ngOnInit() {
@@ -24,9 +21,9 @@ export class SubjectsListComponent {
   }
 
   getSubjects() {
-    this.subjectService.getSubjects().subscribe({
+    this.subjectService.getLoggedUserSubjects().subscribe({
       next: response => {
-        this.subjects = response.subjects;
+        this.subjects = response;
       },
       error: error => console.error('Błąd podczas pobierania przedmiotów:', error)
     });

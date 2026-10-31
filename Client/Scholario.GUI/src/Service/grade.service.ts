@@ -28,4 +28,8 @@ export class GradeService {
     return this.http.put(`${this.apiUrl}/grades`, grade, { headers, responseType: 'text' as 'json' });
   }
 
+  deleteGrade(gradeId?: number): Observable<void>{
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`);
+    return this.http.delete<void>(`${this.apiUrl}/grades/${gradeId}`, { headers });
+  }
 }

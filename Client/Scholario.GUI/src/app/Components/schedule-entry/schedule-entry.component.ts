@@ -62,7 +62,7 @@ export class ScheduleEntryComponent implements OnInit {
     });
   }
 
-
+  
   initializeChildrenData() {
     const childrenMap = new Map<number, Student>();
     this.scheduleEntries.forEach(entry => {

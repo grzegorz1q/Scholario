@@ -1,15 +1,9 @@
 ﻿using AutoMapper;
 using Scholario.Application.Dtos.Group;
 using Scholario.Application.Dtos.Parent;
-using Scholario.Application.Dtos.Subject;
 using Scholario.Application.Interfaces;
 using Scholario.Domain.Entities;
 using Scholario.Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Scholario.Application.Services
 {
