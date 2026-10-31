@@ -161,7 +161,7 @@ export class TimetableComponent implements OnInit {
     } else {
       this.scheduleEntries.push(newEntry);
     }
-
+    
     //this.emptyClassroom = this.getEmptyClassrooms(dayIndex, lessonNumber);
     this.getEmptyClassrooms(dayIndex, lessonNumber)
     this.modalEntry = newEntry;
@@ -209,7 +209,6 @@ export class TimetableComponent implements OnInit {
     if (entry.classroomNumber) {
       return `${entry.subjectName}\ns. ${entry.classroomNumber}`;
     }
-
     return entry.subjectName;
   }
 
