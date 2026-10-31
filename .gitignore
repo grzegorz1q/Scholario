@@ -5,6 +5,22 @@
 
 Server/Scholario.API/appsettings.Development.json
 
+# Local configuration and secrets
+**/appsettings.Local.json
+**/.env
+**/.env.*
+!**/.env.example
+/NuGet.Config
+
+# Angular generated files
+**/.angular/cache/
+**/dist/
+
+# Local database files
+*.db
+*.db-shm
+*.db-wal
+
 # User-specific files
 *.rsuser
 *.suo
