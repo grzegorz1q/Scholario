@@ -122,7 +122,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseInMemoryDatabase("In Memory database"));*/
 //
 
-//Adds repositories to the Dependency Injection Container
 builder.Services.AddScoped<IDescriptiveAssessmentRepository, DescriptiveAssessmentRepository>();
 builder.Services.AddScoped<IGradeRepository, GradeRepository>();
 builder.Services.AddScoped<IGroupRepository, GroupRepository>();
@@ -137,7 +136,6 @@ builder.Services.AddScoped<IPersonRepository, PersonRepository>();
 builder.Services.AddScoped<ISubjectRepository, SubjectRepository>();
 builder.Services.AddScoped<IStudentAttendanceRepository, StudentAttendanceRepository>();
 
-//Adds services to the Dependency Injection Container
 builder.Services.AddScoped<IGradeService, GradeService>();
 builder.Services.AddScoped<ITeacherService, TeacherService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
@@ -170,8 +168,6 @@ using (var scope = app.Services.CreateScope())
     var prepDatabase = new PrepDatabase(dbContext, passwordHasher);
     prepDatabase.Seed();
 }
-//
-
 
 app.UseCors("AllowOrigin");
 
