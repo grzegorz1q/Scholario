@@ -11,10 +11,13 @@ import { Group } from '../Type/Group';
 import { GroupService } from '../../Service/group.service';
 import { FormsModule } from "@angular/forms";
 import { DayOfWeek } from '../Type/DayOfWeek';
+import { Classroom } from '../Type/Classroom';
+import { ClassroomService } from '../../Service/classroom.service';
+import { MatSnackBar , MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-timetable',
-  imports: [DragDropModule, CommonModule, FormsModule],
+  imports: [DragDropModule, CommonModule, FormsModule, MatSnackBarModule],
   templateUrl: './timetable.component.html',
   styleUrl: './timetable.component.scss'
 })
@@ -28,8 +31,19 @@ export class TimetableComponent implements OnInit {
   dayDropLists: string[] = [];
   groups: Group[] = [];
   initialsOfName: string[] = [];
+  classrooms: Classroom[] = [];
+  selectedClassroom: number = 0
+  showModal = false;
+  modalEntry: ScheduleEntry | null = null;
+  emptyClassroom: Classroom[] = [];
+  errorMessage: string | null = null;
 
-  constructor(private scheduleService: ScheduleEntryService, private subjectService: SubjectService, private groupService: GroupService) { console.log("Konstruktor TimetableComponent"); }
+  constructor(private scheduleService: ScheduleEntryService,
+              private subjectService: SubjectService, 
+              private groupService: GroupService, 
+              private classroomService: ClassroomService,
+              private snackBar: MatSnackBar
+    ) { }
 
   ngOnInit() {
     console.log("Metoda ngOnInit");
@@ -38,6 +52,44 @@ export class TimetableComponent implements OnInit {
     this.getAllGroups();
     this.groupSubject();
     this.onGroupChange();
+    this.getClassrooms();
+  }
+
+  getClassrooms() {
+    this.classroomService.getClassrooms().subscribe({
+      next: (classrooms) =>
+        this.classrooms = classrooms,
+      error: (err) => {
+        console.error(err)
+      }
+    });
+  }
+
+  // getEmptyClassrooms(dayIndex: number, lessonNumber: number): Classroom[] {
+  //   const usedRooms = this.scheduleEntries.filter(e => e.day === dayIndex && e.lessonNumber === lessonNumber && e.classroomNumber).map(e => e.classroomNumber);
+  //   return this.classrooms.filter(c => !usedRooms.includes(c.number));
+  // }
+
+  getEmptyClassrooms(dayIndex: number, lessonNumber: number): void {
+    this.scheduleService.getScheduleByDayAndLesson(dayIndex, lessonNumber)
+      .subscribe({
+        next: (entries: ScheduleEntry[] | undefined) => {
+          const usedRooms = (entries ?? [])
+            .map(e => e.classroomNumber)
+            .filter(Boolean) as number[];
+
+          this.emptyClassroom = this.classrooms.filter(c => !usedRooms.includes(c.number));
+        },
+        error: (err) => {
+          console.error(err);
+          this.emptyClassroom = [...this.classrooms];
+        }
+      });
+  }
+
+  setClassroom(number: number) {
+    this.selectedClassroom = number;
+    console.log(this.selectedClassroom)
   }
 
   generateDropListIds() {
@@ -96,6 +148,7 @@ export class TimetableComponent implements OnInit {
       groupId: Number(this.selectedGroupId),
       day: dayIndex,
       lessonNumber: lessonNumber,
+      classroomNumber: null,
       _isNew: true
     };
 
@@ -108,38 +161,55 @@ export class TimetableComponent implements OnInit {
     } else {
       this.scheduleEntries.push(newEntry);
     }
+    
+    //this.emptyClassroom = this.getEmptyClassrooms(dayIndex, lessonNumber);
+    this.getEmptyClassrooms(dayIndex, lessonNumber)
+    this.modalEntry = newEntry;
+    this.showModal = true;
   }
 
-saveSchedule() {
-  const toSave = this.scheduleEntries.filter(e => e._isNew);
-
-  if (toSave.length === 0) {
-    alert("Brak nowych wpisów do zapisania!");
-    return;
-  }
-
-  console.log("Przed zapisem saveSchedule:");
-  console.table(toSave);
-
-  this.scheduleService.createScheduleEntries(toSave).subscribe({
-    next: () => {
-      alert("Plan zapisany pomyślnie!");
-      toSave.forEach(e => e._isNew = false);
-      console.table(this.scheduleEntries);
-    },
-    error: (err) => {
-      console.error(err);
-      alert("Błąd przy zapisie planu!");
-      console.table(this.scheduleEntries);
+  selectClassroom(classroomNumber: number) {
+    if (this.modalEntry) {
+      this.modalEntry.classroomNumber = classroomNumber;
     }
-  });
-}
+
+    this.showModal = false;
+    this.modalEntry = null;
+  }
+
+  saveSchedule() {
+    const toSave = this.scheduleEntries.filter(e => e._isNew);
+    this.errorMessage = null;
+
+    if (toSave.length === 0) {
+      this.snackBar.open("Brak nowych wpisów do zapisania!", "OK", { duration: 3000 });
+      return;
+    }
+
+    this.scheduleService.createScheduleEntries(toSave).subscribe({
+      next: () => {
+        this.snackBar.open("Plan zapisany pomyślnie!", "OK", { duration: 3000 });
+        toSave.forEach(e => e._isNew = false);
+      },
+      error: (err) => {
+        console.error(err);
+        const message = err.error?.message || "Błąd przy zapisie planu!";
+        this.snackBar.open(message, "OK", { duration: 4000 });
+        this.onGroupChange();
+      }
+    });
+  }
 
   getSubjectName(day: number, lessonNumber: number): string {
     const entry = this.scheduleEntries.find(
       e => e.day === day && e.lessonNumber === lessonNumber
     );
-    return entry ? entry.subjectName : '';
+    if (!entry) return '';
+
+    if (entry.classroomNumber) {
+      return `${entry.subjectName}\ns. ${entry.classroomNumber}`;
+    }
+    return entry.subjectName;
   }
 
   getInitials(subject: Subject) {

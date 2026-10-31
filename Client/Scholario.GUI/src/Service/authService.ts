@@ -23,7 +23,7 @@ export class AuthService {
     try {
       // Dekodowanie payloadu JWT
       const payload = JSON.parse(atob(token.split('.')[1]));
-      console.log(payload); // Zobacz, co jest w payloadzie
+     // console.log(payload); // Zobacz, co jest w payloadzie
   
       // Sprawdzenie roli w niestandardowym kluczu
       const role = payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];

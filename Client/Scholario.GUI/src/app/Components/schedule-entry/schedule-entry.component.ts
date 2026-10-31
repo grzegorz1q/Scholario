@@ -62,10 +62,11 @@ export class ScheduleEntryComponent implements OnInit {
     });
   }
 
-  initializeChildrenData(){
+  
+  initializeChildrenData() {
     const childrenMap = new Map<number, Student>();
-    this.scheduleEntries.forEach(entry =>{
-      if(entry.studentId && entry.studentName && !childrenMap.has(entry.studentId)){
+    this.scheduleEntries.forEach(entry => {
+      if (entry.studentId && entry.studentName && !childrenMap.has(entry.studentId)) {
         const nameArr = entry.studentName.split(' ');
         const child: Student = {
           id: entry.studentId,
@@ -73,7 +74,7 @@ export class ScheduleEntryComponent implements OnInit {
           lastName: nameArr[1],
           grades: []
         }
-        childrenMap.set(entry.studentId,child);
+        childrenMap.set(entry.studentId, child);
       }
     });
     this.children = Array.from(childrenMap.values());
@@ -83,9 +84,9 @@ export class ScheduleEntryComponent implements OnInit {
     })
   }
 
-  buildScheduleTable(){
-    this.scheduleTable = this.lessonHours.map(lessonHour => 
-      this.days.map(day => 
+  buildScheduleTable() {
+    this.scheduleTable = this.lessonHours.map(lessonHour =>
+      this.days.map(day =>
         this.getScheduleEntry(day, lessonHour.lessonNumber)
       )
     );
@@ -104,13 +105,13 @@ export class ScheduleEntryComponent implements OnInit {
     }
 
     const grouped = new Map<string, any>();
-    
+
     entries.forEach(entry => {
       if (!entry.studentId || !entry.studentName) {
         return;
       }
       const key = `${entry.subjectId}-${entry.groupId}`;
-      
+
       if (!grouped.has(key)) {
         grouped.set(key, {
           subjectName: entry.subjectName,
@@ -120,7 +121,7 @@ export class ScheduleEntryComponent implements OnInit {
           students: []
         });
       }
-      
+
       const group = grouped.get(key);
       group.students.push({
         id: entry.studentId,
@@ -128,7 +129,7 @@ export class ScheduleEntryComponent implements OnInit {
         color: this.childColors.get(entry.studentId)
       });
     });
-    
+
     return Array.from(grouped.values());
   }
 
@@ -136,7 +137,7 @@ export class ScheduleEntryComponent implements OnInit {
     return this.childColors.get(studentId) || '#CCCCCC';
   }
 
-  getTeacherNameInitials(teacherName: string): string{
+  getTeacherNameInitials(teacherName: string): string {
     const namArr = teacherName.split(' ');
     return `${namArr[0].charAt(0)} ${namArr[1].charAt(0)}`;
   }

@@ -15,5 +15,7 @@ namespace Scholario.Domain.Interfaces
         Task UpdateScheduleEntry(ScheduleEntry scheduleEntry);
         Task DeleteScheduleEntry(int id);
         Task<bool> Exists(int groupId, DayOfWeek day, int lessonNumber);
+        Task<IEnumerable<ScheduleEntry>> GetScheduleByDayAndLesson(int day, int lessonNumber);
+        Task<IEnumerable<ScheduleEntry>> GetScheduleByTeacherAndDayAndLesson(int teacherId, DayOfWeek day, int lessonNumber);
     }
 }

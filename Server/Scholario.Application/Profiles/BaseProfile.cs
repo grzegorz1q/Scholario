@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Scholario.Application.Dtos;
 using Scholario.Application.Dtos.AttendanceRecord;
+using Scholario.Application.Dtos.ClassRoom;
 using Scholario.Application.Dtos.Grade;
 using Scholario.Application.Dtos.Group;
 using Scholario.Application.Dtos.LessonHour;
@@ -62,6 +63,9 @@ namespace Scholario.Application.Profiles
 
             CreateMap<LessonHourDto, LessonHour>();
             CreateMap<LessonHour, LessonHourDto>();
+
+            CreateMap<Classroom, ReadClassRoomDto>();
+            CreateMap<ReadClassRoomDto, Classroom>();
 
             CreateMap<AttendanceRecordDto, AttendanceRecord>();
 

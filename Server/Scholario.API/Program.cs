@@ -1,26 +1,32 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi;
+using System.Text;
+using System.Text.Json.Nodes;
+
 using Scholario.Application.Interfaces;
 using Scholario.Application.Services;
-using Scholario.Domain.Interfaces;
-using Scholario.Domain.Entities;
-using Scholario.Infrastructure.Persistence;
-using Scholario.Infrastructure.Repositories;
-using Microsoft.AspNetCore.Identity;
-using FluentValidation;
 using Scholario.Application.Dtos;
 using Scholario.Application.Dtos.Validators;
-using FluentValidation.AspNetCore;
 using Scholario.Application.Authentication;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using Microsoft.OpenApi.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.OpenApi.Any;
+
+using Scholario.Domain.Interfaces;
+using Scholario.Domain.Entities;
+
+using Scholario.Infrastructure.Persistence;
+using Scholario.Infrastructure.Repositories;
+
+using FluentValidation;
+using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-//Authentication configuration
+// ==========================================
+// AUTHENTICATION - JWT
+// ==========================================
+
 var authenticationSettings = new AuthenticationSettings();
 builder.Configuration.GetSection("Authentication").Bind(authenticationSettings);
 
@@ -31,98 +37,118 @@ builder.Services.AddAuthentication(options =>
     options.DefaultAuthenticateScheme = "Bearer";
     options.DefaultScheme = "Bearer";
     options.DefaultChallengeScheme = "Bearer";
-}).AddJwtBearer(cfg =>
+})
+.AddJwtBearer(cfg =>
 {
     cfg.RequireHttpsMetadata = false;
     cfg.SaveToken = true;
+
     cfg.TokenValidationParameters = new TokenValidationParameters
     {
         ValidIssuer = authenticationSettings.JwtIssuer,
         ValidAudience = authenticationSettings.JwtIssuer,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey))
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(authenticationSettings.JwtKey))
     };
 });
 
+// ==========================================
+// CORS
+// ==========================================
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowOrigin",
-        builder => builder.WithOrigins("http://localhost:4200")
-        .AllowAnyHeader()
-        .AllowAnyMethod()
-        .AllowCredentials()
-        );
+    options.AddPolicy("AllowOrigin", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
+    });
 });
-//PT -- 20.11
+
+// ==========================================
+// CONTROLLERS + JSON
+// ==========================================
 
 builder.Services.AddControllers()
-    .AddJsonOptions(opts =>
-    {
-        opts.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
-    });
-
-//Authorization custom policies
-
-builder.Services.AddControllers();
-
-builder.Services.AddControllers()   ///// DO SPRAWDZENIA
     .AddJsonOptions(options =>
     {
-        options.JsonSerializerOptions.Converters.Add(new TimeSpanConverter());
-    });
-builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
+        options.JsonSerializerOptions.Converters.Add(
+            new System.Text.Json.Serialization.JsonStringEnumConverter());
 
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+        options.JsonSerializerOptions.Converters.Add(
+            new TimeSpanConverter());
+    });
+
+// ==========================================
+// FLUENT VALIDATION
+// ==========================================
+
+builder.Services.AddFluentValidationAutoValidation()
+    .AddFluentValidationClientsideAdapters();
+
+// ==========================================
+// AUTOMAPPER
+// ==========================================
+
+builder.Services.AddAutoMapper(cfg =>
+{
+    cfg.AddMaps(AppDomain.CurrentDomain.GetAssemblies());
+});
+
+// ==========================================
+// SWAGGER / OPENAPI
+// ==========================================
+
 builder.Services.AddEndpointsApiExplorer();
 
-//Token in Swagger
-builder.Services.AddSwaggerGen(opt =>
+builder.Services.AddSwaggerGen(options =>
 {
-    opt.SwaggerDoc("v1", new OpenApiInfo { Title = "MyAPI", Version = "v1" });
-    opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Scholario API",
+        Version = "v1"
+    });
+
+    // JWT Bearer authentication
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,
-        Description = "Please enter token",
+        Description = "Enter JWT token",
         Name = "Authorization",
         Type = SecuritySchemeType.Http,
         BearerFormat = "JWT",
         Scheme = "bearer"
     });
 
-    opt.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
+    // Global security requirement
+    options.AddSecurityRequirement(document =>
+        new OpenApiSecurityRequirement
         {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type=ReferenceType.SecurityScheme,
-                    Id="Bearer"
-                }
-            },
-            new string[]{}
-        }
-    });
-    opt.MapType<TimeSpan>(() => new OpenApiSchema
+            [new OpenApiSecuritySchemeReference("Bearer", document)] = []
+        });
+
+    // TimeSpan schema
+    options.MapType<TimeSpan>(() => new OpenApiSchema
     {
-        Type = "string",
-        Example = new OpenApiString("00:00") // Ustawienie przyk³adu formatu
+        Type = JsonSchemaType.String,
+        Example = JsonValue.Create("00:00")
     });
 });
 
+// ==========================================
+// DATABASE - SQL SERVER
+// ==========================================
 
-//SQL Server configuration
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-//
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection")));
 
-//In Memory database configuration
-/*builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseInMemoryDatabase("In Memory database"));*/
-//
+// ==========================================
+// REPOSITORIES
+// ==========================================
 
-//Adds repositories to the Dependency Injection Container
 builder.Services.AddScoped<IDescriptiveAssessmentRepository, DescriptiveAssessmentRepository>();
 builder.Services.AddScoped<IGradeRepository, GradeRepository>();
 builder.Services.AddScoped<IGroupRepository, GroupRepository>();
@@ -136,8 +162,12 @@ builder.Services.AddScoped<ITeacherRepository, TeacherRepository>();
 builder.Services.AddScoped<IPersonRepository, PersonRepository>();
 builder.Services.AddScoped<ISubjectRepository, SubjectRepository>();
 builder.Services.AddScoped<IStudentAttendanceRepository, StudentAttendanceRepository>();
+builder.Services.AddScoped<IClassroomRepository, ClassroomRepository>();
 
-//Adds services to the Dependency Injection Container
+// ==========================================
+// SERVICES
+// ==========================================
+
 builder.Services.AddScoped<IGradeService, GradeService>();
 builder.Services.AddScoped<ITeacherService, TeacherService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
@@ -147,37 +177,58 @@ builder.Services.AddScoped<IGroupService, GroupService>();
 builder.Services.AddScoped<IScheduleEntryService, ScheduleEntryService>();
 builder.Services.AddScoped<ILessonHourService, LessonHourService>();
 builder.Services.AddScoped<IStudentAttendanceService, StudentAttendanceService>();
+builder.Services.AddScoped<IClassroomService, ClassroomService>();
 
-//Hashowanie has³a
+// ==========================================
+// PASSWORD HASHING + VALIDATION
+// ==========================================
+
 builder.Services.AddScoped<IPasswordHasher<Person>, PasswordHasher<Person>>();
+
 builder.Services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator>();
+
+// ==========================================
+// BUILD APPLICATION
+// ==========================================
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// ==========================================
+// SWAGGER UI
+// ==========================================
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-//Preparing database
+// ==========================================
+// DATABASE INITIALIZATION
+// ==========================================
+
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
     dbContext.Database.Migrate();
-    var passwordHasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher<Person>>();
+
+    var passwordHasher = scope.ServiceProvider
+        .GetRequiredService<IPasswordHasher<Person>>();
+
     var prepDatabase = new PrepDatabase(dbContext, passwordHasher);
     prepDatabase.Seed();
 }
-//
 
+// ==========================================
+// HTTP PIPELINE
+// ==========================================
 
 app.UseCors("AllowOrigin");
 
-app.UseAuthentication();
-
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

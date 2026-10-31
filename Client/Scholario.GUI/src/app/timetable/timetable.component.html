@@ -1,9 +1,27 @@
 <div class="form-container">
   <div class="subjects-panel" cdkDropList id="subjectsList" [cdkDropListData]="subjects"
-       [cdkDropListConnectedTo]="dayDropLists">
+    [cdkDropListConnectedTo]="dayDropLists">
     <h3>Przedmioty</h3>
     <div *ngFor="let subject of subjects" class="subject-item" cdkDrag>
       {{ subject.name }} - {{ getInitials(subject) }}
+    </div>
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="showModal" class="modal">
+    <div class="modal-content">
+      <span class="close" (click)="showModal = false">&times;</span>
+
+      <h3>Wybierz salę</h3>
+      
+      <div *ngFor="let classroom of emptyClassroom" class="classroom-item">
+        <input type="radio" name="selectedRoom" (change)="selectClassroom(classroom.number)" />
+        <span>{{ classroom.number }}</span>
+      </div>
+
     </div>
   </div>
 
@@ -26,11 +44,9 @@
         <tr *ngFor="let hour of lessonHours; let i = index">
           <td>{{ hour.startTime }} - {{ hour.endTime }}</td>
           <td *ngFor="let day of days; let dayIndex = index">
-            <div class="timetable-cell" cdkDropList 
-                 [id]="'dropList-' + dayIndex + '-' + hour.lessonNumber"
-                 [cdkDropListConnectedTo]="['subjectsList']" 
-                 [cdkDropListData]="[]"
-                 (cdkDropListDropped)="drop($event, dayIndex, hour.lessonNumber)">
+            <div class="timetable-cell" cdkDropList [id]="'dropList-' + dayIndex + '-' + hour.lessonNumber"
+              [cdkDropListConnectedTo]="['subjectsList']" [cdkDropListData]="[]"
+              (cdkDropListDropped)="drop($event, dayIndex, hour.lessonNumber)">
               {{ getSubjectName(dayIndex, hour.lessonNumber) }}
             </div>
           </td>
