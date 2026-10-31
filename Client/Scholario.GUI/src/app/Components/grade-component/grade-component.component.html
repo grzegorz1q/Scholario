@@ -1,0 +1,36 @@
+<div class="form-container">
+    <table class="styled-table">
+        <thead>
+            <tr>
+                <th>Przedmiot</th>
+                <th>Oceny</th>
+                <th> Ocena Srednia</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let studentGrade of studentGrades">
+                <td>{{ studentGrade.subjectName }}</td>
+                <td>
+                    <ul>
+                        <li 
+                            *ngFor="let g of studentGrade.grades"
+                            (click)="getAditionalInformation(); grade = g">
+                            {{ g.gradeValue }}
+                        </li>
+                    </ul>
+                </td>
+                <td>{{ getWeightedAverage(studentGrade.grades) }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+<div *ngIf="aditionalInformation" class="modal">
+    <div class="modal-content">
+        <span class="close" (click)="aditionalInformation = false">&times;</span>
+        <p><strong>Data:</strong> {{ grade?.dateOfIssue | date:'yyyy-MM-dd'}}</p>
+        <p><strong>Kategoria:</strong> {{grade?.gradeWeightName}}</p>
+        <p><strong>Waga:</strong> {{grade?.gradeWeight}}</p>
+    </div>
+</div>

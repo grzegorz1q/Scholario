@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Scholario — plan biznesowy i produktowy</title>
+<style>
+@page { size: A4; margin: 18mm 16mm 18mm; }
+* { box-sizing: border-box; }
+body { font-family: Arial, Helvetica, sans-serif; color: #1f2937; line-height: 1.48; font-size: 10.5pt; margin: 0; }
+h1 { color: #123b62; font-size: 28pt; margin: 0 0 8px; }
+h2 { color: #123b62; font-size: 17pt; border-bottom: 2px solid #2b79b9; padding-bottom: 4px; margin-top: 24px; }
+h3 { color: #19598b; font-size: 12.5pt; margin-top: 16px; }
+p { margin: 6px 0; }
+ul, ol { margin-top: 5px; }
+li { margin: 3px 0; }
+.cover { min-height: 245mm; display: flex; flex-direction: column; justify-content: center; padding: 18mm; background: linear-gradient(145deg, #eef7ff, #ffffff); border-left: 8px solid #2b79b9; }
+.subtitle { font-size: 16pt; color: #35617f; margin-bottom: 28px; }
+.meta { color: #64748b; font-size: 10pt; }
+.badge { display: inline-block; background: #dceeff; color: #124d7a; padding: 5px 9px; border-radius: 4px; margin: 4px 4px 0 0; font-weight: bold; }
+.box { background: #f4f8fb; border-left: 4px solid #2b79b9; padding: 10px 13px; margin: 10px 0; }
+.warning { background: #fff7ed; border-left-color: #e87924; }
+.success { background: #effaf3; border-left-color: #269653; }
+table { width: 100%; border-collapse: collapse; margin: 9px 0 14px; font-size: 9.5pt; }
+th { background: #123b62; color: white; text-align: left; padding: 7px; }
+td { border: 1px solid #cbd5e1; padding: 6px; vertical-align: top; }
+tr:nth-child(even) td { background: #f8fafc; }
+.page-break { page-break-before: always; }
+.small { font-size: 9pt; color: #475569; }
+.footer-note { margin-top: 30px; color: #64748b; font-size: 9pt; }
+code { background: #eef2f7; padding: 1px 4px; border-radius: 3px; }
+</style>
+</head>
+<body>
+<section class="cover">
+  <div><span class="badge">.NET 10</span><span class="badge">Angular 19</span><span class="badge">B2B SaaS</span></div>
+  <h1>Scholario</h1>
+  <div class="subtitle">Plan biznesowy, produktowy i techniczny elektronicznego dziennika</div>
+  <p><strong>Cel produktu:</strong> bezpieczny i prosty system dla administracji placówki, nauczycieli, uczniów i rodziców.</p>
+  <p class="meta">Dokument przygotowany na podstawie analizy repozytorium projektu Scholario.<br>Wersja: 1.0 | Stan technologiczny: .NET 10, Angular 19</p>
+</section>
+
+<h2>1. Streszczenie zarządcze</h2>
+<p>Scholario posiada fundament techniczny elektronicznego dziennika: logowanie, role użytkowników, klasy, uczniów, nauczycieli, przedmioty, oceny, plan lekcji, sale i podstawy frekwencji. Backend działa w architekturze warstwowej .NET 10, a frontend jest zbudowany w Angularze.</p>
+<div class="box warning"><strong>Wniosek:</strong> projekt jest prototypem/MVP technicznym, ale nie jest jeszcze gotowy do wdrożenia w prawdziwej placówce. Najpierw należy zamknąć luki bezpieczeństwa, wprowadzić obsługę placówek i roku szkolnego oraz zbudować panel administracyjny.</div>
+<p>Rekomendowana strategia to rozpoczęcie od szkół podstawowych i ponadpodstawowych. Moduł uczelniany powinien powstać później jako osobny etap, ponieważ uczelnie mają odmienny model organizacyjny.</p>
+
+<h2>2. Stan obecny projektu</h2>
+<h3>Backend</h3>
+<ul>
+<li><strong>Technologie:</strong> .NET 10, ASP.NET Core Web API, Entity Framework Core 10, SQL Server, JWT, FluentValidation, AutoMapper.</li>
+<li><strong>Warstwy:</strong> Domain, Application, Infrastructure i API.</li>
+<li><strong>Użytkownicy:</strong> administrator, nauczyciel, uczeń i rodzic.</li>
+<li><strong>Organizacja:</strong> grupy/klasy, uczniowie, nauczyciele, rodzice, przedmioty.</li>
+<li><strong>Oceny:</strong> wartość, typ, waga, data, ocena opisowa.</li>
+<li><strong>Plan:</strong> godziny lekcyjne, dni tygodnia, przedmioty, grupy, sale i wpisy planu.</li>
+<li><strong>Frekwencja:</strong> istnieją encje i endpointy, ale sposób przechowywania wymaga uporządkowania.</li>
+<li><strong>Komunikacja:</strong> istnieją encje wiadomości i powiadomień, lecz moduł nie jest kompletny biznesowo.</li>
+</ul>
+<h3>Frontend</h3>
+<ul>
+<li>Angular 19, routing i guard autoryzacji.</li>
+<li>Logowanie i przechowywanie tokenu JWT.</li>
+<li>Menu zależne od roli użytkownika.</li>
+<li>Widok planu lekcji, ocen i przedmiotów.</li>
+<li>Edycja planu lekcji przez drag-and-drop.</li>
+<li>Część pozycji menu jest jeszcze atrapą i prowadzi do <code>#</code>.</li>
+</ul>
+
+<h2>3. Ocena gotowości produktu</h2>
+<table>
+<tr><th>Obszar</th><th>Ocena</th><th>Wniosek</th></tr>
+<tr><td>Fundament technologiczny</td><td>Dobra</td><td>Warstwy backendu i podstawowy frontend są już obecne.</td></tr>
+<tr><td>Funkcjonalne MVP</td><td>Częściowe</td><td>Istnieją oceny, plan, grupy i użytkownicy, ale brakuje procesów administracyjnych.</td></tr>
+<tr><td>Bezpieczeństwo</td><td>Niewystarczające</td><td>Potrzebne są poprawki autoryzacji, sekretów, audytu i ochrony danych.</td></tr>
+<tr><td>Skalowalność</td><td>Niska/średnia</td><td>Brakuje placówki/tenanta, roku szkolnego, cache i monitoringu.</td></tr>
+<tr><td>Gotowość komercyjna</td><td>Niska</td><td>Produkt wymaga pilotażu i przygotowania operacyjnego.</td></tr>
+</table>
+
+<h2>4. Segmenty klientów i propozycja wartości</h2>
+<h3>Segment startowy</h3>
+<p>Szkoły podstawowe i ponadpodstawowe, szczególnie małe i średnie placówki oraz szkoły prywatne, które potrzebują prostszego i bardziej elastycznego narzędzia.</p>
+<h3>Role użytkowników</h3>
+<ul>
+<li><strong>Administrator:</strong> konfiguracja szkoły, użytkownicy, klasy, raporty i uprawnienia.</li>
+<li><strong>Nauczyciel:</strong> oceny, frekwencja, plan, wiadomości i materiały.</li>
+<li><strong>Uczeń:</strong> oceny, frekwencja, plan, zadania i ogłoszenia.</li>
+<li><strong>Rodzic:</strong> podgląd dzieci, oceny, frekwencja, plan i kontakt ze szkołą.</li>
+</ul>
+<div class="box success"><strong>Propozycja wartości:</strong> jeden bezpieczny, czytelny i dostępny mobilnie dziennik dla całej placówki, który ogranicza pracę administracyjną nauczycieli i poprawia komunikację z rodzicami.</div>
+
+<h2>5. Zakres MVP</h2>
+<h3>Priorytet P0 — konieczne przed pilotażem</h3>
+<ul>
+<li>Model placówki/tenanta i izolacja danych szkół.</li>
+<li>Rok szkolny, semestr i okresy klasyfikacyjne.</li>
+<li>Panel administratora szkoły.</li>
+<li>Import użytkowników i klas z CSV.</li>
+<li>Kompletna autoryzacja każdego endpointu.</li>
+<li>Oceny, frekwencja, plan, wiadomości i powiadomienia.</li>
+<li>Panel rodzica z obsługą wielu dzieci.</li>
+<li>Historia zmian ocen i frekwencji.</li>
+<li>Reset hasła i zmiana hasła.</li>
+<li>Testy jednostkowe, integracyjne i autoryzacyjne.</li>
+</ul>
+<h3>Priorytet P1 — wersja komercyjna</h3>
+<ul>
+<li>Raporty dla dyrekcji.</li><li>Powiadomienia e-mail/push.</li><li>Eksport i import danych.</li><li>PWA lub aplikacja mobilna.</li><li>Dashboard operatora SaaS.</li><li>Monitoring, backupy, SLA i helpdesk.</li>
+</ul>
+<h3>Priorytet P2 — rozszerzenie</h3>
+<ul>
+<li>Zadania i materiały.</li><li>Usprawiedliwienia online.</li><li>Biblioteka i dokumenty.</li><li>Praktyki zawodowe.</li><li>Moduł uczelniany: wydziały, semestry, ECTS, sesje i protokoły.</li>
+</ul>
+
+<div class="page-break"></div>
+<h2>6. Najważniejsze prace techniczne</h2>
+<h3>Bezpieczeństwo</h3>
+<ul>
+<li>Przenieść klucz JWT i connection string do sekretów środowiskowych.</li>
+<li>Wymusić HTTPS i poprawną walidację issuer/audience/klucza.</li>
+<li>Zastąpić luźne role politykami uprawnień.</li>
+<li>Zabezpieczyć endpointy uczniów, rejestracji, ocen i frekwencji.</li>
+<li>Dodać kontrolę dostępu do konkretnej placówki i ucznia, aby wyeliminować IDOR.</li>
+<li>Usunąć automatyczne dane testowe z produkcji.</li>
+<li>Dodać limitowanie logowania, reset haseł, MFA i audyt.</li>
+</ul>
+<h3>Model danych</h3>
+<p>Docelowo potrzebne są encje:</p>
+<table>
+<tr><th>Encja</th><th>Zastosowanie</th></tr>
+<tr><td>Tenant/School</td><td>Izolacja danych placówek.</td></tr>
+<tr><td>AcademicYear</td><td>Rok szkolny i archiwizacja.</td></tr>
+<tr><td>Semester/GradingPeriod</td><td>Semestry i okresy klasyfikacyjne.</td></tr>
+<tr><td>AuditLog</td><td>Historia zmian i odpowiedzialność użytkowników.</td></tr>
+<tr><td>AttendanceRecord</td><td>Relacyjna frekwencja zamiast AttendanceJson.</td></tr>
+<tr><td>Permission/RoleAssignment</td><td>Dokładne uprawnienia w placówce.</td></tr>
+</table>
+<h3>Jakość i wdrożenie</h3>
+<ul>
+<li>Projekty testowe jednostkowe i integracyjne.</li>
+<li>CI/CD dla backendu i frontendu.</li>
+<li>Środowiska Development, Staging i Production.</li>
+<li>Centralne logowanie, monitoring i alerty.</li>
+<li>Backup oraz test odtwarzania bazy.</li>
+<li>Dokumentacja API i instrukcja administratora.</li>
+</ul>
+
+<h2>7. Roadmapa</h2>
+<table>
+<tr><th>Etap</th><th>Zakres</th><th>Cel</th></tr>
+<tr><td>0. Uporządkowanie</td><td>Bezpieczeństwo, konfiguracja, testy, model danych</td><td>Stabilna baza do pilotażu</td></tr>
+<tr><td>1. MVP</td><td>Jedna placówka, administrator, oceny, frekwencja, plan i rodzic</td><td>Pierwsza użyteczna wersja</td></tr>
+<tr><td>2. Pilotaż</td><td>Jedna lub dwie szkoły, pomiary i feedback</td><td>Walidacja problemu i UX</td></tr>
+<tr><td>3. Komercjalizacja</td><td>Multi-tenant, płatności, SLA, support, raporty i integracje</td><td>Pierwsze płatne wdrożenia</td></tr>
+<tr><td>4. Uczelnie</td><td>Wydziały, semestry, ECTS, sesje i protokoły</td><td>Nowy segment rynku</td></tr>
+</table>
+
+<h2>8. Model biznesowy</h2>
+<p>Rekomendowany jest model <strong>B2B SaaS</strong>. Płatnikiem powinna być placówka, organ prowadzący lub sieć szkół. Uczeń i rodzic korzystają z systemu w ramach licencji szkoły.</p>
+<ul>
+<li>Bezpłatny pilotaż dla jednej placówki lub kilku klas.</li>
+<li>Abonament zależny od liczby aktywnych uczniów.</li>
+<li>Opłata wdrożeniowa za import danych i konfigurację.</li>
+<li>Pakiet standardowy z komunikacją i raportami.</li>
+<li>Pakiet enterprise z integracjami, SLA i dedykowanym wsparciem.</li>
+</ul>
+<p>Przed ustaleniem cennika należy przeprowadzić rozmowy z dyrektorami i zebrać informacje o obecnych kosztach, problemach oraz wymaganiach zakupowych.</p>
+
+<h2>9. Operacje i zgodność</h2>
+<p>System będzie przetwarzał dane dzieci, rodziców, nauczycieli, oceny i frekwencję. Przed komercjalizacją potrzebne są:</p>
+<ul>
+<li>analiza RODO z ekspertem,</li>
+<li>polityka prywatności i regulamin,</li>
+<li>umowy powierzenia danych,</li>
+<li>polityka retencji i usuwania danych,</li>
+<li>procedura obsługi incydentów,</li>
+<li>backup i odtwarzanie awaryjne,</li>
+<li>rejestr dostępu i audyt operacji.</li>
+</ul>
+
+<h2>10. Metryki sukcesu</h2>
+<ul>
+<li>liczba aktywnych placówek,</li>
+<li>liczba aktywnych nauczycieli i rodziców,</li>
+<li>częstotliwość logowania,</li>
+<li>liczba wystawionych ocen i wpisów frekwencji,</li>
+<li>czas odpowiedzi API,</li>
+<li>liczba błędów i zgłoszeń,</li>
+<li>konwersja pilotażu na płatną umowę,</li>
+<li>retencja placówek po roku szkolnym,</li>
+<li>koszt infrastruktury na ucznia.</li>
+</ul>
+
+<h2>11. Rekomendowane następne kroki</h2>
+<ol>
+<li>Zabezpieczyć konfigurację i wszystkie endpointy.</li>
+<li>Dodać model placówki, roku szkolnego i tenantów.</li>
+<li>Stworzyć panel administratora.</li>
+<li>Przebudować frekwencję na model relacyjny.</li>
+<li>Dodać panel rodzica i komunikację.</li>
+<li>Napisać testy autoryzacji i testy integracyjne.</li>
+<li>Uruchomić środowisko testowe z backupem i monitoringiem.</li>
+<li>Przeprowadzić pilotaż w jednej placówce.</li>
+<li>Zebrać feedback od dyrektora, nauczycieli, rodziców i uczniów.</li>
+<li>Na podstawie pilotażu ustalić cennik i zakres wersji komercyjnej.</li>
+</ol>
+<div class="box"><strong>Najważniejsza rekomendacja:</strong> nie rozwijać jednocześnie pełnego systemu dla szkół i uczelni. Najpierw stworzyć bezpieczny, wygodny i kompletny dziennik dla jednej szkoły, a dopiero później rozszerzać produkt o kolejne segmenty.</div>
+<p class="footer-note">Dokument jest planem produktowo-biznesowym przygotowanym na podstawie analizy kodu projektu. Kwestie prawne, RODO, ceny i wymagania formalne powinny zostać zweryfikowane z odpowiednimi specjalistami.</p>
+</body>
+</html>

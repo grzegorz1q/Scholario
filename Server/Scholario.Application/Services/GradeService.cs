@@ -3,11 +3,6 @@ using Scholario.Application.Dtos.Grade;
 using Scholario.Application.Interfaces;
 using Scholario.Domain.Entities;
 using Scholario.Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Scholario.Application.Services
 {
@@ -46,12 +41,15 @@ namespace Scholario.Application.Services
             var teacher = await _teacherRepository.GetTeacher(teacherId);
             if (teacher == null)
                 throw new Exception("Teacher not found");
+
             var studentGroup = await _groupRepository.GetGroup(student.GroupId);
             if (studentGroup == null)
                 throw new Exception("Group not found");
+
             var isTeachingInGroup = studentGroup.Subjects.Any(s => s.TeacherId == teacher.Id && s.Id == subject.Id);
             if (!isTeachingInGroup)
                 throw new UnauthorizedAccessException("Teacher is not teaching this student");
+
             var grade = _mapper.Map<Grade>(addGradeToStudentDto);
             await _gradeRepository.AddGrade(grade);
         }
@@ -82,6 +80,9 @@ namespace Scholario.Application.Services
             if (!isTeachingInGroup)
                 throw new UnauthorizedAccessException("Teacher is not teaching this student");
             grade.GradeValue = updateStudentGradeDto.GradeValue;
+            grade.DateOfIssue = DateTime.Now;
+            grade.GradeWeight = updateStudentGradeDto.GradeWeight;
+
             await _gradeRepository.UpdateGrade(grade);
         }
         public async Task DeleteGradeFromStudent(int id)

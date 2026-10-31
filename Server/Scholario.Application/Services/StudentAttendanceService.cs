@@ -5,7 +5,6 @@ using Scholario.Application.Dtos.StudentAttendance;
 using Scholario.Application.Interfaces;
 using Scholario.Domain.Entities;
 using Scholario.Domain.Interfaces;
-using System.Collections.Generic;
 
 namespace Scholario.Application.Services
 {

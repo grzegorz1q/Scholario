@@ -1,0 +1,16 @@
+<div class="navbar-container">
+    <nav class="sidebar"
+         [class.expanded]="isExpanded"
+         (mouseenter)="toggleSidebar(true)"
+         (mouseleave)="toggleSidebar(false)">
+  
+      <ul *ngFor="let item of menuItems">
+        <li><a href="{{ item.link }}">{{ item.name }}</a></li>
+      </ul>
+      
+      <div class="logout">
+        <a href="/login" (click)="logout()">Wyloguj</a>
+      </div>
+    </nav>
+  </div>
+  

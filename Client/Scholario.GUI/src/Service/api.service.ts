@@ -15,16 +15,4 @@ export class ApiService {
     const loginDto = { email, password };
     return this.http.post<string>(`${this.apiUrl}/accounts/login`, loginDto, { responseType: 'text' as 'json' });
   }
-
-  getScheduleEntries(): Observable<{ scheduleEntries: any[] }> {
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`);
-    return this.http.get<{ scheduleEntries: any[] }>(`${this.apiUrl}/schedule-entries/schedule/entries`, { headers });
-    
-  }
-
-  getSubjects(): Observable<{ subjects: any[] }> {    // Do sprawdzenia "getSubjects(): Observable<Subject[]> {"
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`);
-    return this.http.get<{ subjects: any[] }>(`${this.apiUrl}/subjects`, { headers });
-  }
-
 }

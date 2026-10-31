@@ -1,11 +1,7 @@
-﻿using FluentValidation;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Scholario.Application.Dtos;
 using Scholario.Application.Dtos.ScheduleEntries;
 using Scholario.Application.Interfaces;
-using Scholario.Application.Services;
-using Scholario.Domain.Entities;
 using System.Security.Claims;
 namespace Scholario.API.Controllers
 {
@@ -20,14 +16,23 @@ namespace Scholario.API.Controllers
             _scheduleEntryService = scheduleEntriesService;
         }
 
-        [HttpPost("hour/create")]
+        [HttpPost("schedule/creates")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> CreateLessonHour([FromBody] LessonHourDto lessonHourDto)
+        public async Task<IActionResult> CreateScheduleEntries([FromBody] List<ScheduleEntryDto> entries)
         {
+            if (entries == null || entries.Count == 0)
+                return BadRequest("No schedule entries provided.");
+
+            var saved = new List<ScheduleEntryDto>();
+
             try
             {
-                var createdLessonHour = await _scheduleEntryService.CreateLessonHour(lessonHourDto);
-                return Ok("LessoHour added successfully");
+                foreach (var dto in entries)
+                {
+                    await _scheduleEntryService.CreateScheduleEntry(dto);
+                }
+
+                return Ok(new { message = "Schedule entries saved successfully" });
             }
             catch (ArgumentNullException ex)
             {
@@ -45,10 +50,11 @@ namespace Scholario.API.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateScheduleEntry([FromBody] ScheduleEntryDto scheduleEntryDto)
         {
+
             try
             {
-                var createdScheduleEntry = await _scheduleEntryService.CreateScheduleEntry(scheduleEntryDto);
-                return Ok("ScheduleEntry added successfully");
+                var createScheduleEntry = await _scheduleEntryService.CreateScheduleEntry(scheduleEntryDto);
+                return Ok(new { message = "Schedule entries saved successfully" });
             }
             catch (ArgumentNullException ex)
             {
@@ -62,8 +68,9 @@ namespace Scholario.API.Controllers
             }
         }
 
-        [HttpGet("schedule/entries")]
-        public async Task<IActionResult> GetStudentSchedule()
+        [HttpGet]
+        [Authorize(Roles = "Admin,Teacher,Student,Parent")]
+        public async Task<IActionResult> GetUserSchedule()
         {
             try
             {
@@ -74,9 +81,13 @@ namespace Scholario.API.Controllers
                     return Unauthorized("User ID not found in token.");
                 }
                 var userId = int.Parse(userIdClaim);
-                var userSchedule = await _scheduleEntryService.GetStudentSchedule(userId);
+                var userSchedule = await _scheduleEntryService.GetUserSchedule(userId);
 
                 return Ok(userSchedule);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
             }
             catch (ArgumentNullException ex)
             {
@@ -90,5 +101,24 @@ namespace Scholario.API.Controllers
             }
         }
 
+
+        [HttpGet("group/{groupId}")]
+        [Authorize(Roles = "Admin,Teacher")]
+        public async Task<IActionResult> GetScheduleByGroup(int groupId)
+        {
+            try
+            {
+                var schedule = await _scheduleEntryService.GetScheduleByGroupId(groupId);
+                return Ok(schedule);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

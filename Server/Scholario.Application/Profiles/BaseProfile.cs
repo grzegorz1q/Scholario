@@ -3,6 +3,7 @@ using Scholario.Application.Dtos;
 using Scholario.Application.Dtos.AttendanceRecord;
 using Scholario.Application.Dtos.Grade;
 using Scholario.Application.Dtos.Group;
+using Scholario.Application.Dtos.LessonHour;
 using Scholario.Application.Dtos.Message;
 using Scholario.Application.Dtos.Parent;
 using Scholario.Application.Dtos.ScheduleEntries;
@@ -34,7 +35,10 @@ namespace Scholario.Application.Profiles
 
             CreateMap<RegisterUserDto, Person>();
             CreateMap<CreateSubjectDto, Subject>();
-            CreateMap<Grade, ReadGradeByStudentDto>();
+            CreateMap<Grade, ReadGradeByStudentDto>()
+                .ForMember(desc => desc.SubjectName, x => x.MapFrom(src => src.Subject.Name))
+                .ForMember(desc => desc.GradeWeight, x => x.MapFrom(src => src.GradeWeight))
+                .ForMember(desc => desc.GradeWeightName, x => x.MapFrom(src => src.GradeWeight.ToString()));
             CreateMap<Subject, ReadSubjectDto>()
                 .ForMember(dest => dest.TeacherName, x => x.MapFrom(src => $"{src.Teacher.FirstName} {src.Teacher.LastName}"));
             CreateMap<Student, ParentSubjectDto>()
@@ -45,16 +49,28 @@ namespace Scholario.Application.Profiles
                 .ForMember(dest => dest.ChildId, x => x.MapFrom(src => src.Id))
                 .ForMember(dest => dest.ChildName, x => x.MapFrom(src => $"{src.FirstName} {src.LastName}"))
                 .ForMember(dest => dest.Group, x => x.MapFrom(src => src.Group));
-            CreateMap<ScheduleEntry, ScheduleEntryDto>()
-                .ForMember(dest => dest.LessonNumber, x => x.MapFrom(src => src.LessonHour.LessonNumber));
+            CreateMap<ScheduleEntry, ReadScheduleEntryDto>()
+                .ForMember(dest => dest.LessonNumber, x => x.MapFrom(src => src.LessonHour.LessonNumber))
+                .ForMember(dest => dest.SubjectName, x => x.MapFrom(src => src.Subject.Name))
+                .ForMember(dest => dest.GroupName, x => x.MapFrom(src => src.Group.Name))
+                .ForMember(dest => dest.ClassroomNumber, x => x.MapFrom(src => src.Classroom.Number))
+                .ForMember(dest => dest.TeacherName, x => x.MapFrom(src => $"{src.Subject.Teacher.FirstName} {src.Subject.Teacher.LastName}"));
             CreateMap<ScheduleEntryDto, ScheduleEntry>();
             CreateMap<Group, ReadGroupDto>()
                 .ForMember(dest => dest.TeacherName, x => x.MapFrom(src => $"{src.Teacher.FirstName} {src.Teacher.LastName}"))
                 .ForMember(dest => dest.Students, x => x.MapFrom(src => src.Students.Select(s => $"{s.FirstName} {s.LastName}")));
 
             CreateMap<LessonHourDto, LessonHour>();
+            CreateMap<LessonHour, LessonHourDto>();
 
             CreateMap<AttendanceRecordDto, AttendanceRecord>();
+
+            CreateMap<SubjectGradesDto, Grade>();
+
+            CreateMap<Subject, ReadGroupDto>()
+                .ForMember(dest => dest.TeacherName, x => x.MapFrom(src => $"{src.Teacher.FirstName} {src.Teacher.LastName}"));
+
+
         }
     }
 }

@@ -53,6 +53,13 @@ builder.Services.AddCors(options =>
         .AllowCredentials()
         );
 });
+//PT -- 20.11
+
+builder.Services.AddControllers()
+    .AddJsonOptions(opts =>
+    {
+        opts.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+    });
 
 //Authorization custom policies
 
@@ -65,7 +72,7 @@ builder.Services.AddControllers()   ///// DO SPRAWDZENIA
     });
 builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
 
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddAutoMapper(_ => { }, AppDomain.CurrentDomain.GetAssemblies());
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
@@ -115,7 +122,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseInMemoryDatabase("In Memory database"));*/
 //
 
-//Adds repositories to the Dependency Injection Container
 builder.Services.AddScoped<IDescriptiveAssessmentRepository, DescriptiveAssessmentRepository>();
 builder.Services.AddScoped<IGradeRepository, GradeRepository>();
 builder.Services.AddScoped<IGroupRepository, GroupRepository>();
@@ -130,7 +136,6 @@ builder.Services.AddScoped<IPersonRepository, PersonRepository>();
 builder.Services.AddScoped<ISubjectRepository, SubjectRepository>();
 builder.Services.AddScoped<IStudentAttendanceRepository, StudentAttendanceRepository>();
 
-//Adds services to the Dependency Injection Container
 builder.Services.AddScoped<IGradeService, GradeService>();
 builder.Services.AddScoped<ITeacherService, TeacherService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
@@ -138,6 +143,7 @@ builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<ISubjectService, SubjectService>();
 builder.Services.AddScoped<IGroupService, GroupService>();
 builder.Services.AddScoped<IScheduleEntryService, ScheduleEntryService>();
+builder.Services.AddScoped<ILessonHourService, LessonHourService>();
 builder.Services.AddScoped<IStudentAttendanceService, StudentAttendanceService>();
 
 //Hashowanie has³a
@@ -157,12 +163,11 @@ if (app.Environment.IsDevelopment())
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    dbContext.Database.Migrate();
     var passwordHasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher<Person>>();
     var prepDatabase = new PrepDatabase(dbContext, passwordHasher);
     prepDatabase.Seed();
 }
-//
-
 
 app.UseCors("AllowOrigin");
 

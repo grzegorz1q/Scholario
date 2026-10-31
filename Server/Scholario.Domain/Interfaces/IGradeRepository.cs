@@ -1,9 +1,4 @@
 ﻿using Scholario.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Scholario.Domain.Interfaces
 {
@@ -11,6 +6,7 @@ namespace Scholario.Domain.Interfaces
     {
         Task AddGrade(Grade grade);
         Task<IEnumerable<Grade>> GetAllGrades();
+        Task<IEnumerable<Grade>> GetStudentGrades(int studentId);
         Task<Grade?> GetGrade(int? id);
         Task UpdateGrade(Grade grade);
         Task DeleteGrade(int id);

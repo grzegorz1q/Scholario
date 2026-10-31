@@ -44,7 +44,7 @@ namespace Scholario.API.Controllers
         }
 
         [HttpPut("group")]
-        [Authorize(Roles = "Teacher")]
+        [Authorize(Roles = "Teacher,Admin")]
         public async Task<IActionResult> AddOrChangeTeacherToGroup(AddOrChangeTeacherToGroupDto addTeacherToGroupDto)
         {
             try
@@ -65,7 +65,7 @@ namespace Scholario.API.Controllers
         }
 
         [HttpGet("groups")]
-        [Authorize(Roles = "Teacher")]
+        [Authorize(Roles = "Teacher")] // mozliwe ze niepotrzebne TODO: might be remove
         public async Task<IActionResult> GetLoggedTeacherGroups() //Zwracanie grup, które uczy zalogowany nauczyciel(grupa której jest wychowawcą zwracana jest w GroupController)
         {
             try
@@ -106,6 +106,11 @@ namespace Scholario.API.Controllers
             {
                 Console.WriteLine($"Unauthorized access: {ex.Message}");
                 return Forbid();
+            }
+            catch (KeyNotFoundException ex)
+            {
+                Console.WriteLine($">[TeacherCtr] NotFound exception: {ex.Message}");
+                return NotFound($"NotFound error: {ex.Message}");
             }
             catch (Exception ex)
             {

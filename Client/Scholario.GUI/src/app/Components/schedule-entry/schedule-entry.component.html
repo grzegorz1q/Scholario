@@ -1,0 +1,45 @@
+<div class="form-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Godzina</th>
+                <th *ngFor="let day of days">{{ day }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let row of scheduleTable; let i = index">
+                <td>{{ lessonHours[i].startTime }} - {{ lessonHours[i].endTime }}</td>
+                <td *ngFor="let cell of row">
+                    <div *ngIf="role !== 'Parent'">
+                        <div *ngFor="let entry of cell" class="schedule-entry">
+                            <strong>{{entry.subjectName}}</strong><br>
+                            {{entry.groupName}}<br>
+                            s. {{entry.classroomNumber}}<br>
+                            <span *ngIf="role !== 'Teacher'">Nauczyciel: {{getTeacherNameInitials(entry.teacherName ?? '')}}</span>
+                        </div>
+                    </div>
+                    <div *ngIf="role === 'Parent'" class="parent-schedule-cell">
+                        <div *ngFor="let group of getGroupedEntries(cell)" class="group-entry">
+                            <div class="subject-info">
+                                <strong>{{group.subjectName}} - {{getTeacherNameInitials(group.teacherName ?? '')}}</strong><br>
+                                {{group.groupName}}<br>
+                                s. {{group.classroomNumber}}<br>
+                            </div>
+                            <div class="students-indicators">
+                                <span *ngFor="let student of group.students" 
+                                      class="student-indicator"
+                                      [style.background-color]="student.color"
+                                      [title]="student.name">
+                                </span>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="legend" *ngIf="role==='Parent'">
+        <app-parent-legend [children]="children" [childColors]="childColors"></app-parent-legend>
+    </div>
+</div>

@@ -1,17 +1,21 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-//import { NgFor } from "@angular/common";
-import { RouterOutlet } from '@angular/router';
-import { LoginComponent } from "./login/login.component";
-import { ScheduleEntryComponent } from './schedule-entry/schedule-entry.component';
-import { NavbarComponent } from "./navbar/navbar.component";
+import { Router, RouterOutlet } from '@angular/router';
+import { NavbarComponent } from "./Components/navbar/navbar.component";
 
 @Component({
   selector: 'app-root',
-  imports: [CommonModule, RouterOutlet, LoginComponent, ScheduleEntryComponent, NavbarComponent],
+  imports: [CommonModule, RouterOutlet, NavbarComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  title = 'Scholario.GUI';
+  showNavbar = true;
+
+  constructor(private router: Router) {}
+  ngOnInit() {
+    this.router.events.subscribe(() => {
+      this.showNavbar = this.router.url !== '/login';
+    });
+  }
 }

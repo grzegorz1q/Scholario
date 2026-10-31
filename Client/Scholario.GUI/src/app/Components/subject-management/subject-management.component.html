@@ -1,0 +1,22 @@
+<form (ngSubmit)="createSubject()">
+
+  <div>
+    <label>Nazwa *</label>
+    <input type="text" [(ngModel)]="newSubject.name" name="name" required>
+  </div>
+
+  <div>
+    <label>Opis</label>
+    <input type="text" [(ngModel)]="newSubject.description" name="description">
+  </div>
+
+  <div>
+    <label>Nauczyciel *</label>
+    <select [(ngModel)]="newSubject.teacherId" name="teacherId" required>
+      <option [ngValue]="null">-- wybierz --</option>
+    </select>
+  </div>
+
+  <button type="submit">Zapisz</button>
+
+</form>

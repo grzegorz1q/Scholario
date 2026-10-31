@@ -50,6 +50,13 @@ namespace Scholario.Infrastructure.Repositories
             return await _appDbContext.Grades.FirstOrDefaultAsync(g => g.Id == id);
         }
 
+        public async Task<IEnumerable<Grade>> GetStudentGrades(int studentId)
+        {
+            if(studentId < 0)
+                throw new ArgumentOutOfRangeException(nameof(studentId));
+            return await _appDbContext.Grades.Where(g => g.StudentId == studentId).ToListAsync();
+        }
+
         public async Task UpdateGrade(Grade grade)
         {
             if (grade == null)

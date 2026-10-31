@@ -1,15 +1,9 @@
 ﻿using AutoMapper;
 using Scholario.Application.Dtos.Group;
 using Scholario.Application.Dtos.Parent;
-using Scholario.Application.Dtos.Subject;
 using Scholario.Application.Interfaces;
 using Scholario.Domain.Entities;
 using Scholario.Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Scholario.Application.Services
 {
@@ -25,6 +19,12 @@ namespace Scholario.Application.Services
             _personRepository = personRepository;
             _teacherRepository = teacherRepository;
             _mapper = mapper;
+        }
+
+        public async Task<IEnumerable<ReadGroupDto>> GetAllGroups()
+        {
+            var groups = await _groupRepository.GetAllGroups() ?? throw new ArgumentNullException("Groups not found");
+            return _mapper.Map<IEnumerable<ReadGroupDto>>(groups);
         }
 
         public async Task<IEnumerable<ReadGroupDto>> GetLoggedTeacherGroups(int teacherId)

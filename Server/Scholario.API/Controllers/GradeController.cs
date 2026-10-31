@@ -89,5 +89,23 @@ namespace Scholario.API.Controllers
                 return BadRequest($"Unexpected error: {ex.Message}");
             }
         }
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Teacher")]
+        public async Task<IActionResult> DeleteGrade(int id)
+        {
+            try
+            {
+                await _gradeService.DeleteGradeFromStudent(id);
+                return Ok();
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
