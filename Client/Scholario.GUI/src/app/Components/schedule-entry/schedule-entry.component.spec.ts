@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
 
 import { ScheduleEntryComponent } from './schedule-entry.component';
 
@@ -8,7 +9,8 @@ describe('ScheduleEntryComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ScheduleEntryComponent]
+      imports: [ScheduleEntryComponent],
+      providers: [provideHttpClient()]
     })
     .compileComponents();
 

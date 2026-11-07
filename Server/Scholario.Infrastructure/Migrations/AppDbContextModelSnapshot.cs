@@ -17,7 +17,7 @@ namespace Scholario.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.1")
+                .HasAnnotation("ProductVersion", "10.0.14")
                 .HasAnnotation("Proxies:ChangeTracking", false)
                 .HasAnnotation("Proxies:CheckEquality", false)
                 .HasAnnotation("Proxies:LazyLoading", true)
@@ -276,7 +276,7 @@ namespace Scholario.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ClassroomId")
+                    b.Property<int?>("ClassroomId")
                         .HasColumnType("int");
 
                     b.Property<int>("Day")
@@ -481,8 +481,7 @@ namespace Scholario.Infrastructure.Migrations
                     b.HasOne("Scholario.Domain.Entities.Classroom", "Classroom")
                         .WithMany("ScheduleEntries")
                         .HasForeignKey("ClassroomId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Scholario.Domain.Entities.Group", "Group")
                         .WithMany("ScheduleEntries")

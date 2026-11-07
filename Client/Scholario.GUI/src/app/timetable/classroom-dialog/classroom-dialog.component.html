@@ -1,0 +1,45 @@
+
+<h2 mat-dialog-title>Przypisz salę do lekcji</h2>
+
+<mat-dialog-content>
+  <div class="lesson-info">
+    <p><strong>Przedmiot:</strong> {{ data.subjectName }}</p>
+    <p><strong>Dzień:</strong> {{ data.dayName }}</p>
+    <p><strong>Godzina lekcyjna:</strong> {{ data.lessonNumber }}</p>
+  </div>
+
+  <mat-form-field appearance="outline" class="classroom-select">
+    <mat-label>Wybierz salę</mat-label>
+
+    <mat-select [(ngModel)]="selectedClassroomId">
+      <mat-option [value]="null">
+        Bez przypisanej sali
+      </mat-option>
+
+      <mat-option
+        *ngFor="let classroom of data.classrooms"
+        [value]="classroom.id">
+        Sala {{ classroom.number }}
+        ({{ classroom.capacity }} osób)
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <p *ngIf="data.classrooms.length === 0" class="no-classrooms">
+    Brak dostępnych sal w tym terminie.
+  </p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="cancel()">
+    Anuluj
+  </button>
+
+  <button
+    mat-flat-button
+    color="primary"
+    type="button"
+    (click)="confirm()">
+    Zatwierdź
+  </button>
+</mat-dialog-actions>

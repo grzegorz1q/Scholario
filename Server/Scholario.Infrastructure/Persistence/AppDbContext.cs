@@ -133,10 +133,12 @@ namespace Scholario.Infrastructure.Persistence
                 .HasForeignKey(se => se.LessonHourId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Classroom>()
-                .HasMany(c => c.ScheduleEntries)
-                .WithOne(se => se.Classroom)
+            // Relacja ScheduleEntry -> Classroom (sala opcjonalna)
+            modelBuilder.Entity<ScheduleEntry>()
+                .HasOne(se => se.Classroom)
+                .WithMany(c => c.ScheduleEntries)
                 .HasForeignKey(se => se.ClassroomId)
+                .IsRequired(false)
                 .OnDelete(DeleteBehavior.Restrict);
 
             //Relacja StudentAttendances -> Student

@@ -1,0 +1,24 @@
+
+.lesson-info {
+  margin-bottom: 20px;
+  padding: 12px 16px;
+  background: #f1f5f9;
+  border-radius: 8px;
+
+  p {
+    margin: 5px 0;
+    color: #334155;
+  }
+}
+
+.classroom-select {
+  width: 100%;
+}
+
+mat-dialog-content {
+  min-width: 350px;
+}
+
+mat-dialog-actions {
+  padding: 12px 0 0;
+}
